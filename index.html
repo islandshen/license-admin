@@ -15,12 +15,73 @@
         body {
             background: #f5f7fa;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
         
-        .container {
+        /* 登录界面样式 */
+        #loginContainer {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            padding: 40px 30px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .login-form input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        /* 主系统容器 */
+        #mainContainer {
+            display: none;
             max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
             background: white;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
@@ -32,6 +93,25 @@
             color: white;
             padding: 25px 30px;
             text-align: center;
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
         }
         
         .header h1 {
@@ -97,14 +177,14 @@
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
         }
         
-        /* 优化后的按钮样式 - 更紧凑 */
+        /* 统一的主按钮样式 */
         .btn {
             background: #3498db;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            font-size: 13px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
@@ -119,20 +199,51 @@
         
         .btn-refresh {
             background: #2ecc71;
-            padding: 6px 12px;
-            font-size: 12px;
         }
         
         .btn-refresh:hover {
             background: #27ae60;
         }
         
+        .btn-test {
+            background: #9b59b6;
+        }
+        
+        .btn-test:hover {
+            background: #8e44ad;
+        }
+        
+        /* 操作按钮组 */
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            line-height: 1.2;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
         .btn-edit {
             background: #3498db;
+            color: white;
         }
         
         .btn-delete {
             background: #e74c3c;
+            color: white;
         }
         
         .btn-delete:hover {
@@ -141,6 +252,7 @@
         
         .btn-disable {
             background: #f39c12;
+            color: white;
         }
         
         .btn-disable:hover {
@@ -149,6 +261,7 @@
         
         .btn-enable {
             background: #2ecc71;
+            color: white;
         }
         
         .btn-enable:hover {
@@ -211,30 +324,6 @@
             display: inline-block;
         }
         
-        /* 优化后的操作按钮组 - 更紧凑 */
-        .actions {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            padding: 4px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 500;
-            transition: all 0.2s;
-            line-height: 1.2;
-            min-width: 36px; /* 确保按钮有最小宽度 */
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
         .alert {
             padding: 12px 15px;
             border-radius: 6px;
@@ -292,10 +381,10 @@
             border-bottom: 1px solid #eee;
         }
         
-        /* 模态框中的按钮也调整大小 */
+        /* 模态框中的按钮 */
         .modal-content .btn {
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 10px 20px;
+            font-size: 14px;
         }
         
         .test-section {
@@ -327,7 +416,7 @@
         }
         
         .delete-actions .btn {
-            padding: 8px 20px;
+            padding: 10px 20px;
         }
         
         @media (max-width: 768px) {
@@ -356,29 +445,61 @@
                 padding: 8px 10px;
             }
             
-            /* 移动端保持按钮水平排列 */
             .actions {
                 flex-direction: row;
-                gap: 3px;
+                gap: 4px;
             }
             
             .action-btn {
-                padding: 4px 8px;
-                font-size: 10px;
-                min-width: 32px;
+                padding: 5px 8px;
+                font-size: 11px;
             }
             
             .btn {
-                padding: 7px 14px;
-                font-size: 12px;
+                padding: 9px 16px;
+                font-size: 13px;
+            }
+            
+            #loginContainer {
+                padding: 30px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- 登录界面 -->
+    <div id="loginContainer">
+        <div class="login-header">
+            <h1>🔐 EA客户管理系统</h1>
+            <p>请登录以管理客户账号</p>
+        </div>
+        
+        <div class="login-form">
+            <div id="loginAlert" class="alert"></div>
+            
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" placeholder="请输入用户名" value="admin">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="请输入密码" value="admin123">
+            </div>
+            
+            <button onclick="login()" class="btn" style="width: 100%; padding: 12px; margin-top: 10px;">登录</button>
+            
+            <div style="margin-top: 20px; text-align: center; color: #95a5a6; font-size: 13px;">
+                <p>默认账号: admin / admin123</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 主系统界面 -->
+    <div id="mainContainer">
         <!-- 头部 -->
         <div class="header">
+            <button onclick="logout()" class="logout-btn">退出登录</button>
             <h1>📋 EA客户管理系统</h1>
             <p>管理客户账号和到期时间</p>
         </div>
@@ -446,7 +567,7 @@
                     <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
                 </div>
                 
-                <button onclick="testVerify()" class="btn">测试验证</button>
+                <button onclick="testVerify()" class="btn btn-test">测试验证</button>
                 
                 <div id="testResult" class="test-result"></div>
             </div>
@@ -518,16 +639,41 @@
         let currentEditClient = null;
         let clientToDelete = null;
         
-        // ========== 初始化 ==========
-        document.addEventListener('DOMContentLoaded', function() {
-            // 设置默认到期日期为30天后
-            const defaultDate = new Date();
-            defaultDate.setDate(defaultDate.getDate() + 30);
-            document.getElementById('addExpireDate').valueAsDate = defaultDate;
+        // ========== 登录功能 ==========
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
             
-            // 页面加载完成后自动加载客户列表
-            loadClients();
-        });
+            if (!username || !password) {
+                showAlert('loginAlert', '请输入用户名和密码', 'error');
+                return;
+            }
+            
+            // 简单的登录验证
+            if (username === 'admin' && password === 'admin123') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                
+                // 设置默认到期日期为30天后
+                const defaultDate = new Date();
+                defaultDate.setDate(defaultDate.getDate() + 30);
+                document.getElementById('addExpireDate').valueAsDate = defaultDate;
+                
+                // 加载客户列表
+                loadClients();
+            } else {
+                showAlert('loginAlert', '用户名或密码错误', 'error');
+            }
+        }
+        
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('username').value = 'admin';
+                document.getElementById('password').value = 'admin123';
+            }
+        }
         
         // ========== 显示提示信息 ==========
         function showAlert(elementId, message, type = 'error') {
@@ -621,7 +767,7 @@
                 }
             }
             
-            // 使用图标版本的按钮
+            // 使用文字版本的按钮
             tr.innerHTML = `
                 <td><strong>${client.account_id}</strong></td>
                 <td>${client.license_key || client.server || '未设置'}</td>
@@ -630,11 +776,11 @@
                 <td>${createdTime}</td>
                 <td>
                     <div class="actions">
-                        <button onclick="openEditModal('${client.account_id}')" class="action-btn btn-edit" title="编辑">✏️</button>
-                        <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn ${client.is_active ? 'btn-disable' : 'btn-enable'}" title="${client.is_active ? '禁用' : '启用'}">
-                            ${client.is_active ? '⏸️' : '▶️'}
+                        <button onclick="openEditModal('${client.account_id}')" class="action-btn btn-edit">编辑</button>
+                        <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn ${client.is_active ? 'btn-disable' : 'btn-enable'}">
+                            ${client.is_active ? '禁用' : '启用'}
                         </button>
-                        <button onclick="openDeleteModal('${client.account_id}', '${client.license_key || client.server}')" class="action-btn btn-delete" title="删除">🗑️</button>
+                        <button onclick="openDeleteModal('${client.account_id}', '${client.license_key || client.server}')" class="action-btn btn-delete">删除</button>
                     </div>
                 </td>
             `;
@@ -918,6 +1064,11 @@
             if (event.key === 'Escape') {
                 closeEditModal();
                 closeDeleteModal();
+            }
+            
+            // Enter键在登录界面登录
+            if (event.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
+                login();
             }
         });
     </script>
