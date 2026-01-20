@@ -105,12 +105,13 @@
             border-radius: 6px;
             font-size: 14px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
             font-weight: 500;
         }
         
         .btn:hover {
             background: #2980b9;
+            transform: translateY(-1px);
         }
         
         .btn-refresh {
@@ -125,12 +126,20 @@
             background: #3498db;
         }
         
-        .btn-disable {
+        .btn-delete {
             background: #e74c3c;
         }
         
-        .btn-disable:hover {
+        .btn-delete:hover {
             background: #c0392b;
+        }
+        
+        .btn-disable {
+            background: #f39c12;
+        }
+        
+        .btn-disable:hover {
+            background: #d68910;
         }
         
         .btn-enable {
@@ -171,41 +180,51 @@
             color: #27ae60;
             font-weight: 600;
             background: #d5f4e6;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 12px;
+            display: inline-block;
         }
         
         .status-inactive {
             color: #e74c3c;
             font-weight: 600;
             background: #fadbd8;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 12px;
+            display: inline-block;
         }
         
         .status-expired {
             color: #f39c12;
             font-weight: 600;
             background: #fef5e7;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 12px;
+            display: inline-block;
         }
         
         .actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            flex-wrap: wrap;
         }
         
         .action-btn {
-            padding: 5px 10px;
+            padding: 5px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .alert {
@@ -279,6 +298,20 @@
             display: none;
         }
         
+        .delete-confirm {
+            background: #fef5e7;
+            border: 1px solid #f8c471;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .delete-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
         @media (max-width: 768px) {
             .form-row {
                 flex-direction: column;
@@ -303,6 +336,16 @@
             
             th, td {
                 padding: 8px 10px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .action-btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -421,10 +464,34 @@
         </div>
     </div>
     
+    <!-- 删除确认模态框 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">⚠️ 确认删除</div>
+            
+            <div class="delete-confirm">
+                <p style="color: #e74c3c; font-weight: 600; margin-bottom: 10px;">您确定要删除这个客户吗？</p>
+                <p style="color: #7f8c8d; font-size: 14px;">账号ID: <span id="deleteAccountId" style="font-weight: 600;"></span></p>
+                <p style="color: #7f8c8d; font-size: 14px;">服务器: <span id="deleteServer" style="font-weight: 600;"></span></p>
+                <p style="color: #e74c3c; font-size: 13px; margin-top: 15px; border-top: 1px dashed #f8c471; padding-top: 10px;">
+                    ⚠️ 注意：此操作不可撤销，删除后将无法恢复！
+                </p>
+            </div>
+            
+            <div id="deleteAlert" class="alert"></div>
+            
+            <div class="delete-actions">
+                <button onclick="confirmDelete()" class="btn btn-delete">确认删除</button>
+                <button onclick="closeDeleteModal()" class="btn" style="background: #95a5a6;">取消</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // ========== 配置 ==========
         const API_BASE = 'https://islandshen.pythonanywhere.com/api';
         let currentEditClient = null;
+        let clientToDelete = null;
         
         // ========== 初始化 ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -432,11 +499,6 @@
             const defaultDate = new Date();
             defaultDate.setDate(defaultDate.getDate() + 30);
             document.getElementById('addExpireDate').valueAsDate = defaultDate;
-            
-            // 显示当前时间
-            updateLastRefreshTime();
-            
-            // 页面加载时不自动加载，需要手动点击刷新
         });
         
         // ========== 显示提示信息 ==========
@@ -449,17 +511,6 @@
             setTimeout(() => {
                 alertDiv.style.display = 'none';
             }, 3000);
-        }
-        
-        // ========== 更新最后刷新时间 ==========
-        function updateLastRefreshTime() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('zh-CN', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            const dateStr = now.toLocaleDateString('zh-CN');
         }
         
         // ========== 加载客户列表 ==========
@@ -491,7 +542,6 @@
                     });
                 }
                 
-                updateLastRefreshTime();
                 showAlert('listAlert', `已加载 ${clients.length} 个客户`, 'success');
                 
             } catch (error) {
@@ -555,6 +605,7 @@
                         <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn ${client.is_active ? 'btn-disable' : 'btn-enable'}">
                             ${client.is_active ? '禁用' : '启用'}
                         </button>
+                        <button onclick="openDeleteModal('${client.account_id}', '${client.license_key || client.server}')" class="action-btn btn-delete">删除</button>
                     </div>
                 </td>
             `;
@@ -730,71 +781,35 @@
             }
         }
         
-        // ========== 测试验证接口 ==========
-        async function testVerify() {
-            const accountId = document.getElementById('testAccountId').value.trim();
-            const server = document.getElementById('testServer').value.trim();
-            const testResultDiv = document.getElementById('testResult');
-            
-            if (!accountId || !server) {
-                showAlert('testAlert', '请输入账号和服务器', 'error');
-                return;
-            }
+        // ========== 打开删除确认模态框 ==========
+        function openDeleteModal(accountId, server) {
+            clientToDelete = accountId;
+            document.getElementById('deleteAccountId').textContent = accountId;
+            document.getElementById('deleteServer').textContent = server;
+            document.getElementById('deleteModal').style.display = 'flex';
+            document.getElementById('deleteAlert').style.display = 'none';
+        }
+        
+        // ========== 关闭删除确认模态框 ==========
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            clientToDelete = null;
+        }
+        
+        // ========== 确认删除客户 ==========
+        async function confirmDelete() {
+            if (!clientToDelete) return;
             
             try {
-                const response = await fetch(`${API_BASE}/verify`, {
-                    method: 'POST',
+                const response = await fetch(`${API_BASE}/delete/${clientToDelete}`, {
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        account_id: accountId,
-                        license_key: server  // 使用server作为license_key
-                    })
+                    }
                 });
                 
                 const result = await response.json();
                 
-                if (result.valid) {
-                    testResultDiv.innerHTML = `
-                        <div style="background: #d5f4e6; color: #27ae60; padding: 15px; border-radius: 6px; border: 1px solid #a3e4c1;">
-                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">✅ 验证成功！</div>
-                            <div style="font-size: 14px;">
-                                <div>账号ID: <strong>${result.account_id}</strong></div>
-                                <div>到期时间: <strong>${result.expire_date}</strong></div>
-                                <div>状态: <span style="color: #27ae60; font-weight: 600;">正常</span></div>
-                            </div>
-                        </div>
-                    `;
-                    testResultDiv.style.display = 'block';
-                } else {
-                    testResultDiv.innerHTML = `
-                        <div style="background: #fadbd8; color: #e74c3c; padding: 15px; border-radius: 6px; border: 1px solid #f5b7b1;">
-                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">❌ 验证失败</div>
-                            <div style="font-size: 14px;">错误信息: ${result.message}</div>
-                        </div>
-                    `;
-                    testResultDiv.style.display = 'block';
-                }
-                
-            } catch (error) {
-                testResultDiv.innerHTML = `
-                    <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
-                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
-                        <div style="font-size: 14px;">${error.message}</div>
-                    </div>
-                `;
-                testResultDiv.style.display = 'block';
-            }
-        }
-        
-        // ========== 键盘快捷键 ==========
-        document.addEventListener('keydown', function(event) {
-            // ESC 关闭模态框
-            if (event.key === 'Escape') {
-                closeEditModal();
-            }
-        });
-    </script>
-</body>
-</html>
+                if (result.success) {
+                    showAlert('deleteAlert', '✅ 客户删除成功！', 'success');
+                    setTimeout(()
