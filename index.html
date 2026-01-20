@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA客户管理系统</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
-        }
-        
         /* ========== 登录界面样式 ========== */
         .login-container {
             display: flex;
@@ -127,15 +120,20 @@
             font-size: 13px;
         }
         
-        /* ========== 管理界面样式 ========== */
-        .admin-container {
-            display: none;
-            width: 100%;
+        /* ========== 管理界面样式（原来的样式） ========== */
+        body.management-mode {
+            background: #f5f5f5;
             min-height: 100vh;
-            background: #f5f7fa;
+            padding: 0;
+            margin: 0;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
         }
         
-        .admin-header {
+        .management-container {
+            display: none;
+        }
+        
+        .header {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             color: white;
             padding: 20px 30px;
@@ -145,27 +143,9 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .admin-header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .admin-title {
+        .header h1 {
             font-size: 20px;
             font-weight: 600;
-        }
-        
-        .admin-nav a {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            margin-right: 20px;
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-        
-        .admin-nav a:hover {
-            color: white;
         }
         
         .logout-btn {
@@ -183,20 +163,10 @@
             background: rgba(255,255,255,0.3);
         }
         
-        .admin-content {
+        .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px;
-        }
-        
-        .admin-row {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .admin-col {
-            flex: 1;
+            margin: 30px auto;
+            padding: 0 20px;
         }
         
         .card {
@@ -236,15 +206,27 @@
         .form-row .form-control {
             flex: 1;
             min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
             background: #f9f9f9;
         }
         
         .btn-refresh {
             background: #2ecc71;
+            padding: 8px 15px;
+            font-size: 14px;
         }
         
         .btn-refresh:hover {
             background: #27ae60;
+        }
+        
+        .alert-success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #a3e4c1;
         }
         
         table {
@@ -320,7 +302,6 @@
         
         .action-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .btn-edit {
@@ -355,12 +336,6 @@
             background: #27ae60;
         }
         
-        .alert-success {
-            background: #d5f4e6;
-            color: #27ae60;
-            border: 1px solid #a3e4c1;
-        }
-        
         .loading {
             text-align: center;
             padding: 30px;
@@ -368,7 +343,6 @@
             font-size: 14px;
         }
         
-        /* ========== 模态框样式 ========== */
         .modal {
             display: none;
             position: fixed;
@@ -428,15 +402,9 @@
             margin-top: 20px;
         }
         
-        /* ========== 响应式设计 ========== */
         @media (max-width: 768px) {
-            .admin-content {
-                padding: 20px;
-            }
-            
-            .admin-row {
-                flex-direction: column;
-                gap: 20px;
+            .container {
+                padding: 0 15px;
             }
             
             .form-row {
@@ -478,7 +446,7 @@
         <div class="login-box">
             <div class="login-header">
                 <h1>🔐 EA客户管理系统</h1>
-                <p>请登录以继续</p>
+                <p>请登录以管理客户信息</p>
             </div>
             
             <div class="login-content">
@@ -507,97 +475,86 @@
     </div>
     
     <!-- 管理界面（登录后显示） -->
-    <div id="adminContainer" class="admin-container">
+    <div id="managementContainer" class="management-container">
         <!-- 头部 -->
-        <div class="admin-header">
-            <div class="admin-header-left">
-                <div class="admin-title">📋 EA客户管理系统</div>
-                <div class="admin-nav">
-                    <a href="admin.html" target="_blank">API文档</a>
-                </div>
-            </div>
+        <div class="header">
+            <h1>📋 EA客户管理系统</h1>
             <button onclick="logout()" class="logout-btn">退出登录</button>
         </div>
         
         <!-- 主要内容 -->
-        <div class="admin-content">
-            <div class="admin-row">
-                <!-- 左侧：添加客户 -->
-                <div class="admin-col">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">➕ 添加新客户</div>
-                        </div>
-                        <div class="card-body">
-                            <div id="addAlert" class="alert"></div>
-                            
-                            <div class="form-row">
-                                <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
-                                <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: IC Markets)" required>
-                            </div>
-                            
-                            <div class="form-row">
-                                <input type="date" id="addExpireDate" class="form-control" required>
-                                <select id="addIsActive" class="form-control">
-                                    <option value="true">激活状态</option>
-                                    <option value="false">禁用状态</option>
-                                </select>
-                            </div>
-                            
-                            <button onclick="addNewClient()" class="btn" style="margin-top: 10px;">添加客户</button>
-                        </div>
+        <div class="container">
+            <!-- 添加客户 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">➕ 添加新客户</div>
+                </div>
+                <div class="card-body">
+                    <div id="addAlert" class="alert"></div>
+                    
+                    <div class="form-row">
+                        <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
+                        <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: IC Markets)" required>
                     </div>
                     
-                    <!-- 测试验证 -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">🧪 测试验证接口</div>
-                        </div>
-                        <div class="card-body">
-                            <div id="testAlert" class="alert"></div>
-                            
-                            <div class="form-row">
-                                <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
-                                <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
-                            </div>
-                            
-                            <button onclick="testVerify()" class="btn" style="margin-top: 10px;">测试验证</button>
-                            
-                            <div id="testResult" class="test-result"></div>
-                        </div>
+                    <div class="form-row">
+                        <input type="date" id="addExpireDate" class="form-control" required>
+                        <select id="addIsActive" class="form-control">
+                            <option value="true">激活状态</option>
+                            <option value="false">禁用状态</option>
+                        </select>
                     </div>
+                    
+                    <button onclick="addNewClient()" class="btn" style="margin-top: 10px;">添加客户</button>
                 </div>
-                
-                <!-- 右侧：客户列表 -->
-                <div class="admin-col">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">👥 客户列表</div>
-                            <button onclick="loadClients()" class="btn btn-refresh" style="padding: 8px 15px; font-size: 14px;">刷新列表</button>
-                        </div>
-                        <div class="card-body">
-                            <div id="listAlert" class="alert"></div>
-                            
-                            <div id="loading" class="loading">
-                                <p>正在加载客户数据...</p>
-                            </div>
-                            
-                            <table id="clientsTable">
-                                <thead>
-                                    <tr>
-                                        <th>账号ID</th>
-                                        <th>服务器</th>
-                                        <th>到期时间</th>
-                                        <th>状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="clientsBody">
-                                    <!-- 数据将通过JavaScript动态填充 -->
-                                </tbody>
-                            </table>
-                        </div>
+            </div>
+            
+            <!-- 客户列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">👥 客户列表</div>
+                    <button onclick="loadClients()" class="btn btn-refresh">刷新列表</button>
+                </div>
+                <div class="card-body">
+                    <div id="listAlert" class="alert"></div>
+                    
+                    <div id="loading" class="loading">
+                        <p>正在加载客户数据...</p>
                     </div>
+                    
+                    <table id="clientsTable">
+                        <thead>
+                            <tr>
+                                <th>账号ID</th>
+                                <th>服务器</th>
+                                <th>到期时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsBody">
+                            <!-- 数据将通过JavaScript动态填充 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 测试验证 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🧪 测试验证接口</div>
+                </div>
+                <div class="card-body">
+                    <div id="testAlert" class="alert"></div>
+                    
+                    <div class="form-row">
+                        <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
+                        <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
+                    </div>
+                    
+                    <button onclick="testVerify()" class="btn" style="margin-top: 10px;">测试验证</button>
+                    
+                    <div id="testResult" class="test-result"></div>
                 </div>
             </div>
         </div>
@@ -677,7 +634,7 @@
         function checkLoginStatus() {
             const savedLogin = localStorage.getItem('ea_admin_logged_in');
             if (savedLogin === 'true') {
-                showAdminInterface();
+                showManagementInterface();
             }
         }
         
@@ -700,7 +657,7 @@
             if (username === VALID_USERNAME && password === VALID_PASSWORD) {
                 // 登录成功
                 localStorage.setItem('ea_admin_logged_in', 'true');
-                showAdminInterface();
+                showManagementInterface();
             } else {
                 // 登录失败
                 loginAlert.textContent = '用户名或密码错误';
@@ -709,19 +666,15 @@
                 
                 // 清空密码框
                 document.getElementById('password').value = '';
-                
-                // 3秒后隐藏错误信息
-                setTimeout(() => {
-                    loginAlert.style.display = 'none';
-                }, 3000);
             }
         }
         
         // 显示管理界面
-        function showAdminInterface() {
+        function showManagementInterface() {
             isLoggedIn = true;
+            document.body.className = 'management-mode';
             document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('adminContainer').style.display = 'block';
+            document.getElementById('managementContainer').style.display = 'block';
             
             // 设置默认到期日期为30天后
             const defaultDate = new Date();
@@ -737,8 +690,9 @@
             if (confirm('确定要退出登录吗？')) {
                 localStorage.removeItem('ea_admin_logged_in');
                 isLoggedIn = false;
-                document.getElementById('adminContainer').style.display = 'none';
-                document.getElementById('loginContainer').style.display = 'block';
+                document.body.className = '';
+                document.getElementById('managementContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'flex';
                 
                 // 清空表单
                 document.getElementById('username').value = '';
