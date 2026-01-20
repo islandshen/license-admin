@@ -812,4 +812,85 @@
                 
                 if (result.success) {
                     showAlert('deleteAlert', '✅ 客户删除成功！', 'success');
-                    setTimeout(()
+                    setTimeout(() => {
+                        closeDeleteModal();
+                        loadClients();
+                    }, 1000);
+                } else {
+                    showAlert('deleteAlert', `删除失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('deleteAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 测试验证接口 ==========
+        async function testVerify() {
+            const accountId = document.getElementById('testAccountId').value.trim();
+            const server = document.getElementById('testServer').value.trim();
+            const testResultDiv = document.getElementById('testResult');
+            
+            if (!accountId || !server) {
+                showAlert('testAlert', '请输入账号和服务器', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/verify`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: accountId,
+                        license_key: server  // 使用server作为license_key
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.valid) {
+                    testResultDiv.innerHTML = `
+                        <div style="background: #d5f4e6; color: #27ae60; padding: 15px; border-radius: 6px; border: 1px solid #a3e4c1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">✅ 验证成功！</div>
+                            <div style="font-size: 14px;">
+                                <div>账号ID: <strong>${result.account_id}</strong></div>
+                                <div>到期时间: <strong>${result.expire_date}</strong></div>
+                                <div>状态: <span style="color: #27ae60; font-weight: 600;">正常</span></div>
+                            </div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
+                } else {
+                    testResultDiv.innerHTML = `
+                        <div style="background: #fadbd8; color: #e74c3c; padding: 15px; border-radius: 6px; border: 1px solid #f5b7b1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">❌ 验证失败</div>
+                            <div style="font-size: 14px;">错误信息: ${result.message}</div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
+                }
+                
+            } catch (error) {
+                testResultDiv.innerHTML = `
+                    <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
+                        <div style="font-size: 14px;">${error.message}</div>
+                    </div>
+                `;
+                testResultDiv.style.display = 'block';
+            }
+        }
+        
+        // ========== 键盘快捷键 ==========
+        document.addEventListener('keydown', function(event) {
+            // ESC 关闭所有模态框
+            if (event.key === 'Escape') {
+                closeEditModal();
+                closeDeleteModal();
+            }
+        });
+    </script>
+</body>
+</html>
