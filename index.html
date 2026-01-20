@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EA客户账号管理系统</title>
+    <title>EA客户管理系统</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f7fa;
             min-height: 100vh;
             padding: 20px;
         }
@@ -22,41 +22,27 @@
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             overflow: hidden;
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             color: white;
-            padding: 30px;
+            padding: 25px 30px;
             text-align: center;
         }
         
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 26px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
         
         .header p {
             opacity: 0.9;
-            font-size: 16px;
-        }
-        
-        .api-info {
-            background: #f8f9fa;
-            padding: 15px;
-            margin: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-        }
-        
-        .api-info code {
-            background: #e9ecef;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-family: monospace;
+            font-size: 15px;
         }
         
         .content {
@@ -65,14 +51,21 @@
         
         .section {
             margin-bottom: 40px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #eaeaea;
         }
         
         .section-title {
-            font-size: 20px;
-            color: #333;
+            font-size: 18px;
+            color: #2c3e50;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .form-group {
@@ -81,64 +74,93 @@
         
         .form-row {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
         
         .form-control {
             flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
             transition: border-color 0.3s;
+            background: #f9f9f9;
         }
         
         .form-control:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
         }
         
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-size: 14px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background 0.3s;
+            font-weight: 500;
         }
         
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #2980b9;
         }
         
-        .btn-secondary {
-            background: #6c757d;
+        .btn-refresh {
+            background: #2ecc71;
         }
         
-        .btn-danger {
-            background: #dc3545;
+        .btn-refresh:hover {
+            background: #27ae60;
+        }
+        
+        .btn-edit {
+            background: #3498db;
+        }
+        
+        .btn-disable {
+            background: #e74c3c;
+        }
+        
+        .btn-disable:hover {
+            background: #c0392b;
+        }
+        
+        .btn-enable {
+            background: #2ecc71;
+        }
+        
+        .btn-enable:hover {
+            background: #27ae60;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
+            margin-top: 15px;
+            font-size: 14px;
         }
         
         th {
             background: #f8f9fa;
+            color: #2c3e50;
             font-weight: 600;
-            color: #333;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
         }
         
         tr:hover {
@@ -146,18 +168,30 @@
         }
         
         .status-active {
-            color: #28a745;
-            font-weight: bold;
+            color: #27ae60;
+            font-weight: 600;
+            background: #d5f4e6;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
         }
         
         .status-inactive {
-            color: #dc3545;
-            font-weight: bold;
+            color: #e74c3c;
+            font-weight: 600;
+            background: #fadbd8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
         }
         
         .status-expired {
-            color: #ffc107;
-            font-weight: bold;
+            color: #f39c12;
+            font-weight: 600;
+            background: #fef5e7;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
         }
         
         .actions {
@@ -171,31 +205,34 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
+            font-weight: 500;
         }
         
         .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
             display: none;
+            font-size: 14px;
         }
         
         .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #a3e4c1;
         }
         
         .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
         }
         
         .loading {
             text-align: center;
-            padding: 20px;
-            color: #666;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 14px;
         }
         
         .modal {
@@ -213,10 +250,33 @@
         
         .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 8px;
             max-width: 500px;
             width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border: 1px dashed #ddd;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        
+        .test-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
         }
         
         @media (max-width: 768px) {
@@ -230,7 +290,19 @@
             }
             
             .header h1 {
-                font-size: 24px;
+                font-size: 22px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            table {
+                font-size: 13px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
             }
         }
     </style>
@@ -239,19 +311,8 @@
     <div class="container">
         <!-- 头部 -->
         <div class="header">
-            <h1>📊 EA客户账号管理系统</h1>
-            <p>管理客户的许可证、到期时间和运行状态</p>
-        </div>
-        
-        <!-- API信息 -->
-        <div class="api-info">
-            <strong>📌 重要信息：</strong>
-            <p>API地址：<code id="apiUrl">https://islandshen.pythonanywhere.com/api</code></p>
-            <p>验证接口：<code>/api/verify</code> | 添加客户：<code>/api/add</code></p>
-            <div style="margin-top: 10px;">
-                <input type="text" id="apiInput" placeholder="在此输入你的API地址" style="width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                <button onclick="updateApiUrl()" class="btn" style="padding: 8px 15px; margin-left: 10px;">更新API地址</button>
-            </div>
+            <h1>📋 EA客户管理系统</h1>
+            <p>管理客户账号和到期时间</p>
         </div>
         
         <!-- 主要内容 -->
@@ -263,12 +324,11 @@
                 
                 <div class="form-row">
                     <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
-                    <input type="text" id="addLicenseKey" class="form-control" placeholder="许可证密钥 (例如: TEST-888888-2024)" required>
+                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: IC Markets)" required>
                 </div>
                 
                 <div class="form-row">
                     <input type="date" id="addExpireDate" class="form-control" required>
-                    <input type="number" id="addMaxSessions" class="form-control" placeholder="最大同时运行数" value="1" min="1">
                     <select id="addIsActive" class="form-control">
                         <option value="true">激活状态</option>
                         <option value="false">禁用状态</option>
@@ -280,10 +340,9 @@
             
             <!-- 客户列表 -->
             <div class="section">
-                <h2 class="section-title">👥 客户列表</h2>
-                <div style="margin-bottom: 20px;">
-                    <button onclick="loadClients()" class="btn">刷新列表</button>
-                    <span id="lastUpdate" style="margin-left: 20px; color: #666; font-size: 14px;"></span>
+                <div class="section-title">
+                    <span>👥 客户列表</span>
+                    <button onclick="loadClients()" class="btn btn-refresh">刷新列表</button>
                 </div>
                 
                 <div id="listAlert" class="alert"></div>
@@ -296,11 +355,10 @@
                     <thead>
                         <tr>
                             <th>账号ID</th>
-                            <th>许可证</th>
+                            <th>服务器</th>
                             <th>到期时间</th>
-                            <th>运行数</th>
                             <th>状态</th>
-                            <th>最后访问</th>
+                            <th>创建时间</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -311,16 +369,18 @@
             </div>
             
             <!-- 测试验证 -->
-            <div class="section">
+            <div class="section test-section">
                 <h2 class="section-title">🧪 测试验证接口</h2>
                 <div id="testAlert" class="alert"></div>
                 
                 <div class="form-row">
                     <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
-                    <input type="text" id="testLicenseKey" class="form-control" placeholder="输入许可证密钥" value="TEST-888888-2024">
+                    <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
                 </div>
                 
                 <button onclick="testVerify()" class="btn">测试验证</button>
+                
+                <div id="testResult" class="test-result"></div>
             </div>
         </div>
     </div>
@@ -328,74 +388,56 @@
     <!-- 编辑模态框 -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px;">编辑客户信息</h2>
+            <div class="modal-title">编辑客户信息</div>
             <div id="editAlert" class="alert"></div>
             
             <div class="form-group">
-                <label>账号ID:</label>
-                <input type="text" id="editAccountId" class="form-control" readonly>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">账号ID:</label>
+                <input type="text" id="editAccountId" class="form-control" readonly style="background: #f5f5f5;">
             </div>
             
             <div class="form-group">
-                <label>到期时间:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">服务器:</label>
+                <input type="text" id="editServer" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">到期时间:</label>
                 <input type="date" id="editExpireDate" class="form-control">
             </div>
             
             <div class="form-group">
-                <label>最大运行数:</label>
-                <input type="number" id="editMaxSessions" class="form-control" min="1">
-            </div>
-            
-            <div class="form-group">
-                <label>状态:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">状态:</label>
                 <select id="editIsActive" class="form-control">
                     <option value="true">激活</option>
                     <option value="false">禁用</option>
                 </select>
             </div>
             
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
                 <button onclick="saveEdit()" class="btn">保存修改</button>
-                <button onclick="closeEditModal()" class="btn btn-secondary">取消</button>
+                <button onclick="closeEditModal()" class="btn" style="background: #95a5a6;">取消</button>
             </div>
         </div>
     </div>
     
     <script>
         // ========== 配置 ==========
-        let API_BASE = 'https://islandshen.pythonanywhere.com/api';
+        const API_BASE = 'https://islandshen.pythonanywhere.com/api';
         let currentEditClient = null;
         
         // ========== 初始化 ==========
         document.addEventListener('DOMContentLoaded', function() {
-            // 自动加载客户列表
-            loadClients();
-            
             // 设置默认到期日期为30天后
             const defaultDate = new Date();
             defaultDate.setDate(defaultDate.getDate() + 30);
             document.getElementById('addExpireDate').valueAsDate = defaultDate;
             
-            // 显示API地址
-            document.getElementById('apiUrl').textContent = API_BASE;
+            // 显示当前时间
+            updateLastRefreshTime();
+            
+            // 页面加载时不自动加载，需要手动点击刷新
         });
-        
-        // ========== API地址更新 ==========
-        function updateApiUrl() {
-            const newUrl = document.getElementById('apiInput').value.trim();
-            if (newUrl) {
-                // 确保URL以/api结尾
-                if (!newUrl.endsWith('/api')) {
-                    API_BASE = newUrl + '/api';
-                } else {
-                    API_BASE = newUrl;
-                }
-                document.getElementById('apiUrl').textContent = API_BASE;
-                showAlert('addAlert', `API地址已更新为: ${API_BASE}`, 'success');
-                // 重新加载数据
-                loadClients();
-            }
-        }
         
         // ========== 显示提示信息 ==========
         function showAlert(elementId, message, type = 'error') {
@@ -404,10 +446,20 @@
             alertDiv.className = `alert alert-${type}`;
             alertDiv.style.display = 'block';
             
-            // 3秒后自动隐藏
             setTimeout(() => {
                 alertDiv.style.display = 'none';
             }, 3000);
+        }
+        
+        // ========== 更新最后刷新时间 ==========
+        function updateLastRefreshTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateStr = now.toLocaleDateString('zh-CN');
         }
         
         // ========== 加载客户列表 ==========
@@ -420,14 +472,14 @@
             
             try {
                 const response = await fetch(`${API_BASE}/clients`);
-                if (!response.ok) throw new Error('网络响应错误');
+                if (!response.ok) throw new Error(`网络错误: ${response.status}`);
                 
                 const clients = await response.json();
                 
                 if (clients.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                            <td colspan="6" style="text-align: center; padding: 40px; color: #95a5a6;">
                                 📭 暂无客户数据，请先添加客户
                             </td>
                         </tr>
@@ -439,16 +491,20 @@
                     });
                 }
                 
-                // 更新最后刷新时间
-                const now = new Date();
-                document.getElementById('lastUpdate').textContent = 
-                    `最后刷新: ${now.toLocaleTimeString('zh-CN')}`;
-                
+                updateLastRefreshTime();
                 showAlert('listAlert', `已加载 ${clients.length} 个客户`, 'success');
                 
             } catch (error) {
                 console.error('加载客户失败:', error);
                 showAlert('listAlert', `加载失败: ${error.message}`, 'error');
+                
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #e74c3c;">
+                            ❌ 数据加载失败，请检查网络连接
+                        </td>
+                    </tr>
+                `;
             } finally {
                 loadingDiv.style.display = 'none';
             }
@@ -476,21 +532,27 @@
                 statusClass = 'status-active';
             }
             
+            // 格式化创建时间
+            let createdTime = '未知';
+            if (client.created_at) {
+                try {
+                    const createdDate = new Date(client.created_at);
+                    createdTime = createdDate.toLocaleDateString('zh-CN');
+                } catch (e) {
+                    createdTime = client.created_at;
+                }
+            }
+            
             tr.innerHTML = `
                 <td><strong>${client.account_id}</strong></td>
-                <td><code>${client.license_key}</code></td>
+                <td>${client.license_key || client.server || '未设置'}</td>
                 <td>${client.expire_date}</td>
-                <td>
-                    <span style="font-weight: bold; color: ${client.current_sessions >= client.max_sessions ? '#dc3545' : '#28a745'}">
-                        ${client.current_sessions}/${client.max_sessions}
-                    </span>
-                </td>
-                <td class="${statusClass}">${statusText}</td>
-                <td>${client.last_access || '从未访问'}</td>
+                <td><span class="${statusClass}">${statusText}</span></td>
+                <td>${createdTime}</td>
                 <td>
                     <div class="actions">
-                        <button onclick="openEditModal('${client.account_id}')" class="action-btn" style="background: #007bff; color: white;">编辑</button>
-                        <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn" style="background: ${client.is_active ? '#dc3545' : '#28a745'}; color: white;">
+                        <button onclick="openEditModal('${client.account_id}')" class="action-btn btn-edit">编辑</button>
+                        <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn ${client.is_active ? 'btn-disable' : 'btn-enable'}">
                             ${client.is_active ? '禁用' : '启用'}
                         </button>
                     </div>
@@ -499,7 +561,7 @@
             
             // 如果已过期或禁用，整行变灰
             if (!isActive || isExpired) {
-                tr.style.opacity = '0.6';
+                tr.style.opacity = '0.7';
             }
             
             return tr;
@@ -508,14 +570,19 @@
         // ========== 添加新客户 ==========
         async function addNewClient() {
             const accountId = document.getElementById('addAccountId').value.trim();
-            const licenseKey = document.getElementById('addLicenseKey').value.trim();
+            const server = document.getElementById('addServer').value.trim();
             const expireDate = document.getElementById('addExpireDate').value;
-            const maxSessions = parseInt(document.getElementById('addMaxSessions').value) || 1;
             const isActive = document.getElementById('addIsActive').value === 'true';
             
             // 验证输入
-            if (!accountId || !licenseKey || !expireDate) {
+            if (!accountId || !server || !expireDate) {
                 showAlert('addAlert', '请填写所有必填项', 'error');
+                return;
+            }
+            
+            // 验证账号ID格式
+            if (!/^\d+$/.test(accountId)) {
+                showAlert('addAlert', '账号ID必须是数字', 'error');
                 return;
             }
             
@@ -527,9 +594,9 @@
                     },
                     body: JSON.stringify({
                         account_id: accountId,
-                        license_key: licenseKey,
+                        license_key: server,  // 使用server作为license_key
                         expire_date: expireDate,
-                        max_sessions: maxSessions,
+                        max_sessions: 999,  // 设置为很大的数，相当于不限制
                         is_active: isActive
                     })
                 });
@@ -541,8 +608,7 @@
                     
                     // 清空表单
                     document.getElementById('addAccountId').value = '';
-                    document.getElementById('addLicenseKey').value = '';
-                    document.getElementById('addMaxSessions').value = '1';
+                    document.getElementById('addServer').value = '';
                     
                     // 重新加载列表
                     loadClients();
@@ -571,8 +637,8 @@
                 
                 // 填充表单
                 document.getElementById('editAccountId').value = client.account_id;
+                document.getElementById('editServer').value = client.license_key;  // license_key存储的是server
                 document.getElementById('editExpireDate').value = client.expire_date;
-                document.getElementById('editMaxSessions').value = client.max_sessions;
                 document.getElementById('editIsActive').value = client.is_active.toString();
                 
                 // 显示模态框
@@ -593,9 +659,14 @@
         async function saveEdit() {
             if (!currentEditClient) return;
             
+            const server = document.getElementById('editServer').value.trim();
             const expireDate = document.getElementById('editExpireDate').value;
-            const maxSessions = parseInt(document.getElementById('editMaxSessions').value);
             const isActive = document.getElementById('editIsActive').value === 'true';
+            
+            if (!server) {
+                showAlert('editAlert', '服务器不能为空', 'error');
+                return;
+            }
             
             try {
                 const response = await fetch(`${API_BASE}/update/${currentEditClient.account_id}`, {
@@ -604,9 +675,10 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
+                        license_key: server,  // 更新license_key（即server）
                         expire_date: expireDate,
-                        max_sessions: maxSessions,
-                        is_active: isActive
+                        is_active: isActive,
+                        max_sessions: 999  // 设置为很大的数，相当于不限制
                     })
                 });
                 
@@ -661,10 +733,11 @@
         // ========== 测试验证接口 ==========
         async function testVerify() {
             const accountId = document.getElementById('testAccountId').value.trim();
-            const licenseKey = document.getElementById('testLicenseKey').value.trim();
+            const server = document.getElementById('testServer').value.trim();
+            const testResultDiv = document.getElementById('testResult');
             
-            if (!accountId || !licenseKey) {
-                showAlert('testAlert', '请输入账号和密钥', 'error');
+            if (!accountId || !server) {
+                showAlert('testAlert', '请输入账号和服务器', 'error');
                 return;
             }
             
@@ -676,43 +749,52 @@
                     },
                     body: JSON.stringify({
                         account_id: accountId,
-                        license_key: licenseKey
+                        license_key: server  // 使用server作为license_key
                     })
                 });
                 
                 const result = await response.json();
                 
                 if (result.valid) {
-                    showAlert('testAlert', 
-                        `✅ 验证成功！<br>到期时间: ${result.expire_date}<br>运行数: ${result.current_sessions}/${result.max_sessions}`, 
-                        'success'
-                    );
+                    testResultDiv.innerHTML = `
+                        <div style="background: #d5f4e6; color: #27ae60; padding: 15px; border-radius: 6px; border: 1px solid #a3e4c1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">✅ 验证成功！</div>
+                            <div style="font-size: 14px;">
+                                <div>账号ID: <strong>${result.account_id}</strong></div>
+                                <div>到期时间: <strong>${result.expire_date}</strong></div>
+                                <div>状态: <span style="color: #27ae60; font-weight: 600;">正常</span></div>
+                            </div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
                 } else {
-                    showAlert('testAlert', `❌ 验证失败: ${result.message}`, 'error');
+                    testResultDiv.innerHTML = `
+                        <div style="background: #fadbd8; color: #e74c3c; padding: 15px; border-radius: 6px; border: 1px solid #f5b7b1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">❌ 验证失败</div>
+                            <div style="font-size: 14px;">错误信息: ${result.message}</div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
                 }
                 
             } catch (error) {
-                showAlert('testAlert', `网络错误: ${error.message}`, 'error');
+                testResultDiv.innerHTML = `
+                    <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
+                        <div style="font-size: 14px;">${error.message}</div>
+                    </div>
+                `;
+                testResultDiv.style.display = 'block';
             }
         }
         
         // ========== 键盘快捷键 ==========
         document.addEventListener('keydown', function(event) {
-            // Ctrl + R 刷新列表
-            if (event.ctrlKey && event.key === 'r') {
-                event.preventDefault();
-                loadClients();
-            }
-            
             // ESC 关闭模态框
             if (event.key === 'Escape') {
                 closeEditModal();
             }
         });
-        
-        // ========== 自动刷新（可选） ==========
-        // 每30秒自动刷新一次
-        setInterval(loadClients, 30000);
     </script>
 </body>
 </html>
