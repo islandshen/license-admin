@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA客户账号管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .api-info {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .api-info code {
+            background: #e9ecef;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-control {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-active {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .status-inactive {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .status-expired {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>📊 EA客户账号管理系统</h1>
+            <p>管理客户的许可证、到期时间和运行状态</p>
+        </div>
+        
+        <!-- API信息 -->
+        <div class="api-info">
+            <strong>📌 重要信息：</strong>
+            <p>API地址：<code id="apiUrl">https://你的用户名.pythonanywhere.com/api</code></p>
+            <p>验证接口：<code>/api/verify</code> | 添加客户：<code>/api/add</code></p>
+            <div style="margin-top: 10px;">
+                <input type="text" id="apiInput" placeholder="在此输入你的API地址" style="width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <button onclick="updateApiUrl()" class="btn" style="padding: 8px 15px; margin-left: 10px;">更新API地址</button>
+            </div>
+        </div>
+        
+        <!-- 主要内容 -->
+        <div class="content">
+            <!-- 添加客户表单 -->
+            <div class="section">
+                <h2 class="section-title">➕ 添加新客户</h2>
+                <div id="addAlert" class="alert"></div>
+                
+                <div class="form-row">
+                    <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
+                    <input type="text" id="addLicenseKey" class="form-control" placeholder="许可证密钥 (例如: TEST-888888-2024)" required>
+                </div>
+                
+                <div class="form-row">
+                    <input type="date" id="addExpireDate" class="form-control" required>
+                    <input type="number" id="addMaxSessions" class="form-control" placeholder="最大同时运行数" value="1" min="1">
+                    <select id="addIsActive" class="form-control">
+                        <option value="true">激活状态</option>
+                        <option value="false">禁用状态</option>
+                    </select>
+                </div>
+                
+                <button onclick="addNewClient()" class="btn">添加客户</button>
+            </div>
+            
+            <!-- 客户列表 -->
+            <div class="section">
+                <h2 class="section-title">👥 客户列表</h2>
+                <div style="margin-bottom: 20px;">
+                    <button onclick="loadClients()" class="btn">刷新列表</button>
+                    <span id="lastUpdate" style="margin-left: 20px; color: #666; font-size: 14px;"></span>
+                </div>
+                
+                <div id="listAlert" class="alert"></div>
+                
+                <div id="loading" class="loading">
+                    <p>正在加载客户数据...</p>
+                </div>
+                
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th>账号ID</th>
+                            <th>许可证</th>
+                            <th>到期时间</th>
+                            <th>运行数</th>
+                            <th>状态</th>
+                            <th>最后访问</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsBody">
+                        <!-- 数据将通过JavaScript动态填充 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 测试验证 -->
+            <div class="section">
+                <h2 class="section-title">🧪 测试验证接口</h2>
+                <div id="testAlert" class="alert"></div>
+                
+                <div class="form-row">
+                    <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
+                    <input type="text" id="testLicenseKey" class="form-control" placeholder="输入许可证密钥" value="TEST-888888-2024">
+                </div>
+                
+                <button onclick="testVerify()" class="btn">测试验证</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 编辑模态框 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 20px;">编辑客户信息</h2>
+            <div id="editAlert" class="alert"></div>
+            
+            <div class="form-group">
+                <label>账号ID:</label>
+                <input type="text" id="editAccountId" class="form-control" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>到期时间:</label>
+                <input type="date" id="editExpireDate" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label>最大运行数:</label>
+                <input type="number" id="editMaxSessions" class="form-control" min="1">
+            </div>
+            
+            <div class="form-group">
+                <label>状态:</label>
+                <select id="editIsActive" class="form-control">
+                    <option value="true">激活</option>
+                    <option value="false">禁用</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button onclick="saveEdit()" class="btn">保存修改</button>
+                <button onclick="closeEditModal()" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ========== 配置 ==========
+        let API_BASE = 'https://你的用户名.pythonanywhere.com/api';
+        let currentEditClient = null;
+        
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // 自动加载客户列表
+            loadClients();
+            
+            // 设置默认到期日期为30天后
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 30);
+            document.getElementById('addExpireDate').valueAsDate = defaultDate;
+            
+            // 显示API地址
+            document.getElementById('apiUrl').textContent = API_BASE;
+        });
+        
+        // ========== API地址更新 ==========
+        function updateApiUrl() {
+            const newUrl = document.getElementById('apiInput').value.trim();
+            if (newUrl) {
+                // 确保URL以/api结尾
+                if (!newUrl.endsWith('/api')) {
+                    API_BASE = newUrl + '/api';
+                } else {
+                    API_BASE = newUrl;
+                }
+                document.getElementById('apiUrl').textContent = API_BASE;
+                showAlert('addAlert', `API地址已更新为: ${API_BASE}`, 'success');
+                // 重新加载数据
+                loadClients();
+            }
+        }
+        
+        // ========== 显示提示信息 ==========
+        function showAlert(elementId, message, type = 'error') {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        // ========== 加载客户列表 ==========
+        async function loadClients() {
+            const loadingDiv = document.getElementById('loading');
+            const tbody = document.getElementById('clientsBody');
+            
+            loadingDiv.style.display = 'block';
+            tbody.innerHTML = '';
+            
+            try {
+                const response = await fetch(`${API_BASE}/clients`);
+                if (!response.ok) throw new Error('网络响应错误');
+                
+                const clients = await response.json();
+                
+                if (clients.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                                📭 暂无客户数据，请先添加客户
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    clients.forEach(client => {
+                        const row = createClientRow(client);
+                        tbody.appendChild(row);
+                    });
+                }
+                
+                // 更新最后刷新时间
+                const now = new Date();
+                document.getElementById('lastUpdate').textContent = 
+                    `最后刷新: ${now.toLocaleTimeString('zh-CN')}`;
+                
+                showAlert('listAlert', `已加载 ${clients.length} 个客户`, 'success');
+                
+            } catch (error) {
+                console.error('加载客户失败:', error);
+                showAlert('listAlert', `加载失败: ${error.message}`, 'error');
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+        
+        // ========== 创建客户行 ==========
+        function createClientRow(client) {
+            const tr = document.createElement('tr');
+            
+            // 检查是否过期
+            const expireDate = new Date(client.expire_date);
+            const now = new Date();
+            const isExpired = expireDate < now;
+            const isActive = client.is_active;
+            
+            let statusText, statusClass;
+            if (!isActive) {
+                statusText = '已禁用';
+                statusClass = 'status-inactive';
+            } else if (isExpired) {
+                statusText = '已过期';
+                statusClass = 'status-expired';
+            } else {
+                statusText = '正常';
+                statusClass = 'status-active';
+            }
+            
+            tr.innerHTML = `
+                <td><strong>${client.account_id}</strong></td>
+                <td><code>${client.license_key}</code></td>
+                <td>${client.expire_date}</td>
+                <td>
+                    <span style="font-weight: bold; color: ${client.current_sessions >= client.max_sessions ? '#dc3545' : '#28a745'}">
+                        ${client.current_sessions}/${client.max_sessions}
+                    </span>
+                </td>
+                <td class="${statusClass}">${statusText}</td>
+                <td>${client.last_access || '从未访问'}</td>
+                <td>
+                    <div class="actions">
+                        <button onclick="openEditModal('${client.account_id}')" class="action-btn" style="background: #007bff; color: white;">编辑</button>
+                        <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn" style="background: ${client.is_active ? '#dc3545' : '#28a745'}; color: white;">
+                            ${client.is_active ? '禁用' : '启用'}
+                        </button>
+                    </div>
+                </td>
+            `;
+            
+            // 如果已过期或禁用，整行变灰
+            if (!isActive || isExpired) {
+                tr.style.opacity = '0.6';
+            }
+            
+            return tr;
+        }
+        
+        // ========== 添加新客户 ==========
+        async function addNewClient() {
+            const accountId = document.getElementById('addAccountId').value.trim();
+            const licenseKey = document.getElementById('addLicenseKey').value.trim();
+            const expireDate = document.getElementById('addExpireDate').value;
+            const maxSessions = parseInt(document.getElementById('addMaxSessions').value) || 1;
+            const isActive = document.getElementById('addIsActive').value === 'true';
+            
+            // 验证输入
+            if (!accountId || !licenseKey || !expireDate) {
+                showAlert('addAlert', '请填写所有必填项', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: accountId,
+                        license_key: licenseKey,
+                        expire_date: expireDate,
+                        max_sessions: maxSessions,
+                        is_active: isActive
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('addAlert', '✅ 客户添加成功！', 'success');
+                    
+                    // 清空表单
+                    document.getElementById('addAccountId').value = '';
+                    document.getElementById('addLicenseKey').value = '';
+                    document.getElementById('addMaxSessions').value = '1';
+                    
+                    // 重新加载列表
+                    loadClients();
+                } else {
+                    showAlert('addAlert', `添加失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('addAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 打开编辑模态框 ==========
+        async function openEditModal(accountId) {
+            try {
+                const response = await fetch(`${API_BASE}/clients`);
+                const clients = await response.json();
+                
+                const client = clients.find(c => c.account_id === accountId);
+                if (!client) {
+                    showAlert('editAlert', '客户不存在', 'error');
+                    return;
+                }
+                
+                currentEditClient = client;
+                
+                // 填充表单
+                document.getElementById('editAccountId').value = client.account_id;
+                document.getElementById('editExpireDate').value = client.expire_date;
+                document.getElementById('editMaxSessions').value = client.max_sessions;
+                document.getElementById('editIsActive').value = client.is_active.toString();
+                
+                // 显示模态框
+                document.getElementById('editModal').style.display = 'flex';
+                
+            } catch (error) {
+                showAlert('editAlert', `加载失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 关闭编辑模态框 ==========
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditClient = null;
+        }
+        
+        // ========== 保存编辑 ==========
+        async function saveEdit() {
+            if (!currentEditClient) return;
+            
+            const expireDate = document.getElementById('editExpireDate').value;
+            const maxSessions = parseInt(document.getElementById('editMaxSessions').value);
+            const isActive = document.getElementById('editIsActive').value === 'true';
+            
+            try {
+                const response = await fetch(`${API_BASE}/update/${currentEditClient.account_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        expire_date: expireDate,
+                        max_sessions: maxSessions,
+                        is_active: isActive
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('editAlert', '✅ 修改保存成功！', 'success');
+                    setTimeout(() => {
+                        closeEditModal();
+                        loadClients();
+                    }, 1000);
+                } else {
+                    showAlert('editAlert', `保存失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('editAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 切换客户状态 ==========
+        async function toggleClientStatus(accountId, newStatus) {
+            if (!confirm(`确定要${newStatus ? '启用' : '禁用'}这个账号吗？`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/update/${accountId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        is_active: newStatus
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('listAlert', `账号已${newStatus ? '启用' : '禁用'}`, 'success');
+                    loadClients();
+                } else {
+                    showAlert('listAlert', `操作失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('listAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 测试验证接口 ==========
+        async function testVerify() {
+            const accountId = document.getElementById('testAccountId').value.trim();
+            const licenseKey = document.getElementById('testLicenseKey').value.trim();
+            
+            if (!accountId || !licenseKey) {
+                showAlert('testAlert', '请输入账号和密钥', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/verify`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: accountId,
+                        license_key: licenseKey
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.valid) {
+                    showAlert('testAlert', 
+                        `✅ 验证成功！\n到期时间: ${result.expire_date}\n运行数: ${result.current_sessions}/${result.max_sessions}`, 
+                        'success'
+                    );
+                } else {
+                    showAlert('testAlert', `❌ 验证失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('testAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 键盘快捷键 ==========
+        document.addEventListener('keydown', function(event) {
+            // Ctrl + R 刷新列表
+            if (event.ctrlKey && event.key === 'r') {
+                event.preventDefault();
+                loadClients();
+            }
+            
+            // ESC 关闭模态框
+            if (event.key === 'Escape') {
+                closeEditModal();
+            }
+        });
+        
+        // ========== 自动刷新（可选） ==========
+        // 每30秒自动刷新一次
+        setInterval(loadClients, 30000);
+    </script>
+</body>
+</html>
