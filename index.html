@@ -1,37 +1,37 @@
-
- 
-<头>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA客户账号管理系统</title>
-    <样式>
-        *  {
-            边距：0;
-            
-            盒模型：边框盒;
-            字体：'微软 YaHei'，Arial，无衬线;
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
         }
         
-        身体 {
-            背景：线性渐变（135度，#667eea 0%，#764ba2 100%）;
-            最小高度：100vh;
-            
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
         
-        .容器 {
-            最大宽度：1200像素;
-            边距：0 自动;
-            背景：白色;
-            边框半径：15像素;
-            box-shadow：0 20px 40px rgba(0,0,0,0.1);
-            溢出：隐藏;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         
-        .标题 {
-            背景：线性渐变（135度，#667eea 0%，#764ba2 100%）;
-            颜色：白色;
-            
-            文本对齐：居中;
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
         }
         
         .header h1 {
@@ -240,7 +240,7 @@
         <!-- 头部 -->
         <div class="header">
             <h1>📊 EA客户账号管理系统</h1>
-            <p>管理客户的账号、使用期限和运行状态</p>
+            <p>管理客户的许可证、到期时间和运行状态</p>
         </div>
         
         <!-- API信息 -->
@@ -684,7 +684,7 @@
                 
                 if (result.valid) {
                     showAlert('testAlert', 
-                        `✅ 验证成功！\n到期时间: ${result.expire_date}\n运行数: ${result.current_sessions}/${result.max_sessions}`, 
+                        `✅ 验证成功！<br>到期时间: ${result.expire_date}<br>运行数: ${result.current_sessions}/${result.max_sessions}`, 
                         'success'
                     );
                 } else {
