@@ -119,7 +119,7 @@
         /* 主系统容器 */
         #mainContainer {
             display: none;
-            max-width: 1400px;  /* 增加宽度以适应更多列 */
+            max-width: 1400px;
             width: 100%;
             background: white;
             border-radius: 10px;
@@ -179,7 +179,7 @@
         .section-title {
             font-size: 18px;
             color: #2c3e50;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid #3498db;
             display: flex;
@@ -212,19 +212,40 @@
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
         }
         
-        /* 搜索区域样式 */
-        .search-section {
+        /* 搜索区域样式 - 根据图片调整 */
+        .search-header {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-box-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             flex-wrap: wrap;
         }
         
-        .search-input {
+        .search-label {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .search-input-container {
             flex: 1;
             min-width: 300px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
             padding: 10px 15px;
+            padding-right: 40px;
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 14px;
@@ -237,24 +258,22 @@
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
         }
         
-        .search-btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            font-size: 16px;
         }
         
-        .search-btn:hover {
-            background: #2980b9;
-            transform: translateY(-1px);
+        .search-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
-        /* 统一的主按钮样式 */
+        /* 按钮样式 */
         .btn {
             background: #3498db;
             color: white;
@@ -288,6 +307,73 @@
         
         .btn-test:hover {
             background: #8e44ad;
+        }
+        
+        .btn-clear {
+            background: #95a5a6;
+        }
+        
+        .btn-clear:hover {
+            background: #7f8c8d;
+        }
+        
+        /* 分页样式 */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .pagination-info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #2c3e50;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            min-width: 36px;
+            text-align: center;
+        }
+        
+        .page-btn:hover:not(:disabled) {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .page-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            font-weight: 600;
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-ellipsis {
+            padding: 6px 8px;
+            color: #7f8c8d;
         }
         
         /* 操作按钮组 */
@@ -551,12 +637,17 @@
                 padding: 20px;
             }
             
-            .search-section {
+            .search-header {
                 flex-direction: column;
                 align-items: stretch;
             }
             
-            .search-input {
+            .search-box-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input-container {
                 min-width: 100%;
             }
             
@@ -588,6 +679,15 @@
             .btn {
                 padding: 9px 16px;
                 font-size: 13px;
+            }
+            
+            .pagination-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .pagination-controls {
+                justify-content: center;
             }
         }
     </style>
@@ -658,14 +758,21 @@
             <div class="section">
                 <div class="section-title">
                     <span>👥 客户列表</span>
-                    <button onclick="loadClients()" class="btn btn-refresh">刷新列表</button>
                 </div>
                 
-                <!-- 搜索区域 -->
-                <div class="search-section">
-                    <input type="text" id="searchInput" class="search-input" placeholder="搜索账号ID、服务器、识别码或备注...">
-                    <button onclick="searchClients()" class="search-btn">搜索</button>
-                    <button onclick="clearSearch()" class="btn" style="background: #95a5a6;">清除搜索</button>
+                <!-- 搜索区域 - 根据图片重新排列 -->
+                <div class="search-header">
+                    <div class="search-box-container">
+                        <span class="search-label">搜索</span>
+                        <div class="search-input-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="账号ID、服务器、识别码或备注...">
+                            <span class="search-icon">🔍</span>
+                        </div>
+                        <div class="search-actions">
+                            <button onclick="clearSearch()" class="btn btn-clear">清除搜索</button>
+                            <button onclick="loadClients()" class="btn btn-refresh">刷新列表</button>
+                        </div>
+                    </div>
                 </div>
                 
                 <div id="listAlert" class="alert"></div>
@@ -692,6 +799,12 @@
                         <!-- 数据将通过JavaScript动态填充 -->
                     </tbody>
                 </table>
+                
+                <!-- 分页控件 -->
+                <div id="paginationContainer" class="pagination-container" style="display: none;">
+                    <div class="pagination-info" id="paginationInfo"></div>
+                    <div class="pagination-controls" id="paginationControls"></div>
+                </div>
             </div>
             
             <!-- 测试验证 -->
@@ -786,6 +899,8 @@
         let currentEditClient = null;
         let clientToDelete = null;
         let currentSearchQuery = '';
+        let currentPage = 1;
+        const perPage = 20;  // 每页显示20条
         
         // ========== 登录功能 ==========
         async function login() {
@@ -870,13 +985,111 @@
         function searchClients() {
             const searchInput = document.getElementById('searchInput');
             currentSearchQuery = searchInput.value.trim();
+            currentPage = 1;  // 搜索时回到第一页
             loadClients();
         }
         
         function clearSearch() {
             document.getElementById('searchInput').value = '';
             currentSearchQuery = '';
+            currentPage = 1;  // 清除搜索时回到第一页
             loadClients();
+        }
+        
+        // ========== 分页功能 ==========
+        function goToPage(page) {
+            currentPage = page;
+            loadClients();
+        }
+        
+        function createPagination(pagination) {
+            const container = document.getElementById('paginationContainer');
+            const infoDiv = document.getElementById('paginationInfo');
+            const controlsDiv = document.getElementById('paginationControls');
+            
+            if (pagination.pages <= 1) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'flex';
+            
+            // 更新分页信息
+            const start = (pagination.page - 1) * pagination.per_page + 1;
+            const end = Math.min(pagination.page * pagination.per_page, pagination.total);
+            infoDiv.textContent = `显示第 ${start} 到 ${end} 条，共 ${pagination.total} 条记录`;
+            
+            // 创建分页按钮
+            controlsDiv.innerHTML = '';
+            
+            // 上一页按钮
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.textContent = '‹';
+            prevBtn.disabled = !pagination.has_prev;
+            prevBtn.onclick = () => goToPage(pagination.page - 1);
+            controlsDiv.appendChild(prevBtn);
+            
+            // 页码按钮
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, pagination.page - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(pagination.pages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // 第一页
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.className = 'page-btn';
+                firstBtn.textContent = '1';
+                firstBtn.onclick = () => goToPage(1);
+                controlsDiv.appendChild(firstBtn);
+                
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.textContent = '...';
+                    controlsDiv.appendChild(ellipsis);
+                }
+            }
+            
+            // 中间页码
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = 'page-btn';
+                pageBtn.textContent = i;
+                if (i === pagination.page) {
+                    pageBtn.classList.add('active');
+                }
+                pageBtn.onclick = () => goToPage(i);
+                controlsDiv.appendChild(pageBtn);
+            }
+            
+            // 最后一页
+            if (endPage < pagination.pages) {
+                if (endPage < pagination.pages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.textContent = '...';
+                    controlsDiv.appendChild(ellipsis);
+                }
+                
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'page-btn';
+                lastBtn.textContent = pagination.pages;
+                lastBtn.onclick = () => goToPage(pagination.pages);
+                controlsDiv.appendChild(lastBtn);
+            }
+            
+            // 下一页按钮
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.textContent = '›';
+            nextBtn.disabled = !pagination.has_next;
+            nextBtn.onclick = () => goToPage(pagination.page + 1);
+            controlsDiv.appendChild(nextBtn);
         }
         
         // ========== 加载客户列表 ==========
@@ -888,15 +1101,17 @@
             tbody.innerHTML = '';
             
             try {
-                let url = `${API_BASE}/clients`;
+                let url = `${API_BASE}/clients?page=${currentPage}&per_page=${perPage}`;
                 if (currentSearchQuery) {
-                    url += `?search=${encodeURIComponent(currentSearchQuery)}`;
+                    url += `&search=${encodeURIComponent(currentSearchQuery)}`;
                 }
                 
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`网络错误: ${response.status}`);
                 
-                const clients = await response.json();
+                const data = await response.json();
+                const clients = data.clients || [];
+                const pagination = data.pagination || { page: 1, per_page: perPage, total: 0, pages: 1 };
                 
                 if (clients.length === 0) {
                     tbody.innerHTML = `
@@ -906,11 +1121,15 @@
                             </td>
                         </tr>
                     `;
+                    document.getElementById('paginationContainer').style.display = 'none';
                 } else {
                     clients.forEach((client, index) => {
-                        const row = createClientRow(client, index + 1);
+                        const row = createClientRow(client, (pagination.page - 1) * pagination.per_page + index + 1);
                         tbody.appendChild(row);
                     });
+                    
+                    // 创建分页
+                    createPagination(pagination);
                 }
                 
                 const searchInfo = currentSearchQuery ? `（搜索: "${currentSearchQuery}"）` : '';
@@ -927,6 +1146,7 @@
                         </td>
                     </tr>
                 `;
+                document.getElementById('paginationContainer').style.display = 'none';
             } finally {
                 loadingDiv.style.display = 'none';
             }
@@ -1052,13 +1272,14 @@
         // ========== 打开编辑模态框 ==========
         async function openEditModal(accountId) {
             try {
-                let url = `${API_BASE}/clients`;
+                let url = `${API_BASE}/clients?page=${currentPage}&per_page=${perPage}`;
                 if (currentSearchQuery) {
-                    url += `?search=${encodeURIComponent(currentSearchQuery)}`;
+                    url += `&search=${encodeURIComponent(currentSearchQuery)}`;
                 }
                 
                 const response = await fetch(url);
-                const clients = await response.json();
+                const data = await response.json();
+                const clients = data.clients || [];
                 
                 const client = clients.find(c => c.account_id === accountId);
                 if (!client) {
