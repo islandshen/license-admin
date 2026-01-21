@@ -5,20 +5,225 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA客户管理系统</title>
     <style>
-        /* ... 原有样式保持不变 ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
         
-        /* 新增样式：搜索区域 */
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* 登录界面样式 - 保持原来的admin.html样式 */
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .login-header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .login-form {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .login-alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .alert-error {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        /* 主系统容器 */
+        #mainContainer {
+            display: none;
+            max-width: 1400px;  /* 增加宽度以适应更多列 */
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-control {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        /* 搜索区域样式 */
         .search-section {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
-            flex-wrap: wrap;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .search-input {
             flex: 1;
-            min-width: 250px;
+            min-width: 300px;
             padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 6px;
@@ -49,7 +254,104 @@
             transform: translateY(-1px);
         }
         
-        /* 表格调整 */
+        /* 统一的主按钮样式 */
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-refresh {
+            background: #2ecc71;
+        }
+        
+        .btn-refresh:hover {
+            background: #27ae60;
+        }
+        
+        .btn-test {
+            background: #9b59b6;
+        }
+        
+        .btn-test:hover {
+            background: #8e44ad;
+        }
+        
+        /* 操作按钮组 */
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            line-height: 1.2;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+        
+        .btn-disable {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn-disable:hover {
+            background: #d68910;
+        }
+        
+        .btn-enable {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-enable:hover {
+            background: #27ae60;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
         th {
             background: #f8f9fa;
             color: #2c3e50;
@@ -57,14 +359,18 @@
             padding: 10px 8px;
             text-align: left;
             border-bottom: 2px solid #eaeaea;
-            font-size: 13px;
+            white-space: nowrap;
         }
         
         td {
             padding: 10px 8px;
             border-bottom: 1px solid #eee;
             vertical-align: middle;
-            font-size: 13px;
+            white-space: nowrap;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
         }
         
         /* 序号列样式 */
@@ -77,42 +383,174 @@
         
         /* 备注列样式 */
         .notes-cell {
-            max-width: 150px;
+            max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            cursor: pointer;
-            position: relative;
         }
         
         .notes-cell:hover {
             overflow: visible;
             white-space: normal;
-            background: white;
-            z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             position: relative;
+            z-index: 10;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         
-        /* 操作按钮组调整 */
-        .actions {
+        .status-active {
+            color: #27ae60;
+            font-weight: 600;
+            background: #d5f4e6;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .status-inactive {
+            color: #e74c3c;
+            font-weight: 600;
+            background: #fadbd8;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .status-expired {
+            color: #f39c12;
+            font-weight: 600;
+            background: #fef5e7;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #a3e4c1;
+        }
+        
+        .alert-error {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* 模态框中的按钮 */
+        .modal-content .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border: 1px dashed #ddd;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        
+        .test-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .delete-confirm {
+            background: #fef5e7;
+            border: 1px solid #f8c471;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .delete-actions {
             display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
         }
         
-        .action-btn {
-            padding: 4px 8px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 500;
-            transition: all 0.2s;
+        .delete-actions .btn {
+            padding: 10px 20px;
+        }
+        
+        @media (max-width: 1200px) {
+            table {
+                font-size: 13px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+            }
         }
         
         @media (max-width: 768px) {
-            /* 响应式调整 */
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
             .search-section {
                 flex-direction: column;
                 align-items: stretch;
@@ -124,10 +562,12 @@
             
             table {
                 font-size: 12px;
+                display: block;
+                overflow-x: auto;
             }
             
             th, td {
-                padding: 6px 4px;
+                padding: 8px 6px;
                 font-size: 12px;
             }
             
@@ -137,18 +577,45 @@
             
             .actions {
                 flex-direction: column;
-                gap: 2px;
+                gap: 4px;
             }
             
             .action-btn {
-                padding: 3px 6px;
-                font-size: 10px;
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+            
+            .btn {
+                padding: 9px 16px;
+                font-size: 13px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- ... 登录部分保持不变 ... -->
+    <!-- 登录界面 - 保持原来的admin.html样式 -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-header">
+            <h1>🔐 EA客户管理系统</h1>
+            <p>请登录以管理客户账号</p>
+        </div>
+        
+        <div class="login-form">
+            <div id="loginAlert" class="login-alert"></div>
+            
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" placeholder="请输入用户名">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="请输入密码">
+            </div>
+            
+            <button onclick="login()" class="login-btn">登录</button>
+        </div>
+    </div>
     
     <!-- 主系统界面 -->
     <div id="mainContainer">
@@ -161,14 +628,14 @@
         
         <!-- 主要内容 -->
         <div class="content">
-            <!-- 添加客户表单 - 新增识别码和备注字段 -->
+            <!-- 添加客户表单 -->
             <div class="section">
                 <h2 class="section-title">➕ 添加新客户</h2>
                 <div id="addAlert" class="alert"></div>
                 
                 <div class="form-row">
                     <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
-                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: ECMarkets-Live04)" required>
+                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: IC Markets)" required>
                     <input type="text" id="addIdentificationCode" class="form-control" placeholder="识别码 (可选)">
                 </div>
                 
@@ -227,11 +694,24 @@
                 </table>
             </div>
             
-            <!-- ... 测试验证部分保持不变 ... -->
+            <!-- 测试验证 -->
+            <div class="section test-section">
+                <h2 class="section-title">🧪 测试验证接口</h2>
+                <div id="testAlert" class="alert"></div>
+                
+                <div class="form-row">
+                    <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
+                    <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
+                </div>
+                
+                <button onclick="testVerify()" class="btn btn-test">测试验证</button>
+                
+                <div id="testResult" class="test-result"></div>
+            </div>
         </div>
     </div>
     
-    <!-- 编辑模态框 - 新增识别码和备注字段 -->
+    <!-- 编辑模态框 -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">编辑客户信息</div>
@@ -277,7 +757,28 @@
         </div>
     </div>
     
-    <!-- ... 删除确认模态框保持不变 ... -->
+    <!-- 删除确认模态框 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">⚠️ 确认删除</div>
+            
+            <div class="delete-confirm">
+                <p style="color: #e74c3c; font-weight: 600; margin-bottom: 10px;">您确定要删除这个客户吗？</p>
+                <p style="color: #7f8c8d; font-size: 14px;">账号ID: <span id="deleteAccountId" style="font-weight: 600;"></span></p>
+                <p style="color: #7f8c8d; font-size: 14px;">服务器: <span id="deleteServer" style="font-weight: 600;"></span></p>
+                <p style="color: #e74c3c; font-size: 13px; margin-top: 15px; border-top: 1px dashed #f8c471; padding-top: 10px;">
+                    ⚠️ 注意：此操作不可撤销，删除后将无法恢复！
+                </p>
+            </div>
+            
+            <div id="deleteAlert" class="alert"></div>
+            
+            <div class="delete-actions">
+                <button onclick="confirmDelete()" class="btn btn-delete">确认删除</button>
+                <button onclick="closeDeleteModal()" class="btn" style="background: #95a5a6;">取消</button>
+            </div>
+        </div>
+    </div>
     
     <script>
         // ========== 配置 ==========
@@ -286,7 +787,84 @@
         let clientToDelete = null;
         let currentSearchQuery = '';
         
-        // ========== 登录功能 - 保持不变 ... ==========
+        // ========== 登录功能 ==========
+        async function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username || !password) {
+                showLoginAlert('请输入用户名和密码');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('登录失败');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('mainContainer').style.display = 'block';
+                    
+                    const defaultDate = new Date();
+                    defaultDate.setDate(defaultDate.getDate() + 30);
+                    document.getElementById('addExpireDate').valueAsDate = defaultDate;
+                    
+                    loadClients();
+                } else {
+                    showLoginAlert('用户名或密码错误');
+                }
+                
+            } catch (error) {
+                console.error('登录错误:', error);
+                showLoginAlert('登录失败，请检查网络连接');
+            }
+        }
+        
+        function showLoginAlert(message) {
+            const alertDiv = document.getElementById('loginAlert');
+            alertDiv.textContent = message;
+            alertDiv.className = 'login-alert alert-error';
+            alertDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        }
+        
+        // ========== 显示提示信息 ==========
+        function showAlert(elementId, message, type = 'error') {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
         
         // ========== 搜索功能 ==========
         function searchClients() {
@@ -310,7 +888,6 @@
             tbody.innerHTML = '';
             
             try {
-                // 构建查询URL
                 let url = `${API_BASE}/clients`;
                 if (currentSearchQuery) {
                     url += `?search=${encodeURIComponent(currentSearchQuery)}`;
@@ -359,7 +936,6 @@
         function createClientRow(client, serialNumber) {
             const tr = document.createElement('tr');
             
-            // 检查是否过期
             const expireDate = new Date(client.expire_date);
             const now = new Date();
             const isExpired = expireDate < now;
@@ -377,7 +953,6 @@
                 statusClass = 'status-active';
             }
             
-            // 格式化创建时间
             let createdTime = '未知';
             if (client.created_at) {
                 try {
@@ -388,18 +963,18 @@
                 }
             }
             
-            // 备注处理：如果为空显示占位符
-            const notes = client.notes || '';
+            const identificationCode = client.identification_code || '-';
+            const notes = client.notes || '-';
             
             tr.innerHTML = `
                 <td class="serial-number">${serialNumber}</td>
                 <td><strong>${client.account_id}</strong></td>
                 <td>${client.license_key || client.server || '未设置'}</td>
-                <td>${client.identification_code || '-'}</td>
+                <td>${identificationCode}</td>
                 <td>${client.expire_date}</td>
                 <td><span class="${statusClass}">${statusText}</span></td>
                 <td>${createdTime}</td>
-                <td class="notes-cell" title="${notes}">${notes || '-'}</td>
+                <td class="notes-cell" title="${notes}">${notes}</td>
                 <td>
                     <div class="actions">
                         <button onclick="openEditModal('${client.account_id}')" class="action-btn btn-edit">编辑</button>
@@ -411,7 +986,6 @@
                 </td>
             `;
             
-            // 如果已过期或禁用，整行变灰
             if (!isActive || isExpired) {
                 tr.style.opacity = '0.7';
             }
@@ -423,18 +997,16 @@
         async function addNewClient() {
             const accountId = document.getElementById('addAccountId').value.trim();
             const server = document.getElementById('addServer').value.trim();
-            const identificationCode = document.getElementById('addIdentificationCode').value.trim(); // 新增
+            const identificationCode = document.getElementById('addIdentificationCode').value.trim();
             const expireDate = document.getElementById('addExpireDate').value;
             const isActive = document.getElementById('addIsActive').value === 'true';
-            const notes = document.getElementById('addNotes').value.trim(); // 新增
+            const notes = document.getElementById('addNotes').value.trim();
             
-            // 验证输入
             if (!accountId || !server || !expireDate) {
                 showAlert('addAlert', '请填写所有必填项', 'error');
                 return;
             }
             
-            // 验证账号ID格式
             if (!/^\d+$/.test(accountId)) {
                 showAlert('addAlert', '账号ID必须是数字', 'error');
                 return;
@@ -449,11 +1021,11 @@
                     body: JSON.stringify({
                         account_id: accountId,
                         license_key: server,
-                        identification_code: identificationCode, // 新增
+                        identification_code: identificationCode,
                         expire_date: expireDate,
                         max_sessions: 999,
                         is_active: isActive,
-                        notes: notes // 新增
+                        notes: notes
                     })
                 });
                 
@@ -462,13 +1034,11 @@
                 if (result.success) {
                     showAlert('addAlert', '✅ 客户添加成功！', 'success');
                     
-                    // 清空表单
                     document.getElementById('addAccountId').value = '';
                     document.getElementById('addServer').value = '';
                     document.getElementById('addIdentificationCode').value = '';
                     document.getElementById('addNotes').value = '';
                     
-                    // 重新加载列表
                     loadClients();
                 } else {
                     showAlert('addAlert', `添加失败: ${result.message}`, 'error');
@@ -482,7 +1052,12 @@
         // ========== 打开编辑模态框 ==========
         async function openEditModal(accountId) {
             try {
-                const response = await fetch(`${API_BASE}/clients`);
+                let url = `${API_BASE}/clients`;
+                if (currentSearchQuery) {
+                    url += `?search=${encodeURIComponent(currentSearchQuery)}`;
+                }
+                
+                const response = await fetch(url);
                 const clients = await response.json();
                 
                 const client = clients.find(c => c.account_id === accountId);
@@ -493,15 +1068,13 @@
                 
                 currentEditClient = client;
                 
-                // 填充表单
                 document.getElementById('editAccountId').value = client.account_id;
                 document.getElementById('editServer').value = client.license_key;
-                document.getElementById('editIdentificationCode').value = client.identification_code || ''; // 新增
+                document.getElementById('editIdentificationCode').value = client.identification_code || '';
                 document.getElementById('editExpireDate').value = client.expire_date;
                 document.getElementById('editIsActive').value = client.is_active.toString();
-                document.getElementById('editNotes').value = client.notes || ''; // 新增
+                document.getElementById('editNotes').value = client.notes || '';
                 
-                // 显示模态框
                 document.getElementById('editModal').style.display = 'flex';
                 
             } catch (error) {
@@ -509,15 +1082,21 @@
             }
         }
         
+        // ========== 关闭编辑模态框 ==========
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditClient = null;
+        }
+        
         // ========== 保存编辑 ==========
         async function saveEdit() {
             if (!currentEditClient) return;
             
             const server = document.getElementById('editServer').value.trim();
-            const identificationCode = document.getElementById('editIdentificationCode').value.trim(); // 新增
+            const identificationCode = document.getElementById('editIdentificationCode').value.trim();
             const expireDate = document.getElementById('editExpireDate').value;
             const isActive = document.getElementById('editIsActive').value === 'true';
-            const notes = document.getElementById('editNotes').value.trim(); // 新增
+            const notes = document.getElementById('editNotes').value.trim();
             
             if (!server) {
                 showAlert('editAlert', '服务器不能为空', 'error');
@@ -532,10 +1111,10 @@
                     },
                     body: JSON.stringify({
                         license_key: server,
-                        identification_code: identificationCode, // 新增
+                        identification_code: identificationCode,
                         expire_date: expireDate,
                         is_active: isActive,
-                        notes: notes, // 新增
+                        notes: notes,
                         max_sessions: 999
                     })
                 });
@@ -557,38 +1136,156 @@
             }
         }
         
-        // ... 其他函数保持不变 ...
+        // ========== 切换客户状态 ==========
+        async function toggleClientStatus(accountId, newStatus) {
+            if (!confirm(`确定要${newStatus ? '启用' : '禁用'}这个账号吗？`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/update/${accountId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        is_active: newStatus
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('listAlert', `账号已${newStatus ? '启用' : '禁用'}`, 'success');
+                    loadClients();
+                } else {
+                    showAlert('listAlert', `操作失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('listAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
         
-        // ========== 键盘快捷键 - 增强 ==========
+        // ========== 打开删除确认模态框 ==========
+        function openDeleteModal(accountId, server) {
+            clientToDelete = accountId;
+            document.getElementById('deleteAccountId').textContent = accountId;
+            document.getElementById('deleteServer').textContent = server;
+            document.getElementById('deleteModal').style.display = 'flex';
+            document.getElementById('deleteAlert').style.display = 'none';
+        }
+        
+        // ========== 关闭删除确认模态框 ==========
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            clientToDelete = null;
+        }
+        
+        // ========== 确认删除客户 ==========
+        async function confirmDelete() {
+            if (!clientToDelete) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/delete/${clientToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('deleteAlert', '✅ 客户删除成功！', 'success');
+                    setTimeout(() => {
+                        closeDeleteModal();
+                        loadClients();
+                    }, 1000);
+                } else {
+                    showAlert('deleteAlert', `删除失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('deleteAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 测试验证接口 ==========
+        async function testVerify() {
+            const accountId = document.getElementById('testAccountId').value.trim();
+            const server = document.getElementById('testServer').value.trim();
+            const testResultDiv = document.getElementById('testResult');
+            
+            if (!accountId || !server) {
+                showAlert('testAlert', '请输入账号和服务器', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/verify`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: accountId,
+                        license_key: server
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.valid) {
+                    testResultDiv.innerHTML = `
+                        <div style="background: #d5f4e6; color: #27ae60; padding: 15px; border-radius: 6px; border: 1px solid #a3e4c1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">✅ 验证成功！</div>
+                            <div style="font-size: 14px;">
+                                <div>账号ID: <strong>${result.account_id}</strong></div>
+                                <div>到期时间: <strong>${result.expire_date}</strong></div>
+                                <div>状态: <span style="color: #27ae60; font-weight: 600;">正常</span></div>
+                            </div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
+                } else {
+                    testResultDiv.innerHTML = `
+                        <div style="background: #fadbd8; color: #e74c3c; padding: 15px; border-radius: 6px; border: 1px solid #f5b7b1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">❌ 验证失败</div>
+                            <div style="font-size: 14px;">错误信息: ${result.message}</div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
+                }
+                
+            } catch (error) {
+                testResultDiv.innerHTML = `
+                    <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
+                        <div style="font-size: 14px;">${error.message}</div>
+                    </div>
+                `;
+                testResultDiv.style.display = 'block';
+            }
+        }
+        
+        // ========== 键盘快捷键 ==========
         document.addEventListener('keydown', function(event) {
-            // ESC 关闭所有模态框
             if (event.key === 'Escape') {
                 closeEditModal();
                 closeDeleteModal();
             }
             
-            // Enter键在登录界面登录
             if (event.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
                 login();
             }
             
-            // Ctrl+F 聚焦搜索框（在主界面时）
-            if (event.ctrlKey && event.key === 'f' && document.getElementById('mainContainer').style.display !== 'none') {
-                event.preventDefault();
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) {
-                    searchInput.focus();
-                    searchInput.select();
-                }
-            }
-            
-            // Enter键在搜索框搜索
             if (event.key === 'Enter' && event.target.id === 'searchInput') {
                 searchClients();
             }
         });
         
-        // 搜索框实时搜索（防抖）
+        // 搜索框输入监听
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function() {
             clearTimeout(searchTimeout);
