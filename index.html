@@ -682,29 +682,6 @@
             display: block;
         }
         
-        /* MT4接口测试区域样式 */
-        .mt4-test-section {
-            background: #e8f4fc;
-            border: 1px solid #3498db;
-            border-radius: 6px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        
-        .mt4-test-title {
-            color: #2c3e50;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .mt4-test-title::before {
-            content: "📱";
-            font-size: 18px;
-        }
-        
         @media (max-width: 1200px) {
             table {
                 font-size: 13px;
@@ -793,7 +770,7 @@
     </style>
 </head>
 <body>
-    <!-- 登录界面 -->
+    <!-- 登录界面 - 保持原来的admin.html样式 -->
     <div id="loginContainer" class="login-container">
         <div class="login-header">
             <h1>🔐 EA客户管理系统</h1>
@@ -834,45 +811,21 @@
                 <div id="addAlert" class="alert"></div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">账号ID</label>
-                        <input type="text" id="addAccountId" class="form-control" placeholder="例如: 888888" required>
-                        <span class="field-hint">账号ID必须是数字</span>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">服务器</label>
-                        <input type="text" id="addServer" class="form-control" placeholder="例如: IC Markets" required>
-                        <span class="field-hint">MT4服务器名称</span>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">识别码</label>
-                        <input type="text" id="addIdentificationCode" class="form-control" placeholder="请输入识别码" required>
-                        <span class="field-hint">MT4 EA验证必需字段</span>
-                    </div>
+                    <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
+                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: IC Markets)" required>
+                    <input type="text" id="addIdentificationCode" class="form-control" placeholder="识别码 (必填)" required>
                 </div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">到期时间</label>
-                        <input type="date" id="addExpireDate" class="form-control" required>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">状态</label>
-                        <select id="addIsActive" class="form-control">
-                            <option value="true">激活状态</option>
-                            <option value="false">禁用状态</option>
-                        </select>
-                    </div>
+                    <input type="date" id="addExpireDate" class="form-control" required>
+                    <select id="addIsActive" class="form-control">
+                        <option value="true">激活状态</option>
+                        <option value="false">禁用状态</option>
+                    </select>
                 </div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">备注信息</label>
-                        <textarea id="addNotes" class="form-control" placeholder="备注信息 (可选)" rows="2" style="resize: vertical;"></textarea>
-                    </div>
+                    <textarea id="addNotes" class="form-control" placeholder="备注信息 (可选)" rows="2" style="resize: vertical;"></textarea>
                 </div>
                 
                 <button onclick="addNewClient()" class="btn">添加客户</button>
@@ -884,7 +837,7 @@
                     <span>👥 客户列表</span>
                 </div>
                 
-                <!-- 搜索区域 -->
+                <!-- 搜索区域 - 优化后的样式 -->
                 <div class="search-header">
                     <div class="search-title">
                         <div class="search-title-icon">🔍</div>
@@ -953,47 +906,13 @@
                 <div id="testAlert" class="alert"></div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">账号ID</label>
-                        <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID" value="888888">
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">服务器</label>
-                        <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
-                    </div>
+                    <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
+                    <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
                 </div>
                 
                 <button onclick="testVerify()" class="btn btn-test">测试验证</button>
                 
                 <div id="testResult" class="test-result"></div>
-                
-                <!-- MT4接口测试区域 -->
-                <div class="mt4-test-section">
-                    <div class="mt4-test-title">MT4 EA验证接口测试</div>
-                    <p style="font-size: 14px; color: #2c3e50; margin-bottom: 15px;">这是MT4 EA专用的验证接口，需要验证账号ID、服务器和识别码。</p>
-                    
-                    <div class="form-row">
-                        <div style="flex: 1; min-width: 200px;">
-                            <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">账号ID</label>
-                            <input type="text" id="mt4AccountId" class="form-control" placeholder="输入账号ID">
-                        </div>
-                        
-                        <div style="flex: 1; min-width: 200px;">
-                            <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">服务器</label>
-                            <input type="text" id="mt4Server" class="form-control" placeholder="输入服务器">
-                        </div>
-                        
-                        <div style="flex: 1; min-width: 200px;">
-                            <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">识别码</label>
-                            <input type="text" id="mt4IdentificationCode" class="form-control" placeholder="输入识别码">
-                        </div>
-                    </div>
-                    
-                    <button onclick="testMT4Verify()" class="btn" style="background: #9b59b6; margin-top: 10px;">测试MT4验证接口</button>
-                    
-                    <div id="mt4TestResult" class="test-result" style="margin-top: 15px;"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -1005,22 +924,22 @@
             <div id="editAlert" class="alert"></div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">账号ID:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">账号ID:</label>
                 <input type="text" id="editAccountId" class="form-control" readonly style="background: #f5f5f5;">
             </div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">服务器:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">服务器:</label>
                 <input type="text" id="editServer" class="form-control">
             </div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">识别码:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">识别码:</label>
                 <input type="text" id="editIdentificationCode" class="form-control">
             </div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">到期时间:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">到期时间:</label>
                 <input type="date" id="editExpireDate" class="form-control">
             </div>
             
@@ -1435,16 +1354,10 @@
                 if (result.success) {
                     showAlert('addAlert', '✅ 客户添加成功！', 'success');
                     
-                    // 清空表单
                     document.getElementById('addAccountId').value = '';
                     document.getElementById('addServer').value = '';
                     document.getElementById('addIdentificationCode').value = '';
                     document.getElementById('addNotes').value = '';
-                    
-                    // 设置默认到期时间（30天后）
-                    const defaultDate = new Date();
-                    defaultDate.setDate(defaultDate.getDate() + 30);
-                    document.getElementById('addExpireDate').valueAsDate = defaultDate;
                     
                     loadClients();
                 } else {
@@ -1581,7 +1494,7 @@
             clientToDelete = accountId;
             document.getElementById('deleteAccountId').textContent = accountId;
             document.getElementById('deleteServer').textContent = server;
-            document.getElementById('deleteIdentificationCode').textContent = identificationCode || '-';
+            document.getElementById('deleteIdentificationCode').textContent = identificationCode;
             document.getElementById('deleteModal').style.display = 'flex';
             document.getElementById('deleteAlert').style.display = 'none';
         }
@@ -1621,7 +1534,7 @@
             }
         }
         
-        // ========== 测试原有验证接口 ==========
+        // ========== 测试验证接口 ==========
         async function testVerify() {
             const accountId = document.getElementById('testAccountId').value.trim();
             const server = document.getElementById('testServer').value.trim();
@@ -1673,83 +1586,6 @@
                     <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
                         <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
                         <div style="font-size: 14px;">${error.message}</div>
-                    </div>
-                `;
-                testResultDiv.style.display = 'block';
-            }
-        }
-        
-        // ========== 测试MT4验证接口 ==========
-        async function testMT4Verify() {
-            const accountId = document.getElementById('mt4AccountId').value.trim();
-            const server = document.getElementById('mt4Server').value.trim();
-            const identificationCode = document.getElementById('mt4IdentificationCode').value.trim();
-            const testResultDiv = document.getElementById('mt4TestResult');
-            
-            if (!accountId || !server || !identificationCode) {
-                showAlert('testAlert', '请输入账号ID、服务器和识别码', 'error');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/mt4_verify`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        account_id: accountId,
-                        license_key: server,
-                        identification_code: identificationCode
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.valid) {
-                    testResultDiv.innerHTML = `
-                        <div style="background: #d5f4e6; color: #27ae60; padding: 15px; border-radius: 6px; border: 1px solid #a3e4c1;">
-                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">✅ MT4验证成功！</div>
-                            <div style="font-size: 14px; line-height: 1.5;">
-                                <div><strong>账号ID:</strong> ${result.account_id}</div>
-                                <div><strong>服务器:</strong> ${result.license_key}</div>
-                                <div><strong>识别码:</strong> ${result.identification_code}</div>
-                                <div><strong>到期时间:</strong> ${result.expire_date}</div>
-                                <div><strong>会话数:</strong> ${result.current_sessions}/${result.max_sessions}</div>
-                                <div><strong>备注:</strong> ${result.notes || '无'}</div>
-                            </div>
-                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #a3e4c1; font-size: 12px; color: #27ae60;">
-                                <strong>说明:</strong> MT4 EA可以使用此验证结果，如果验证失败应删除EA。
-                            </div>
-                        </div>
-                    `;
-                    testResultDiv.style.display = 'block';
-                } else {
-                    testResultDiv.innerHTML = `
-                        <div style="background: #fadbd8; color: #e74c3c; padding: 15px; border-radius: 6px; border: 1px solid #f5b7b1;">
-                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">❌ MT4验证失败</div>
-                            <div style="font-size: 14px; margin-bottom: 8px;">
-                                <strong>错误信息:</strong> ${result.message}
-                            </div>
-                            <div style="font-size: 14px;">
-                                <strong>错误代码:</strong> ${result.error_code || 'UNKNOWN'}
-                            </div>
-                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f5b7b1; font-size: 12px; color: #e74c3c;">
-                                <strong>MT4 EA处理建议:</strong> 显示错误信息并调用 ExpertRemove() 函数删除EA。
-                            </div>
-                        </div>
-                    `;
-                    testResultDiv.style.display = 'block';
-                }
-                
-            } catch (error) {
-                testResultDiv.innerHTML = `
-                    <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
-                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
-                        <div style="font-size: 14px;">${error.message}</div>
-                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f8c471; font-size: 12px; color: #f39c12;">
-                            <strong>MT4 EA处理建议:</strong> 显示网络错误并调用 ExpertRemove() 函数删除EA。
-                        </div>
                     </div>
                 `;
                 testResultDiv.style.display = 'block';
