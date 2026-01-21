@@ -377,58 +377,6 @@
             background: #7f8c8d;
         }
         
-        /* 下拉菜单样式 */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            z-index: 1000;
-            min-width: 180px;
-            margin-top: 5px;
-        }
-        
-        .dropdown-item {
-            width: 100%;
-            padding: 10px 15px;
-            border: none;
-            background: none;
-            text-align: left;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .dropdown-item:hover {
-            background: #f8f9fa;
-        }
-        
-        .dropdown-item:first-child {
-            border-radius: 6px 6px 0 0;
-        }
-        
-        .dropdown-item:last-child {
-            border-radius: 0 0 6px 6px;
-        }
-        
-        .dropdown-divider {
-            height: 1px;
-            background: #eee;
-            margin: 5px 0;
-        }
-        
         /* 分页样式 */
         .pagination-container {
             display: flex;
@@ -734,57 +682,6 @@
             display: block;
         }
         
-        /* 导入模态框特定样式 */
-        .import-instructions {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid #dee2e6;
-        }
-        
-        .import-instructions h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 15px;
-        }
-        
-        .import-instructions ul {
-            color: #6c757d;
-            font-size: 13px;
-            padding-left: 20px;
-            margin: 0;
-        }
-        
-        .import-instructions li {
-            margin-bottom: 5px;
-        }
-        
-        .import-instructions a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        
-        .import-instructions a:hover {
-            text-decoration: underline;
-        }
-        
-        #importPreview {
-            margin-top: 20px;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        
-        #previewContent {
-            max-height: 200px;
-            overflow: auto;
-            padding: 10px;
-            background: white;
-            font-size: 12px;
-            font-family: monospace;
-        }
-        
         @media (max-width: 1200px) {
             table {
                 font-size: 13px;
@@ -869,15 +766,6 @@
             .pagination-controls {
                 justify-content: center;
             }
-            
-            .dropdown-menu {
-                position: fixed;
-                top: auto;
-                left: 50%;
-                transform: translateX(-50%);
-                min-width: 250px;
-                margin-top: 10px;
-            }
         }
     </style>
 </head>
@@ -924,8 +812,8 @@
                 
                 <div class="form-row">
                     <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
-                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: IC Markets)" required>
-                    <input type="text" id="addIdentificationCode" class="form-control" placeholder="识别码 (必填，多个用逗号分隔)" required>
+                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: ECMarkets-Live08)" required>
+                    <input type="text" id="addIdentificationCode" class="form-control" placeholder="识别码 (必填)" required>
                 </div>
                 
                 <div class="form-row">
@@ -965,29 +853,6 @@
                         <div class="search-actions">
                             <button onclick="clearSearch()" class="btn btn-clear">清除搜索</button>
                             <button onclick="loadClients()" class="btn btn-refresh">刷新列表</button>
-                            <!-- 导出导入功能 -->
-                            <div class="dropdown">
-                                <button onclick="toggleExportMenu()" class="btn" style="background: #2ecc71;">📁 导入导出 ▾</button>
-                                <div id="exportMenu" class="dropdown-menu">
-                                    <button onclick="exportData('csv')" class="dropdown-item">
-                                        <span>📊</span>
-                                        <span>导出为 CSV</span>
-                                    </button>
-                                    <button onclick="exportData('excel')" class="dropdown-item">
-                                        <span>📈</span>
-                                        <span>导出为 Excel</span>
-                                    </button>
-                                    <div class="dropdown-divider"></div>
-                                    <button onclick="showImportModal()" class="dropdown-item" style="color: #3498db;">
-                                        <span>📥</span>
-                                        <span>批量导入数据</span>
-                                    </button>
-                                    <button onclick="downloadTemplate()" class="dropdown-item">
-                                        <span>📄</span>
-                                        <span>下载模板文件</span>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     
@@ -1041,8 +906,8 @@
                 <div id="testAlert" class="alert"></div>
                 
                 <div class="form-row">
-                    <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="1000132128">
-                    <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="FortunePrimeGlobal-Demo">
+                    <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
+                    <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="ECMarkets-Live08">
                 </div>
                 
                 <button onclick="testVerify()" class="btn btn-test">测试验证</button>
@@ -1122,51 +987,6 @@
         </div>
     </div>
     
-    <!-- 导入模态框 -->
-    <div id="importModal" class="modal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-title">📥 批量导入客户数据</div>
-            
-            <div class="import-instructions">
-                <h4>📋 导入说明</h4>
-                <ul>
-                    <li>支持 CSV 或 Excel 格式（.csv, .xlsx）</li>
-                    <li>文件必须包含以下列：<strong>账号ID, 服务器, 识别码, 到期时间</strong></li>
-                    <li>可选列：最大会话数, 状态, 备注, 创建时间</li>
-                    <li>状态列使用：激活 / 禁用</li>
-                    <li>日期格式：YYYY-MM-DD</li>
-                    <li><a href="javascript:void(0)" onclick="downloadTemplate()" style="color: #3498db; text-decoration: none;">📥 点击下载模板文件</a></li>
-                </ul>
-            </div>
-            
-            <div id="importAlert" class="alert"></div>
-            
-            <div class="form-group">
-                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">文件格式：</label>
-                <select id="importFormat" class="form-control" style="margin-bottom: 15px;">
-                    <option value="csv">CSV 文件 (.csv)</option>
-                    <option value="excel">Excel 文件 (.xlsx)</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">选择文件：</label>
-                <input type="file" id="importFile" class="form-control" accept=".csv,.xlsx,.xls" style="padding: 8px;">
-                <div class="field-hint">支持 .csv, .xlsx, .xls 格式</div>
-            </div>
-            
-            <div id="importPreview" style="display: none; margin-top: 20px;">
-                <h4 style="color: #2c3e50; margin-bottom: 10px; font-size: 15px;">👀 数据预览（前5行）</h4>
-                <div id="previewContent" style="max-height: 200px; overflow: auto; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: white; font-size: 12px;"></div>
-            </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button onclick="startImport()" class="btn" style="background: #2ecc71;">开始导入</button>
-                <button onclick="closeImportModal()" class="btn" style="background: #95a5a6;">取消</button>
-            </div>
-        </div>
-    </div>
-    
     <script>
         // ========== 配置 ==========
         const API_BASE = 'https://islandshen.pythonanywhere.com/api';
@@ -1208,7 +1028,6 @@
                     document.getElementById('loginContainer').style.display = 'none';
                     document.getElementById('mainContainer').style.display = 'block';
                     
-                    // 设置默认到期时间为30天后
                     const defaultDate = new Date();
                     defaultDate.setDate(defaultDate.getDate() + 30);
                     document.getElementById('addExpireDate').valueAsDate = defaultDate;
@@ -1254,201 +1073,6 @@
             setTimeout(() => {
                 alertDiv.style.display = 'none';
             }, 3000);
-        }
-        
-        // ========== 导出功能 ==========
-        function toggleExportMenu() {
-            const menu = document.getElementById('exportMenu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-        
-        // 关闭菜单点击其他地方时
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.dropdown')) {
-                document.getElementById('exportMenu').style.display = 'none';
-            }
-        });
-        
-        function exportData(format) {
-            document.getElementById('exportMenu').style.display = 'none';
-            
-            let url = `${API_BASE}/export/clients?format=${format}`;
-            if (currentSearchQuery) {
-                url += `&search=${encodeURIComponent(currentSearchQuery)}`;
-            }
-            
-            // 显示导出提示
-            showAlert('listAlert', `正在导出${format === 'excel' ? 'Excel' : 'CSV'}数据...`, 'success');
-            
-            // 创建临时链接下载文件
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = '';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        
-        // ========== 导入功能 ==========
-        let importFileData = null;
-        
-        function showImportModal() {
-            document.getElementById('importModal').style.display = 'flex';
-            document.getElementById('importAlert').style.display = 'none';
-            document.getElementById('importPreview').style.display = 'none';
-            document.getElementById('importFile').value = '';
-            document.getElementById('exportMenu').style.display = 'none';
-        }
-        
-        function closeImportModal() {
-            document.getElementById('importModal').style.display = 'none';
-            importFileData = null;
-        }
-        
-        // 文件选择预览
-        document.getElementById('importFile').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const format = document.getElementById('importFormat').value;
-            const reader = new FileReader();
-            
-            reader.onload = function(event) {
-                if (format === 'csv') {
-                    previewCSV(event.target.result);
-                } else {
-                    // 对于Excel文件，我们只显示文件名
-                    document.getElementById('previewContent').innerHTML = `
-                        <div style="color: #6c757d; text-align: center; padding: 20px;">
-                            <div style="font-size: 48px;">📊</div>
-                            <div>已选择文件：${file.name}</div>
-                            <div style="font-size: 12px; margin-top: 10px;">文件大小：${(file.size / 1024).toFixed(2)} KB</div>
-                            <div style="font-size: 12px;">Excel文件内容将在导入时由服务器解析</div>
-                        </div>
-                    `;
-                    document.getElementById('importPreview').style.display = 'block';
-                }
-            };
-            
-            if (format === 'csv') {
-                reader.readAsText(file, 'UTF-8');
-            } else {
-                // 对于Excel，我们只需要文件名
-                document.getElementById('previewContent').innerHTML = `
-                    <div style="color: #6c757d; text-align: center; padding: 20px;">
-                        <div style="font-size: 48px;">📊</div>
-                        <div>已选择文件：${file.name}</div>
-                    </div>
-                `;
-                document.getElementById('importPreview').style.display = 'block';
-            }
-        });
-        
-        // 预览CSV
-        function previewCSV(content) {
-            try {
-                const lines = content.split('\n').slice(0, 6); // 前6行（包含标题）
-                const preview = lines.map((line, index) => {
-                    const cols = line.split(',');
-                    return `
-                        <div style="display: flex; border-bottom: ${index === 0 ? '2px solid #3498db' : '1px solid #eee'}; padding: 4px 0; font-family: monospace; background: ${index === 0 ? '#f8f9fa' : 'white'}">
-                            ${cols.map((col, colIndex) => `
-                                <div style="flex: 1; padding: 2px 5px; border-right: 1px solid #eee; font-weight: ${index === 0 ? 'bold' : 'normal'}; color: ${index === 0 ? '#3498db' : '#333'};">
-                                    ${col}
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                }).join('');
-                
-                document.getElementById('previewContent').innerHTML = preview;
-                document.getElementById('importPreview').style.display = 'block';
-            } catch (error) {
-                document.getElementById('previewContent').innerHTML = `
-                    <div style="color: #e74c3c; padding: 20px; text-align: center;">
-                        ❌ CSV文件解析错误
-                    </div>
-                `;
-                document.getElementById('importPreview').style.display = 'block';
-            }
-        }
-        
-        // 下载模板
-        function downloadTemplate() {
-            const template = `账号ID,服务器,识别码,到期时间,最大会话数,状态,备注
-100001,IC Markets,123456,2024-12-31,999,激活,示例账号1
-100002,FXTM,789012,2024-06-30,999,激活,示例账号2
-100003,Pepperstone,345678,2024-03-15,999,禁用,示例账号3`;
-            
-            const blob = new Blob([template], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = '客户导入模板.csv';
-            link.click();
-        }
-        
-        // 开始导入
-        async function startImport() {
-            const fileInput = document.getElementById('importFile');
-            const file = fileInput.files[0];
-            const format = document.getElementById('importFormat').value;
-            
-            if (!file) {
-                showAlert('importAlert', '请选择要导入的文件', 'error');
-                return;
-            }
-            
-            // 验证文件类型
-            const fileName = file.name.toLowerCase();
-            if (format === 'csv' && !fileName.endsWith('.csv')) {
-                showAlert('importAlert', '请选择CSV文件', 'error');
-                return;
-            }
-            if (format === 'excel' && !fileName.endsWith('.xlsx') && !fileName.endsWith('.xls')) {
-                showAlert('importAlert', '请选择Excel文件', 'error');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('format', format);
-            
-            try {
-                showAlert('importAlert', '正在导入，请稍候...', 'success');
-                
-                const response = await fetch(`${API_BASE}/import/clients`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    let message = `✅ 导入完成！成功: ${result.success_count} 条`;
-                    if (result.error_count > 0) {
-                        message += `，失败: ${result.error_count} 条`;
-                        if (result.errors && result.errors.length > 0) {
-                            message += `<br><br><strong>错误详情（前10条）：</strong><br>`;
-                            message += result.errors.map(err => `• ${err}`).join('<br>');
-                        }
-                    }
-                    
-                    showAlert('importAlert', message, result.error_count > 0 ? 'error' : 'success');
-                    
-                    // 导入成功，刷新列表
-                    if (result.success_count > 0) {
-                        setTimeout(() => {
-                            closeImportModal();
-                            loadClients();
-                        }, 3000);
-                    }
-                } else {
-                    showAlert('importAlert', `导入失败: ${result.message}`, 'error');
-                }
-                
-            } catch (error) {
-                showAlert('importAlert', `网络错误: ${error.message}`, 'error');
-            }
         }
         
         // ========== 搜索功能 ==========
@@ -1973,7 +1597,6 @@
             if (event.key === 'Escape') {
                 closeEditModal();
                 closeDeleteModal();
-                closeImportModal();
             }
             
             if (event.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
@@ -1994,16 +1617,6 @@
                     searchClients();
                 }
             }, 500);
-        });
-        
-        // 页面加载时设置默认日期
-        window.addEventListener('load', function() {
-            const defaultDate = new Date();
-            defaultDate.setDate(defaultDate.getDate() + 30);
-            const dateInput = document.getElementById('addExpireDate');
-            if (dateInput) {
-                dateInput.valueAsDate = defaultDate;
-            }
         });
     </script>
 </body>
