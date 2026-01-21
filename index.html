@@ -21,7 +21,7 @@
             padding: 20px;
         }
         
-        /* 登录界面样式 */
+        /* 登录界面样式 - 保持原来的admin.html样式 */
         .login-container {
             background: white;
             border-radius: 10px;
@@ -119,7 +119,7 @@
         /* 主系统容器 */
         #mainContainer {
             display: none;
-            max-width: 1400px;
+            max-width: 1200px;
             width: 100%;
             background: white;
             border-radius: 10px;
@@ -168,133 +168,6 @@
             padding: 30px;
         }
         
-        /* 统计卡片样式 */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .stat-card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #eaeaea;
-            transition: transform 0.3s;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-        
-        .total-clients .stat-value {
-            color: #3498db;
-        }
-        
-        .active-clients .stat-value {
-            color: #2ecc71;
-        }
-        
-        .disabled-clients .stat-value {
-            color: #e74c3c;
-        }
-        
-        .expired-clients .stat-value {
-            color: #f39c12;
-        }
-        
-        /* 搜索栏样式 */
-        .search-section {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid #eaeaea;
-        }
-        
-        .search-title {
-            font-size: 16px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .search-box {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .search-input {
-            flex: 1;
-            min-width: 250px;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
-        }
-        
-        .search-btn {
-            background: #9b59b6;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .search-btn:hover {
-            background: #8e44ad;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .clear-search-btn {
-            background: #95a5a6;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .clear-search-btn:hover {
-            background: #7f8c8d;
-            transform: translateY(-1px);
-        }
-        
-        /* 其他样式保持不变，但需要微调 */
         .section {
             margin-bottom: 40px;
             background: #fff;
@@ -430,19 +303,11 @@
             background: #27ae60;
         }
         
-        /* 表格样式调整 */
-        .table-container {
-            overflow-x: auto;
-            border: 1px solid #eaeaea;
-            border-radius: 6px;
-            margin-top: 20px;
-        }
-        
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 15px;
             font-size: 14px;
-            min-width: 1000px;
         }
         
         th {
@@ -452,8 +317,6 @@
             padding: 12px 15px;
             text-align: left;
             border-bottom: 2px solid #eaeaea;
-            position: sticky;
-            top: 0;
         }
         
         td {
@@ -494,32 +357,6 @@
             border-radius: 20px;
             font-size: 12px;
             display: inline-block;
-        }
-        
-        .notes-cell {
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-        
-        .notes-cell:hover {
-            overflow: visible;
-            white-space: normal;
-            position: relative;
-            z-index: 10;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 4px;
-            padding: 8px;
-            max-width: none;
-        }
-        
-        .identifier-cell {
-            font-family: monospace;
-            font-weight: 600;
-            color: #3498db;
         }
         
         .alert {
@@ -657,19 +494,11 @@
                 padding: 9px 16px;
                 font-size: 13px;
             }
-            
-            .search-box {
-                flex-direction: column;
-            }
-            
-            .search-input {
-                min-width: 100%;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- 登录界面 -->
+    <!-- 登录界面 - 保持原来的admin.html样式 -->
     <div id="loginContainer" class="login-container">
         <div class="login-header">
             <h1>🔐 EA客户管理系统</h1>
@@ -704,26 +533,6 @@
         
         <!-- 主要内容 -->
         <div class="content">
-            <!-- 统计卡片 -->
-            <div class="stats-container" id="statsContainer">
-                <!-- 统计信息将通过JavaScript动态加载 -->
-            </div>
-            
-            <!-- 搜索栏 -->
-            <div class="search-section">
-                <div class="search-title">
-                    <span>🔍 搜索客户</span>
-                </div>
-                <div class="search-box">
-                    <input type="text" id="searchInput" class="search-input" 
-                           placeholder="搜索账号ID、识别码、服务器或备注...">
-                    <button onclick="searchClients()" class="search-btn">
-                        <span>🔍</span> 搜索
-                    </button>
-                    <button onclick="clearSearch()" class="clear-search-btn">清除搜索</button>
-                </div>
-            </div>
-            
             <!-- 添加客户表单 -->
             <div class="section">
                 <h2 class="section-title">➕ 添加新客户</h2>
@@ -742,10 +551,6 @@
                     </select>
                 </div>
                 
-                <div class="form-row">
-                    <textarea id="addNotes" class="form-control" placeholder="备注信息 (可选)" rows="2"></textarea>
-                </div>
-                
                 <button onclick="addNewClient()" class="btn">添加客户</button>
             </div>
             
@@ -762,26 +567,21 @@
                     <p>正在加载客户数据...</p>
                 </div>
                 
-                <div class="table-container">
-                    <table id="clientsTable">
-                        <thead>
-                            <tr>
-                                <th>序号</th>
-                                <th>账号ID</th>
-                                <th>识别码</th>
-                                <th>服务器</th>
-                                <th>到期时间</th>
-                                <th>状态</th>
-                                <th>备注</th>
-                                <th>创建时间</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="clientsBody">
-                            <!-- 数据将通过JavaScript动态填充 -->
-                        </tbody>
-                    </table>
-                </div>
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th>账号ID</th>
+                            <th>服务器</th>
+                            <th>到期时间</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsBody">
+                        <!-- 数据将通过JavaScript动态填充 -->
+                    </tbody>
+                </table>
             </div>
             
             <!-- 测试验证 -->
@@ -813,11 +613,6 @@
             </div>
             
             <div class="form-group">
-                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">识别码:</label>
-                <input type="text" id="editIdentifier" class="form-control" readonly style="background: #f5f5f5;">
-            </div>
-            
-            <div class="form-group">
                 <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">服务器:</label>
                 <input type="text" id="editServer" class="form-control">
             </div>
@@ -835,11 +630,6 @@
                 </select>
             </div>
             
-            <div class="form-group">
-                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">备注:</label>
-                <textarea id="editNotes" class="form-control" rows="3" placeholder="备注信息"></textarea>
-            </div>
-            
             <div style="display: flex; gap: 10px; margin-top: 25px;">
                 <button onclick="saveEdit()" class="btn">保存修改</button>
                 <button onclick="closeEditModal()" class="btn" style="background: #95a5a6;">取消</button>
@@ -854,9 +644,7 @@
             
             <div class="delete-confirm">
                 <p style="color: #e74c3c; font-weight: 600; margin-bottom: 10px;">您确定要删除这个客户吗？</p>
-                <p style="color: #7f8c8d; font-size: 14px;">序号: <span id="deleteSeq" style="font-weight: 600;"></span></p>
                 <p style="color: #7f8c8d; font-size: 14px;">账号ID: <span id="deleteAccountId" style="font-weight: 600;"></span></p>
-                <p style="color: #7f8c8d; font-size: 14px;">识别码: <span id="deleteIdentifier" style="font-weight: 600;"></span></p>
                 <p style="color: #7f8c8d; font-size: 14px;">服务器: <span id="deleteServer" style="font-weight: 600;"></span></p>
                 <p style="color: #e74c3c; font-size: 13px; margin-top: 15px; border-top: 1px dashed #f8c471; padding-top: 10px;">
                     ⚠️ 注意：此操作不可撤销，删除后将无法恢复！
@@ -874,13 +662,9 @@
     
     <script>
         // ========== 配置 ==========
-        const API_BASE = window.location.hostname.includes('pythonanywhere') 
-            ? 'https://islandshen.pythonanywhere.com/api'
-            : '/api';
-        
+        const API_BASE = 'https://islandshen.pythonanywhere.com/api';
         let currentEditClient = null;
         let clientToDelete = null;
-        let currentSearchTerm = '';
         
         // ========== 登录功能 ==========
         async function login() {
@@ -920,9 +704,6 @@
                     const defaultDate = new Date();
                     defaultDate.setDate(defaultDate.getDate() + 30);
                     document.getElementById('addExpireDate').valueAsDate = defaultDate;
-                    
-                    // 加载统计数据
-                    loadStats();
                     
                     // 加载客户列表
                     loadClients();
@@ -968,62 +749,6 @@
             }, 3000);
         }
         
-        // ========== 加载统计数据 ==========
-        async function loadStats() {
-            try {
-                const response = await fetch(`${API_BASE}/stats`);
-                if (!response.ok) throw new Error(`网络错误: ${response.status}`);
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    const stats = result.data;
-                    const statsContainer = document.getElementById('statsContainer');
-                    
-                    statsContainer.innerHTML = `
-                        <div class="stat-card total-clients">
-                            <div class="stat-value">${stats.total}</div>
-                            <div class="stat-label">总客户数</div>
-                        </div>
-                        <div class="stat-card active-clients">
-                            <div class="stat-value">${stats.active}</div>
-                            <div class="stat-label">正常状态</div>
-                        </div>
-                        <div class="stat-card disabled-clients">
-                            <div class="stat-value">${stats.disabled}</div>
-                            <div class="stat-label">禁用状态</div>
-                        </div>
-                        <div class="stat-card expired-clients">
-                            <div class="stat-value">${stats.expired}</div>
-                            <div class="stat-label">已过期</div>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('加载统计失败:', error);
-            }
-        }
-        
-        // ========== 搜索客户 ==========
-        function searchClients() {
-            const searchInput = document.getElementById('searchInput');
-            currentSearchTerm = searchInput.value.trim();
-            
-            if (currentSearchTerm) {
-                showAlert('listAlert', `正在搜索: "${currentSearchTerm}"`, 'success');
-            }
-            
-            loadClients();
-        }
-        
-        // ========== 清除搜索 ==========
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            currentSearchTerm = '';
-            loadClients();
-            showAlert('listAlert', '搜索已清除', 'success');
-        }
-        
         // ========== 加载客户列表 ==========
         async function loadClients() {
             const loadingDiv = document.getElementById('loading');
@@ -1033,12 +758,7 @@
             tbody.innerHTML = '';
             
             try {
-                let url = `${API_BASE}/clients`;
-                if (currentSearchTerm) {
-                    url += `?search=${encodeURIComponent(currentSearchTerm)}`;
-                }
-                
-                const response = await fetch(url);
+                const response = await fetch(`${API_BASE}/clients`);
                 if (!response.ok) throw new Error(`网络错误: ${response.status}`);
                 
                 const clients = await response.json();
@@ -1046,29 +766,19 @@
                 if (clients.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="9" style="text-align: center; padding: 40px; color: #95a5a6;">
-                                📭 ${currentSearchTerm ? '未找到匹配的客户' : '暂无客户数据，请先添加客户'}
+                            <td colspan="6" style="text-align: center; padding: 40px; color: #95a5a6;">
+                                📭 暂无客户数据，请先添加客户
                             </td>
                         </tr>
                     `;
                 } else {
-                    // 计算起始序号（倒序显示）
-                    let seqNumber = clients.length;
-                    
                     clients.forEach(client => {
-                        const row = createClientRow(client, seqNumber);
+                        const row = createClientRow(client);
                         tbody.appendChild(row);
-                        seqNumber--;
                     });
                 }
                 
-                const message = currentSearchTerm 
-                    ? `找到 ${clients.length} 条匹配记录` 
-                    : `已加载 ${clients.length} 个客户`;
-                showAlert('listAlert', message, 'success');
-                
-                // 重新加载统计
-                loadStats();
+                showAlert('listAlert', `已加载 ${clients.length} 个客户`, 'success');
                 
             } catch (error) {
                 console.error('加载客户失败:', error);
@@ -1076,7 +786,7 @@
                 
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="9" style="text-align: center; padding: 40px; color: #e74c3c;">
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #e74c3c;">
                             ❌ 数据加载失败，请检查网络连接
                         </td>
                     </tr>
@@ -1087,7 +797,7 @@
         }
         
         // ========== 创建客户行 ==========
-        function createClientRow(client, seqNumber) {
+        function createClientRow(client) {
             const tr = document.createElement('tr');
             
             // 检查是否过期
@@ -1119,17 +829,12 @@
                 }
             }
             
-            // 备注处理
-            const notes = client.notes || '';
-            
+            // 使用文字版本的按钮
             tr.innerHTML = `
-                <td>${seqNumber}</td>
                 <td><strong>${client.account_id}</strong></td>
-                <td class="identifier-cell">${client.identifier || 'N/A'}</td>
                 <td>${client.license_key || client.server || '未设置'}</td>
                 <td>${client.expire_date}</td>
                 <td><span class="${statusClass}">${statusText}</span></td>
-                <td class="notes-cell" title="${notes}">${notes || '-'}</td>
                 <td>${createdTime}</td>
                 <td>
                     <div class="actions">
@@ -1137,7 +842,7 @@
                         <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn ${client.is_active ? 'btn-disable' : 'btn-enable'}">
                             ${client.is_active ? '禁用' : '启用'}
                         </button>
-                        <button onclick="openDeleteModal('${client.id}', '${client.account_id}', '${client.identifier}', '${client.license_key || client.server}')" class="action-btn btn-delete">删除</button>
+                        <button onclick="openDeleteModal('${client.account_id}', '${client.license_key || client.server}')" class="action-btn btn-delete">删除</button>
                     </div>
                 </td>
             `;
@@ -1156,7 +861,6 @@
             const server = document.getElementById('addServer').value.trim();
             const expireDate = document.getElementById('addExpireDate').value;
             const isActive = document.getElementById('addIsActive').value === 'true';
-            const notes = document.getElementById('addNotes').value.trim();
             
             // 验证输入
             if (!accountId || !server || !expireDate) {
@@ -1178,23 +882,21 @@
                     },
                     body: JSON.stringify({
                         account_id: accountId,
-                        license_key: server,
+                        license_key: server,  // 使用server作为license_key
                         expire_date: expireDate,
-                        max_sessions: 999,
-                        is_active: isActive,
-                        notes: notes
+                        max_sessions: 999,  // 设置为很大的数，相当于不限制
+                        is_active: isActive
                     })
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    showAlert('addAlert', `✅ 客户添加成功！识别码: ${result.client.identifier}`, 'success');
+                    showAlert('addAlert', '✅ 客户添加成功！', 'success');
                     
                     // 清空表单
                     document.getElementById('addAccountId').value = '';
                     document.getElementById('addServer').value = '';
-                    document.getElementById('addNotes').value = '';
                     
                     // 重新加载列表
                     loadClients();
@@ -1210,12 +912,7 @@
         // ========== 打开编辑模态框 ==========
         async function openEditModal(accountId) {
             try {
-                let url = `${API_BASE}/clients`;
-                if (currentSearchTerm) {
-                    url += `?search=${encodeURIComponent(currentSearchTerm)}`;
-                }
-                
-                const response = await fetch(url);
+                const response = await fetch(`${API_BASE}/clients`);
                 const clients = await response.json();
                 
                 const client = clients.find(c => c.account_id === accountId);
@@ -1228,11 +925,9 @@
                 
                 // 填充表单
                 document.getElementById('editAccountId').value = client.account_id;
-                document.getElementById('editIdentifier').value = client.identifier || 'N/A';
-                document.getElementById('editServer').value = client.license_key || client.server;
+                document.getElementById('editServer').value = client.license_key;  // license_key存储的是server
                 document.getElementById('editExpireDate').value = client.expire_date;
                 document.getElementById('editIsActive').value = client.is_active.toString();
-                document.getElementById('editNotes').value = client.notes || '';
                 
                 // 显示模态框
                 document.getElementById('editModal').style.display = 'flex';
@@ -1255,7 +950,6 @@
             const server = document.getElementById('editServer').value.trim();
             const expireDate = document.getElementById('editExpireDate').value;
             const isActive = document.getElementById('editIsActive').value === 'true';
-            const notes = document.getElementById('editNotes').value.trim();
             
             if (!server) {
                 showAlert('editAlert', '服务器不能为空', 'error');
@@ -1269,10 +963,10 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        license_key: server,
+                        license_key: server,  // 更新license_key（即server）
                         expire_date: expireDate,
                         is_active: isActive,
-                        notes: notes
+                        max_sessions: 999  // 设置为很大的数，相当于不限制
                     })
                 });
                 
@@ -1325,16 +1019,9 @@
         }
         
         // ========== 打开删除确认模态框 ==========
-        function openDeleteModal(clientId, accountId, identifier, server) {
-            clientToDelete = {
-                id: clientId,
-                accountId: accountId,
-                identifier: identifier,
-                server: server
-            };
-            document.getElementById('deleteSeq').textContent = clientId;
+        function openDeleteModal(accountId, server) {
+            clientToDelete = accountId;
             document.getElementById('deleteAccountId').textContent = accountId;
-            document.getElementById('deleteIdentifier').textContent = identifier || 'N/A';
             document.getElementById('deleteServer').textContent = server;
             document.getElementById('deleteModal').style.display = 'flex';
             document.getElementById('deleteAlert').style.display = 'none';
@@ -1351,7 +1038,7 @@
             if (!clientToDelete) return;
             
             try {
-                const response = await fetch(`${API_BASE}/delete/${clientToDelete.accountId}`, {
+                const response = await fetch(`${API_BASE}/delete/${clientToDelete}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1394,7 +1081,7 @@
                     },
                     body: JSON.stringify({
                         account_id: accountId,
-                        license_key: server
+                        license_key: server  // 使用server作为license_key
                     })
                 });
                 
@@ -1406,7 +1093,6 @@
                             <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">✅ 验证成功！</div>
                             <div style="font-size: 14px;">
                                 <div>账号ID: <strong>${result.account_id}</strong></div>
-                                <div>识别码: <strong>${result.identifier || 'N/A'}</strong></div>
                                 <div>到期时间: <strong>${result.expire_date}</strong></div>
                                 <div>状态: <span style="color: #27ae60; font-weight: 600;">正常</span></div>
                             </div>
@@ -1445,22 +1131,6 @@
             // Enter键在登录界面登录
             if (event.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
                 login();
-            }
-            
-            // Enter键在搜索框搜索
-            if (event.key === 'Enter' && document.getElementById('searchInput') === document.activeElement) {
-                searchClients();
-            }
-        });
-        
-        // ========== 页面加载后设置默认日期 ==========
-        window.addEventListener('load', function() {
-            // 设置添加表单的默认日期为30天后
-            const defaultDate = new Date();
-            defaultDate.setDate(defaultDate.getDate() + 30);
-            const dateInput = document.getElementById('addExpireDate');
-            if (dateInput) {
-                dateInput.valueAsDate = defaultDate;
             }
         });
     </script>
