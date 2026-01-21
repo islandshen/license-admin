@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA客户管理系统</title>
     <style>
-        /* 保持原有CSS样式不变 */
         * {
             margin: 0;
             padding: 0;
@@ -22,51 +21,743 @@
             padding: 20px;
         }
         
-        /* ... 保持所有原有CSS样式 ... */
-        
-        /* 新增：必填字段提示样式 */
-        .required-field::after {
-            content: " *";
-            color: #e74c3c;
+        /* 登录界面样式 - 保持原来的admin.html样式 */
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
         }
         
-        .field-hint {
-            font-size: 12px;
-            color: #7f8c8d;
-            margin-top: 4px;
+        .login-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .login-header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .login-form {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
             display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
         }
         
-        /* MT4接口测试区域样式 */
-        .mt4-test-section {
-            background: #e8f4fc;
-            border: 1px solid #3498db;
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
             border-radius: 6px;
-            padding: 20px;
-            margin-top: 20px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
         }
         
-        .mt4-test-title {
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .login-alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .alert-error {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        /* 主系统容器 */
+        #mainContainer {
+            display: none;
+            max-width: 1400px;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-control {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        /* 搜索区域样式 - 已优化 */
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .search-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
             color: #2c3e50;
             font-weight: 600;
-            margin-bottom: 10px;
+        }
+        
+        .search-title-icon {
+            background: #3498db;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .search-box-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        
+        .search-label {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 500;
+            white-space: nowrap;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .search-input-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            background: white;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-right: 50px;
+            border: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: transparent;
+        }
+        
+        .search-input:focus {
+            outline: none;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3498db;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .search-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-hint {
+            margin-top: 8px;
+            color: #6c757d;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
         
-        .mt4-test-title::before {
-            content: "📱";
+        .hint-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        
+        .hint-icon {
+            font-size: 12px;
+            color: #3498db;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-refresh {
+            background: #2ecc71;
+        }
+        
+        .btn-refresh:hover {
+            background: #27ae60;
+        }
+        
+        .btn-test {
+            background: #9b59b6;
+        }
+        
+        .btn-test:hover {
+            background: #8e44ad;
+        }
+        
+        .btn-clear {
+            background: #95a5a6;
+        }
+        
+        .btn-clear:hover {
+            background: #7f8c8d;
+        }
+        
+        /* 分页样式 */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .pagination-info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #2c3e50;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            min-width: 36px;
+            text-align: center;
+        }
+        
+        .page-btn:hover:not(:disabled) {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .page-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            font-weight: 600;
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-ellipsis {
+            padding: 6px 8px;
+            color: #7f8c8d;
+        }
+        
+        /* 操作按钮组 */
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            line-height: 1.2;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+        
+        .btn-disable {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn-disable:hover {
+            background: #d68910;
+        }
+        
+        .btn-enable {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-enable:hover {
+            background: #27ae60;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 2px solid #eaeaea;
+            white-space: nowrap;
+        }
+        
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* 序号列样式 */
+        .serial-number {
+            width: 60px;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* 备注列样式 */
+        .notes-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .notes-cell:hover {
+            overflow: visible;
+            white-space: normal;
+            position: relative;
+            z-index: 10;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .status-active {
+            color: #27ae60;
+            font-weight: 600;
+            background: #d5f4e6;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .status-inactive {
+            color: #e74c3c;
+            font-weight: 600;
+            background: #fadbd8;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .status-expired {
+            color: #f39c12;
+            font-weight: 600;
+            background: #fef5e7;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #a3e4c1;
+        }
+        
+        .alert-error {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .modal-title {
             font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* 模态框中的按钮 */
+        .modal-content .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border: 1px dashed #ddd;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        
+        .test-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .delete-confirm {
+            background: #fef5e7;
+            border: 1px solid #f8c471;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .delete-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .delete-actions .btn {
+            padding: 10px 20px;
+        }
+        
+        @media (max-width: 1200px) {
+            table {
+                font-size: 13px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+            }
         }
         
         @media (max-width: 768px) {
-            /* 保持原有响应式样式 */
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .search-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input-container {
+                min-width: 100%;
+            }
+            
+            .search-title {
+                margin-bottom: 10px;
+            }
+            
+            table {
+                font-size: 12px;
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+            
+            .serial-number {
+                width: 40px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .action-btn {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+            
+            .btn {
+                padding: 9px 16px;
+                font-size: 13px;
+            }
+            
+            .pagination-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .pagination-controls {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 登录界面 -->
+    <!-- 登录界面 - 保持原来的admin.html样式 -->
     <div id="loginContainer" class="login-container">
         <div class="login-header">
             <h1>🔐 EA客户管理系统</h1>
@@ -77,12 +768,12 @@
             <div id="loginAlert" class="login-alert"></div>
             
             <div class="form-group">
-                <label for="username" class="required-field">用户名</label>
+                <label for="username">用户名</label>
                 <input type="text" id="username" placeholder="请输入用户名">
             </div>
             
             <div class="form-group">
-                <label for="password" class="required-field">密码</label>
+                <label for="password">密码</label>
                 <input type="password" id="password" placeholder="请输入密码">
             </div>
             
@@ -107,45 +798,21 @@
                 <div id="addAlert" class="alert"></div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">账号ID</label>
-                        <input type="text" id="addAccountId" class="form-control" placeholder="例如: 888888" required>
-                        <span class="field-hint">账号ID必须是数字</span>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">服务器</label>
-                        <input type="text" id="addServer" class="form-control" placeholder="例如: IC Markets" required>
-                        <span class="field-hint">MT4服务器名称</span>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">识别码</label>
-                        <input type="text" id="addIdentificationCode" class="form-control" placeholder="请输入识别码" required>
-                        <span class="field-hint">MT4 EA验证必需字段</span>
-                    </div>
+                    <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
+                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: IC Markets)" required>
+                    <input type="text" id="addIdentificationCode" class="form-control" placeholder="识别码 (可选)">
                 </div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">到期时间</label>
-                        <input type="date" id="addExpireDate" class="form-control" required>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">状态</label>
-                        <select id="addIsActive" class="form-control">
-                            <option value="true">激活状态</option>
-                            <option value="false">禁用状态</option>
-                        </select>
-                    </div>
+                    <input type="date" id="addExpireDate" class="form-control" required>
+                    <select id="addIsActive" class="form-control">
+                        <option value="true">激活状态</option>
+                        <option value="false">禁用状态</option>
+                    </select>
                 </div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">备注信息</label>
-                        <textarea id="addNotes" class="form-control" placeholder="备注信息 (可选)" rows="2" style="resize: vertical;"></textarea>
-                    </div>
+                    <textarea id="addNotes" class="form-control" placeholder="备注信息 (可选)" rows="2" style="resize: vertical;"></textarea>
                 </div>
                 
                 <button onclick="addNewClient()" class="btn">添加客户</button>
@@ -157,7 +824,7 @@
                     <span>👥 客户列表</span>
                 </div>
                 
-                <!-- 搜索区域 -->
+                <!-- 搜索区域 - 优化后的样式 -->
                 <div class="search-header">
                     <div class="search-title">
                         <div class="search-title-icon">🔍</div>
@@ -226,47 +893,13 @@
                 <div id="testAlert" class="alert"></div>
                 
                 <div class="form-row">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">账号ID</label>
-                        <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID" value="888888">
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">服务器</label>
-                        <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
-                    </div>
+                    <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="888888">
+                    <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="IC Markets">
                 </div>
                 
                 <button onclick="testVerify()" class="btn btn-test">测试验证</button>
                 
                 <div id="testResult" class="test-result"></div>
-                
-                <!-- MT4接口测试区域 -->
-                <div class="mt4-test-section">
-                    <div class="mt4-test-title">MT4 EA验证接口测试</div>
-                    <p style="font-size: 14px; color: #2c3e50; margin-bottom: 15px;">这是MT4 EA专用的验证接口，需要验证账号ID、服务器和识别码。</p>
-                    
-                    <div class="form-row">
-                        <div style="flex: 1; min-width: 200px;">
-                            <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">账号ID</label>
-                            <input type="text" id="mt4AccountId" class="form-control" placeholder="输入账号ID">
-                        </div>
-                        
-                        <div style="flex: 1; min-width: 200px;">
-                            <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">服务器</label>
-                            <input type="text" id="mt4Server" class="form-control" placeholder="输入服务器">
-                        </div>
-                        
-                        <div style="flex: 1; min-width: 200px;">
-                            <label class="required-field" style="display: block; margin-bottom: 5px; font-size: 14px; color: #2c3e50;">识别码</label>
-                            <input type="text" id="mt4IdentificationCode" class="form-control" placeholder="输入识别码">
-                        </div>
-                    </div>
-                    
-                    <button onclick="testMT4Verify()" class="btn" style="background: #9b59b6; margin-top: 10px;">测试MT4验证接口</button>
-                    
-                    <div id="mt4TestResult" class="test-result" style="margin-top: 15px;"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -278,22 +911,22 @@
             <div id="editAlert" class="alert"></div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">账号ID:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">账号ID:</label>
                 <input type="text" id="editAccountId" class="form-control" readonly style="background: #f5f5f5;">
             </div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">服务器:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">服务器:</label>
                 <input type="text" id="editServer" class="form-control">
             </div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">识别码:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">识别码:</label>
                 <input type="text" id="editIdentificationCode" class="form-control">
             </div>
             
             <div class="form-group">
-                <label class="required-field" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">到期时间:</label>
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">到期时间:</label>
                 <input type="date" id="editExpireDate" class="form-control">
             </div>
             
@@ -326,7 +959,6 @@
                 <p style="color: #e74c3c; font-weight: 600; margin-bottom: 10px;">您确定要删除这个客户吗？</p>
                 <p style="color: #7f8c8d; font-size: 14px;">账号ID: <span id="deleteAccountId" style="font-weight: 600;"></span></p>
                 <p style="color: #7f8c8d; font-size: 14px;">服务器: <span id="deleteServer" style="font-weight: 600;"></span></p>
-                <p style="color: #7f8c8d; font-size: 14px;">识别码: <span id="deleteIdentificationCode" style="font-weight: 600;"></span></p>
                 <p style="color: #e74c3c; font-size: 13px; margin-top: 15px; border-top: 1px dashed #f8c471; padding-top: 10px;">
                     ⚠️ 注意：此操作不可撤销，删除后将无法恢复！
                 </p>
@@ -348,7 +980,7 @@
         let clientToDelete = null;
         let currentSearchQuery = '';
         let currentPage = 1;
-        const perPage = 20;
+        const perPage = 20;  // 每页显示20条
         
         // ========== 登录功能 ==========
         async function login() {
@@ -433,14 +1065,14 @@
         function searchClients() {
             const searchInput = document.getElementById('searchInput');
             currentSearchQuery = searchInput.value.trim();
-            currentPage = 1;
+            currentPage = 1;  // 搜索时回到第一页
             loadClients();
         }
         
         function clearSearch() {
             document.getElementById('searchInput').value = '';
             currentSearchQuery = '';
-            currentPage = 1;
+            currentPage = 1;  // 清除搜索时回到第一页
             loadClients();
         }
         
@@ -462,12 +1094,15 @@
             
             container.style.display = 'flex';
             
+            // 更新分页信息
             const start = (pagination.page - 1) * pagination.per_page + 1;
             const end = Math.min(pagination.page * pagination.per_page, pagination.total);
             infoDiv.textContent = `显示第 ${start} 到 ${end} 条，共 ${pagination.total} 条记录`;
             
+            // 创建分页按钮
             controlsDiv.innerHTML = '';
             
+            // 上一页按钮
             const prevBtn = document.createElement('button');
             prevBtn.className = 'page-btn';
             prevBtn.textContent = '‹';
@@ -475,6 +1110,7 @@
             prevBtn.onclick = () => goToPage(pagination.page - 1);
             controlsDiv.appendChild(prevBtn);
             
+            // 页码按钮
             const maxVisiblePages = 5;
             let startPage = Math.max(1, pagination.page - Math.floor(maxVisiblePages / 2));
             let endPage = Math.min(pagination.pages, startPage + maxVisiblePages - 1);
@@ -483,6 +1119,7 @@
                 startPage = Math.max(1, endPage - maxVisiblePages + 1);
             }
             
+            // 第一页
             if (startPage > 1) {
                 const firstBtn = document.createElement('button');
                 firstBtn.className = 'page-btn';
@@ -498,6 +1135,7 @@
                 }
             }
             
+            // 中间页码
             for (let i = startPage; i <= endPage; i++) {
                 const pageBtn = document.createElement('button');
                 pageBtn.className = 'page-btn';
@@ -509,6 +1147,7 @@
                 controlsDiv.appendChild(pageBtn);
             }
             
+            // 最后一页
             if (endPage < pagination.pages) {
                 if (endPage < pagination.pages - 1) {
                     const ellipsis = document.createElement('span');
@@ -524,6 +1163,7 @@
                 controlsDiv.appendChild(lastBtn);
             }
             
+            // 下一页按钮
             const nextBtn = document.createElement('button');
             nextBtn.className = 'page-btn';
             nextBtn.textContent = '›';
@@ -568,6 +1208,7 @@
                         tbody.appendChild(row);
                     });
                     
+                    // 创建分页
                     createPagination(pagination);
                 }
                 
@@ -640,7 +1281,7 @@
                         <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn ${client.is_active ? 'btn-disable' : 'btn-enable'}">
                             ${client.is_active ? '禁用' : '启用'}
                         </button>
-                        <button onclick="openDeleteModal('${client.account_id}', '${client.license_key || client.server}', '${identificationCode}')" class="action-btn btn-delete">删除</button>
+                        <button onclick="openDeleteModal('${client.account_id}', '${client.license_key || client.server}')" class="action-btn btn-delete">删除</button>
                     </div>
                 </td>
             `;
@@ -661,19 +1302,13 @@
             const isActive = document.getElementById('addIsActive').value === 'true';
             const notes = document.getElementById('addNotes').value.trim();
             
-            // 验证所有必填字段
-            if (!accountId || !server || !expireDate || !identificationCode) {
-                showAlert('addAlert', '请填写所有必填项（账号ID、服务器、识别码、到期时间）', 'error');
+            if (!accountId || !server || !expireDate) {
+                showAlert('addAlert', '请填写所有必填项', 'error');
                 return;
             }
             
             if (!/^\d+$/.test(accountId)) {
                 showAlert('addAlert', '账号ID必须是数字', 'error');
-                return;
-            }
-            
-            if (!identificationCode) {
-                showAlert('addAlert', '识别码是必填项', 'error');
                 return;
             }
             
@@ -699,16 +1334,10 @@
                 if (result.success) {
                     showAlert('addAlert', '✅ 客户添加成功！', 'success');
                     
-                    // 清空表单
                     document.getElementById('addAccountId').value = '';
                     document.getElementById('addServer').value = '';
                     document.getElementById('addIdentificationCode').value = '';
                     document.getElementById('addNotes').value = '';
-                    
-                    // 设置默认到期时间（30天后）
-                    const defaultDate = new Date();
-                    defaultDate.setDate(defaultDate.getDate() + 30);
-                    document.getElementById('addExpireDate').valueAsDate = defaultDate;
                     
                     loadClients();
                 } else {
@@ -770,9 +1399,8 @@
             const isActive = document.getElementById('editIsActive').value === 'true';
             const notes = document.getElementById('editNotes').value.trim();
             
-            // 验证必填字段
-            if (!server || !identificationCode || !expireDate) {
-                showAlert('editAlert', '服务器、识别码和到期时间都是必填项', 'error');
+            if (!server) {
+                showAlert('editAlert', '服务器不能为空', 'error');
                 return;
             }
             
@@ -841,11 +1469,10 @@
         }
         
         // ========== 打开删除确认模态框 ==========
-        function openDeleteModal(accountId, server, identificationCode) {
+        function openDeleteModal(accountId, server) {
             clientToDelete = accountId;
             document.getElementById('deleteAccountId').textContent = accountId;
             document.getElementById('deleteServer').textContent = server;
-            document.getElementById('deleteIdentificationCode').textContent = identificationCode;
             document.getElementById('deleteModal').style.display = 'flex';
             document.getElementById('deleteAlert').style.display = 'none';
         }
@@ -885,7 +1512,7 @@
             }
         }
         
-        // ========== 测试原有验证接口 ==========
+        // ========== 测试验证接口 ==========
         async function testVerify() {
             const accountId = document.getElementById('testAccountId').value.trim();
             const server = document.getElementById('testServer').value.trim();
@@ -937,83 +1564,6 @@
                     <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
                         <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
                         <div style="font-size: 14px;">${error.message}</div>
-                    </div>
-                `;
-                testResultDiv.style.display = 'block';
-            }
-        }
-        
-        // ========== 测试MT4验证接口 ==========
-        async function testMT4Verify() {
-            const accountId = document.getElementById('mt4AccountId').value.trim();
-            const server = document.getElementById('mt4Server').value.trim();
-            const identificationCode = document.getElementById('mt4IdentificationCode').value.trim();
-            const testResultDiv = document.getElementById('mt4TestResult');
-            
-            if (!accountId || !server || !identificationCode) {
-                showAlert('testAlert', '请输入账号ID、服务器和识别码', 'error');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/mt4_verify`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        account_id: accountId,
-                        license_key: server,
-                        identification_code: identificationCode
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.valid) {
-                    testResultDiv.innerHTML = `
-                        <div style="background: #d5f4e6; color: #27ae60; padding: 15px; border-radius: 6px; border: 1px solid #a3e4c1;">
-                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">✅ MT4验证成功！</div>
-                            <div style="font-size: 14px; line-height: 1.5;">
-                                <div><strong>账号ID:</strong> ${result.account_id}</div>
-                                <div><strong>服务器:</strong> ${result.license_key}</div>
-                                <div><strong>识别码:</strong> ${result.identification_code}</div>
-                                <div><strong>到期时间:</strong> ${result.expire_date}</div>
-                                <div><strong>会话数:</strong> ${result.current_sessions}/${result.max_sessions}</div>
-                                <div><strong>备注:</strong> ${result.notes || '无'}</div>
-                            </div>
-                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #a3e4c1; font-size: 12px; color: #27ae60;">
-                                <strong>说明:</strong> MT4 EA可以使用此验证结果，如果验证失败应删除EA。
-                            </div>
-                        </div>
-                    `;
-                    testResultDiv.style.display = 'block';
-                } else {
-                    testResultDiv.innerHTML = `
-                        <div style="background: #fadbd8; color: #e74c3c; padding: 15px; border-radius: 6px; border: 1px solid #f5b7b1;">
-                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">❌ MT4验证失败</div>
-                            <div style="font-size: 14px; margin-bottom: 8px;">
-                                <strong>错误信息:</strong> ${result.message}
-                            </div>
-                            <div style="font-size: 14px;">
-                                <strong>错误代码:</strong> ${result.error_code || 'UNKNOWN'}
-                            </div>
-                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f5b7b1; font-size: 12px; color: #e74c3c;">
-                                <strong>MT4 EA处理建议:</strong> 显示错误信息并调用 ExpertRemove() 函数删除EA。
-                            </div>
-                        </div>
-                    `;
-                    testResultDiv.style.display = 'block';
-                }
-                
-            } catch (error) {
-                testResultDiv.innerHTML = `
-                    <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
-                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
-                        <div style="font-size: 14px;">${error.message}</div>
-                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #f8c471; font-size: 12px; color: #f39c12;">
-                            <strong>MT4 EA处理建议:</strong> 显示网络错误并调用 ExpertRemove() 函数删除EA。
-                        </div>
                     </div>
                 `;
                 testResultDiv.style.display = 'block';
