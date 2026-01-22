@@ -1358,23 +1358,19 @@
                 });
                 
                 const result = await response.json();
-                
+
                 if (result.success) {
-                    const previewData = result.preview_data;
-                    
-                    // 显示预览信息
-                    let message = `文件预览成功，共 ${result.total_rows} 行数据`;
-                    if (previewData && previewData.length > 0) {
-                        const validCount = previewData.filter(item => item.is_valid).length;
-                        const invalidCount = previewData.length - validCount;
-                        message += ` (有效: ${validCount}, 无效: ${invalidCount})`;
-                    }
-                    
+                    // 直接使用后端返回的统计结果，而不是基于preview_data计算
+                    const message = `文件预览成功，共 ${result.total_rows} 行数据（有效: ${result.valid_count}, 无效: ${result.invalid_count}）`;
+    
                     showAlert('importAlert', message, 'success');
-                    
+    
+                    // 可选：在控制台显示详细预览信息
+                    console.log('预览结果:', result);
+    
                 } else {
                     showAlert('importAlert', `预览失败: ${result.message}`, 'error');
-                }
+                }	
                 
             } catch (error) {
                 console.error('预览错误:', error);
