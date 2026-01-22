@@ -1055,6 +1055,63 @@
                 <button onclick="addNewClient()" class="btn">添加客户</button>
             </div>
             
+            <!-- 数据导入功能 -->
+            <div class="section">
+                <h2 class="section-title">📥 数据导入</h2>
+                <div id="importAlert" class="alert"></div>
+                
+                <div class="file-input-container">
+                    <label class="file-input-label">
+                        📁 选择CSV文件
+                        <input type="file" id="csvFile" class="file-input" accept=".csv" onchange="handleFileSelect()">
+                    </label>
+                    <span class="file-name" id="fileName">未选择文件</span>
+                </div>
+                
+                <div class="import-options">
+                    <div class="option-item">
+                        <input type="checkbox" id="updateExisting" checked>
+                        <label for="updateExisting">更新已存在的记录</label>
+                    </div>
+                </div>
+                
+                <div class="format-info">
+                    <p style="color: #2c3e50; font-size: 13px; margin-bottom: 5px;">
+                        <strong>支持格式：</strong>
+                    </p>
+                    <ul>
+                        <li><strong>简化格式：</strong> 账号ID, 服务器, 识别码, 到期时间, 状态, 备注</li>
+                        <li><strong>完整格式：</strong> 序号, 账号ID, 服务器, 识别码, 到期时间, 状态, 当前会话数, 备注, 创建时间</li>
+                    </ul>
+                    <p style="color: #7f8c8d; font-size: 12px; margin-top: 8px;">
+                        💡 提示：可以使用系统导出的CSV文件直接导入
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button onclick="previewImport()" class="btn" id="previewBtn">预览文件</button>
+                    <button onclick="confirmImport()" class="btn btn-import" id="importBtn" disabled>开始导入</button>
+                    <button onclick="clearImport()" class="btn btn-clear">清空</button>
+                </div>
+                
+                <div class="import-progress" id="importProgress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
+                    </div>
+                    <div style="text-align: center; font-size: 13px; color: #7f8c8d;" id="progressText">准备导入...</div>
+                </div>
+                
+                <div class="import-results" id="importResults">
+                    <div class="results-summary" id="resultsSummary">
+                        <!-- 结果摘要将通过JS动态生成 -->
+                    </div>
+                    <div style="font-size: 14px; color: #2c3e50; margin-bottom: 10px;">导入详情：</div>
+                    <div class="results-details" id="resultsDetails">
+                        <!-- 结果详情将通过JS动态生成 -->
+                    </div>
+                </div>
+            </div>
+            
             <!-- 客户列表 -->
             <div class="section">
                 <div class="section-title">
@@ -1123,64 +1180,7 @@
                     <div class="pagination-controls" id="paginationControls"></div>
                 </div>
             </div>
-
-            <!-- 数据导入功能 -->
-            <div class="section">
-                <h2 class="section-title">📥 数据导入</h2>
-                <div id="importAlert" class="alert"></div>
-                
-                <div class="file-input-container">
-                    <label class="file-input-label">
-                        📁 选择CSV文件
-                        <input type="file" id="csvFile" class="file-input" accept=".csv" onchange="handleFileSelect()">
-                    </label>
-                    <span class="file-name" id="fileName">未选择文件</span>
-                </div>
-                
-                <div class="import-options">
-                    <div class="option-item">
-                        <input type="checkbox" id="updateExisting" checked>
-                        <label for="updateExisting">更新已存在的记录</label>
-                    </div>
-                </div>
-                
-                <div class="format-info">
-                    <p style="color: #2c3e50; font-size: 13px; margin-bottom: 5px;">
-                        <strong>支持格式：</strong>
-                    </p>
-                    <ul>
-                        <li><strong>简化格式：</strong> 账号ID, 服务器, 识别码, 到期时间, 状态, 备注</li>
-                        <li><strong>完整格式：</strong> 账号ID, 服务器, 识别码, 到期时间, 状态, 最大会话数, 当前会话数, 备注, 创建时间</li>
-                    </ul>
-                    <p style="color: #7f8c8d; font-size: 12px; margin-top: 8px;">
-                        💡 提示：可以使用系统导出的CSV文件直接导入
-                    </p>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button onclick="previewImport()" class="btn" id="previewBtn">预览文件</button>
-                    <button onclick="confirmImport()" class="btn btn-import" id="importBtn" disabled>开始导入</button>
-                    <button onclick="clearImport()" class="btn btn-clear">清空</button>
-                </div>
-                
-                <div class="import-progress" id="importProgress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
-                    </div>
-                    <div style="text-align: center; font-size: 13px; color: #7f8c8d;" id="progressText">准备导入...</div>
-                </div>
-                
-                <div class="import-results" id="importResults">
-                    <div class="results-summary" id="resultsSummary">
-                        <!-- 结果摘要将通过JS动态生成 -->
-                    </div>
-                    <div style="font-size: 14px; color: #2c3e50; margin-bottom: 10px;">导入详情：</div>
-                    <div class="results-details" id="resultsDetails">
-                        <!-- 结果详情将通过JS动态生成 -->
-                    </div>
-                </div>
-            </div>
- 
+            
             <!-- 数据导出功能 -->
             <div class="section">
                 <h2 class="section-title">📤 数据导出</h2>
@@ -1207,7 +1207,7 @@
                     <div style="font-size: 13px; color: #7f8c8d;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
                             <span style="color: #2ecc71;">✓</span>
-                            <span>导出的CSV文件包含所有客户字段</span>
+                            <span>导出的CSV文件包含账号状态（正常/禁用）</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span style="color: #3498db;">✓</span>
@@ -1510,12 +1510,9 @@
                     statusInfo.textContent = item.message || item.status;
                     
                     // 根据状态设置样式
-                    if (item.status === '导入') {
+                    if (item.status === '导入' || item.status === '更新') {
                         rowDiv.className += ' result-row-success';
                         statusInfo.textContent = '✓ ' + statusInfo.textContent;
-                    } else if (item.status === '更新') {
-                        rowDiv.className += ' result-row-success';
-                        statusInfo.textContent = '🔄 ' + statusInfo.textContent;
                     } else if (item.status === '跳过') {
                         rowDiv.className += ' result-row-skip';
                         statusInfo.textContent = '⏭️ ' + statusInfo.textContent;
@@ -1881,7 +1878,6 @@
                         license_key: server,
                         identification_code: identificationCode,
                         expire_date: expireDate,
-                        max_sessions: 999,
                         is_active: isActive,
                         notes: notes
                     })
@@ -1967,8 +1963,7 @@
                         identification_code: identificationCode,
                         expire_date: expireDate,
                         is_active: isActive,
-                        notes: notes,
-                        max_sessions: 999
+                        notes: notes
                     })
                 });
                 
