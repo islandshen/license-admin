@@ -4,381 +4,637 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA客户管理系统</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
         
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
+        /* 登录界面样式 */
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .login-header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .login-form {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .login-alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .alert-error {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        /* 主系统容器 */
+        #mainContainer {
+            display: none;
+            max-width: 1400px;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
         }
         
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        
+        .content {
             padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .logo {
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-control {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        /* 搜索区域样式 */
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .search-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .search-title-icon {
+            background: #3498db;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .search-box-container {
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
+            flex: 1;
         }
         
-        .logo-icon {
-            font-size: 2.5rem;
-            color: #667eea;
-        }
-        
-        .logo-text h1 {
-            color: #333;
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-        
-        .logo-text p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .user-info {
-            text-align: right;
-        }
-        
-        .user-info .username {
-            font-weight: bold;
-            color: #333;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        
-        .user-info .logout-btn {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-        
-        .user-info .logout-btn:hover {
-            background: #ff3742;
-        }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
-        }
-        
-        .sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .nav-menu {
-            list-style: none;
-        }
-        
-        .nav-item {
-            margin-bottom: 10px;
-        }
-        
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #333;
+        .search-label {
+            font-size: 14px;
+            color: #2c3e50;
             font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .nav-link:hover {
-            background: #667eea;
-            color: white;
-            transform: translateX(5px);
-        }
-        
-        .nav-link.active {
-            background: #667eea;
-            color: white;
-        }
-        
-        .nav-icon {
-            font-size: 1.2rem;
-        }
-        
-        .content-area {
-            background: rgba(255, 255, 255, 0.95);
+            white-space: nowrap;
+            background: white;
+            padding: 8px 15px;
             border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .content-title {
-            font-size: 1.8rem;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .content-title-icon {
-            color: #667eea;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
-        }
-        
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-        
-        .btn-warning {
-            background: #ffc107;
-            color: #333;
-        }
-        
-        .btn-warning:hover {
-            background: #e0a800;
-            transform: translateY(-2px);
-        }
-        
-        .btn-info {
-            background: #17a2b8;
-            color: white;
-        }
-        
-        .btn-info:hover {
-            background: #138496;
-            transform: translateY(-2px);
-        }
-        
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-        
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+        .search-input-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            background: white;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .search-input {
-            flex: 1;
+            width: 100%;
             padding: 12px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
+            padding-right: 50px;
+            border: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: transparent;
         }
         
         .search-input:focus {
             outline: none;
-            border-color: #667eea;
         }
         
-        .search-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3498db;
+            font-size: 18px;
             cursor: pointer;
-            font-weight: 600;
+        }
+        
+        .search-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-hint {
+            margin-top: 8px;
+            color: #6c757d;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
         
-        .table-container {
-            overflow-x: auto;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-        }
-        
-        .data-table th {
-            background: #667eea;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-        }
-        
-        .data-table td {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .data-table tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .status-active {
-            background: #d4edda;
-            color: #155724;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-        
-        .status-inactive {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-        
-        .action-icons {
+        .hint-item {
             display: flex;
-            gap: 10px;
-        }
-        
-        .action-icon {
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        
-        .edit-icon {
-            color: #17a2b8;
-        }
-        
-        .edit-icon:hover {
-            background: #17a2b8;
-            color: white;
-        }
-        
-        .delete-icon {
-            color: #dc3545;
-        }
-        
-        .delete-icon:hover {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .reset-icon {
-            color: #ffc107;
-        }
-        
-        .reset-icon:hover {
-            background: #ffc107;
-            color: white;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 10px;
-            margin-top: 30px;
+            gap: 4px;
+            padding: 2px 8px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(52, 152, 219, 0.2);
         }
         
-        .pagination-btn {
-            padding: 8px 15px;
+        .hint-icon {
+            font-size: 12px;
+            color: #3498db;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-refresh {
+            background: #2ecc71;
+        }
+        
+        .btn-refresh:hover {
+            background: #27ae60;
+        }
+        
+        .btn-test {
+            background: #9b59b6;
+        }
+        
+        .btn-test:hover {
+            background: #8e44ad;
+        }
+        
+        .btn-clear {
+            background: #95a5a6;
+        }
+        
+        .btn-clear:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-export {
+            background: #2ecc71;
+        }
+        
+        .btn-export:hover {
+            background: #27ae60;
+        }
+        
+        .btn-template {
+            background: #9b59b6;
+        }
+        
+        .btn-template:hover {
+            background: #8e44ad;
+        }
+        
+        .btn-import {
+            background: #f39c12;
+        }
+        
+        .btn-import:hover {
+            background: #d68910;
+        }
+        
+        /* 分页样式 */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .pagination-info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .page-btn {
+            padding: 6px 12px;
             border: 1px solid #ddd;
             background: white;
-            border-radius: 5px;
+            color: #2c3e50;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 13px;
+            transition: all 0.2s;
+            min-width: 36px;
+            text-align: center;
         }
         
-        .pagination-btn:hover:not(:disabled) {
-            background: #667eea;
+        .page-btn:hover:not(:disabled) {
+            background: #3498db;
             color: white;
-            border-color: #667eea;
+            border-color: #3498db;
         }
         
-        .pagination-btn:disabled {
+        .page-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            font-weight: 600;
+        }
+        
+        .page-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
         
-        .page-info {
-            font-size: 0.9rem;
-            color: #666;
+        .page-ellipsis {
+            padding: 6px 8px;
+            color: #7f8c8d;
+        }
+        
+        /* 操作按钮组 */
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            line-height: 1.2;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+        
+        .btn-disable {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn-disable:hover {
+            background: #d68910;
+        }
+        
+        .btn-enable {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-enable:hover {
+            background: #27ae60;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 2px solid #eaeaea;
+            white-space: nowrap;
+        }
+        
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* 序号列样式 */
+        .serial-number {
+            width: 60px;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* 备注列样式 */
+        .notes-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .notes-cell:hover {
+            overflow: visible;
+            white-space: normal;
+            position: relative;
+            z-index: 10;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .status-active {
+            color: #27ae60;
+            font-weight: 600;
+            background: #d5f4e6;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .status-inactive {
+            color: #e74c3c;
+            font-weight: 600;
+            background: #fadbd8;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .status-expired {
+            color: #f39c12;
+            font-weight: 600;
+            background: #fef5e7;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #a3e4c1;
+        }
+        
+        .alert-error {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        .alert-info {
+            background: #d6eaf8;
+            color: #2c3e50;
+            border: 1px solid #aed6f1;
+        }
+        
+        .alert-warning {
+            background: #fef5e7;
+            color: #f39c12;
+            border: 1px solid #f8c471;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 14px;
         }
         
         .modal {
@@ -388,178 +644,241 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
         
         .modal-content {
             background: white;
-            border-radius: 15px;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 600px;
             width: 90%;
-            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-        }
-        
-        .modal-header {
-            padding: 25px;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
         .modal-title {
-            font-size: 1.5rem;
-            color: #333;
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
+            gap: 8px;
+        }
+        
+        .modal-title span {
+            font-size: 20px;
+        }
+        
+        /* 模态框中的按钮 */
+        .modal-content .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border: 1px dashed #ddd;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        
+        .test-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .delete-confirm {
+            background: #fef5e7;
+            border: 1px solid #f8c471;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .delete-actions {
+            display: flex;
             gap: 10px;
+            margin-top: 20px;
         }
         
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #999;
+        .delete-actions .btn {
+            padding: 10px 20px;
         }
         
-        .close-btn:hover {
-            color: #333;
+        /* 新增：必填字段提示样式 */
+        .required-field::after {
+            content: " *";
+            color: #e74c3c;
         }
         
-        .modal-body {
-            padding: 25px;
+        .field-hint {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 4px;
+            display: block;
         }
         
-        .form-group {
+        /* 导出导入相关样式 */
+        .export-import-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
         }
         
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+        .export-import-title {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
+        .export-import-title span {
+            font-size: 18px;
         }
         
-        .form-input:focus {
-            outline: none;
-            border-color: #667eea;
+        .file-input-container {
+            margin-bottom: 15px;
         }
         
-        .form-checkbox {
-            width: 20px;
-            height: 20px;
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
             margin-right: 10px;
         }
         
-        .form-textarea {
+        .file-input-label:hover {
+            background: #2980b9;
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            min-height: 100px;
-            resize: vertical;
+            height: 100%;
+            cursor: pointer;
         }
         
-        .modal-footer {
-            padding: 20px 25px;
-            border-top: 2px solid #f0f0f0;
+        .preview-container {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .preview-stats {
             display: flex;
-            justify-content: flex-end;
-            gap: 15px;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #2c3e50;
         }
         
-        .import-section {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        .preview-table th {
+            background: #e9ecef;
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            font-size: 12px;
+        }
+        
+        .preview-table td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            font-size: 12px;
+        }
+        
+        .preview-valid {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .preview-invalid {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .preview-exists {
+            color: #f39c12;
         }
         
         .import-options {
             display: flex;
             gap: 15px;
-            margin-top: 15px;
+            margin-bottom: 20px;
         }
         
         .import-option {
             flex: 1;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
+            text-align: center;
         }
         
         .import-option:hover {
-            border-color: #667eea;
-            transform: translateY(-5px);
+            border-color: #3498db;
+            background: #f0f8ff;
         }
         
         .import-option.active {
-            border-color: #667eea;
-            background: #f0f5ff;
+            border-color: #3498db;
+            background: #e3f2fd;
         }
         
         .import-option-icon {
-            font-size: 2.5rem;
-            color: #667eea;
-            margin-bottom: 15px;
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #3498db;
         }
         
         .import-option-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: #333;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
         }
         
         .import-option-desc {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .import-form {
-            margin-top: 30px;
-        }
-        
-        .file-input-container {
-            margin-bottom: 20px;
-        }
-        
-        .file-input-label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .file-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            background: #f8f9fa;
+            font-size: 12px;
+            color: #7f8c8d;
         }
         
         .import-mode {
-            margin-bottom: 20px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
         }
         
         .mode-options {
@@ -574,1050 +893,1280 @@
             gap: 8px;
         }
         
-        .preview-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.9rem;
+        .mode-option input {
+            margin: 0;
         }
         
-        .preview-table th {
-            background: #f8f9fa;
-            padding: 10px;
-            text-align: left;
-            border-bottom: 2px solid #ddd;
-        }
-        
-        .preview-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .preview-valid {
-            color: #28a745;
-        }
-        
-        .preview-invalid {
-            color: #dc3545;
-        }
-        
-        .preview-exists {
-            color: #ffc107;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1001;
-            transform: translateX(150%);
-            transition: transform 0.5s ease;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification.success {
-            background: #28a745;
-        }
-        
-        .notification.error {
-            background: #dc3545;
-        }
-        
-        .notification.warning {
-            background: #ffc107;
-            color: #333;
-        }
-        
-        .notification.info {
-            background: #17a2b8;
-        }
-        
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .loading-text {
-            font-size: 1.2rem;
-            color: #333;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #666;
-        }
-        
-        .empty-state-icon {
-            font-size: 4rem;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .empty-state-text {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        
-        /* 响应式设计 */
         @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 1fr;
+            table {
+                font-size: 13px;
             }
             
-            .sidebar {
-                display: none;
+            th, td {
+                padding: 8px 6px;
             }
         }
         
         @media (max-width: 768px) {
-            .header {
+            .form-row {
                 flex-direction: column;
-                gap: 20px;
-                text-align: center;
+                gap: 10px;
             }
             
-            .user-info {
-                text-align: center;
+            .content {
+                padding: 20px;
             }
             
-            .action-buttons {
-                flex-wrap: wrap;
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .search-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input-container {
+                min-width: 100%;
+            }
+            
+            .search-title {
+                margin-bottom: 10px;
+            }
+            
+            .import-options {
+                flex-direction: column;
+            }
+            
+            .mode-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            table {
+                font-size: 12px;
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+            
+            .serial-number {
+                width: 40px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .action-btn {
+                padding: 5px 8px;
+                font-size: 11px;
             }
             
             .btn {
-                padding: 10px 15px;
-                font-size: 0.9rem;
+                padding: 9px 16px;
+                font-size: 13px;
             }
             
-            .modal-content {
-                width: 95%;
-                margin: 10px;
+            .pagination-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .pagination-controls {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- 登录界面 -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-header">
+            <h1>🔐 EA客户管理系统</h1>
+            <p>请登录以管理客户账号</p>
+        </div>
+        
+        <div class="login-form">
+            <div id="loginAlert" class="login-alert"></div>
+            
+            <div class="form-group">
+                <label for="username" class="required-field">用户名</label>
+                <input type="text" id="username" placeholder="请输入用户名" value="islandshen@163.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="required-field">密码</label>
+                <input type="password" id="password" placeholder="请输入密码" value="Auo_0523">
+            </div>
+            
+            <button onclick="login()" class="login-btn">登录</button>
+        </div>
+    </div>
+    
+    <!-- 主系统界面 -->
+    <div id="mainContainer">
         <!-- 头部 -->
         <div class="header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-chart-line"></i>
+            <button onclick="logout()" class="logout-btn">退出登录</button>
+            <h1>📋 EA客户管理系统</h1>
+            <p>管理客户账号和到期时间</p>
+        </div>
+        
+        <!-- 主要内容 -->
+        <div class="content">
+            <!-- 添加客户表单 -->
+            <div class="section">
+                <h2 class="section-title">➕ 添加新客户</h2>
+                <div id="addAlert" class="alert"></div>
+                
+                <div class="form-row">
+                    <input type="text" id="addAccountId" class="form-control" placeholder="账号ID (例如: 888888)" required>
+                    <input type="text" id="addServer" class="form-control" placeholder="服务器 (例如: ECMarkets-Live08)" required>
+                    <input type="text" id="addIdentificationCode" class="form-control" placeholder="识别码 (必填)" required>
                 </div>
-                <div class="logo-text">
-                    <h1>EA客户管理系统</h1>
-                    <p>专业的外汇EA客户验证与管理系统</p>
+                
+                <div class="form-row">
+                    <input type="date" id="addExpireDate" class="form-control" required>
+                    <select id="addIsActive" class="form-control">
+                        <option value="true">激活状态</option>
+                        <option value="false">禁用状态</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <textarea id="addNotes" class="form-control" placeholder="备注信息 (可选)" rows="2" style="resize: vertical;"></textarea>
+                </div>
+                
+                <button onclick="addNewClient()" class="btn">添加客户</button>
+            </div>
+            
+            <!-- 客户列表 -->
+            <div class="section">
+                <div class="section-title">
+                    <span>👥 客户列表</span>
+                </div>
+                
+                <!-- 搜索区域 -->
+                <div class="search-header">
+                    <div class="search-title">
+                        <div class="search-title-icon">🔍</div>
+                        <span>搜索客户信息</span>
+                    </div>
+                    
+                    <div class="search-box-container">
+                        <div class="search-label">快速查找</div>
+                        <div class="search-input-container">
+                            <input type="text" id="searchInput" class="search-input" placeholder="输入账号ID、服务器、识别码或备注...">
+                            <span class="search-icon" onclick="searchClients()">🔍</span>
+                        </div>
+                        <div class="search-actions">
+                            <button onclick="clearSearch()" class="btn btn-clear">清除搜索</button>
+                            <button onclick="loadClients()" class="btn btn-refresh">刷新列表</button>
+                        </div>
+                    </div>
+                    
+                    <div class="search-hint">
+                        <div class="hint-item">
+                            <span class="hint-icon">📝</span>
+                            <span>支持模糊搜索</span>
+                        </div>
+                        <div class="hint-item">
+                            <span class="hint-icon">⚡</span>
+                            <span>输入2个字符以上自动搜索</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="listAlert" class="alert"></div>
+                
+                <div id="loading" class="loading">
+                    <p>正在加载客户数据...</p>
+                </div>
+                
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th class="serial-number">序号</th>
+                            <th>账号ID</th>
+                            <th>服务器</th>
+                            <th>识别码</th>
+                            <th>到期时间</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsBody">
+                        <!-- 数据将通过JavaScript动态填充 -->
+                    </tbody>
+                </table>
+                
+                <!-- 分页控件 -->
+                <div id="paginationContainer" class="pagination-container" style="display: none;">
+                    <div class="pagination-info" id="paginationInfo"></div>
+                    <div class="pagination-controls" id="paginationControls"></div>
                 </div>
             </div>
-            <div class="user-info">
-                <div class="username" id="username">管理员</div>
-                <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> 退出登录
+            
+            <!-- 数据导入导出功能 -->
+            <div class="section">
+                <h2 class="section-title">📊 数据导入导出</h2>
+                <div id="exportImportAlert" class="alert"></div>
+                
+                <!-- 数据导出功能 -->
+                <div class="export-import-section">
+                    <h3 class="export-import-title">
+                        <span>📤</span>
+                        数据导出
+                    </h3>
+                    
+                    <div class="form-row" style="align-items: center;">
+                        <div style="flex: 1;">
+                            <p style="color: #2c3e50; font-size: 14px; margin-bottom: 10px;">
+                                导出当前搜索结果到CSV文件
+                            </p>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="exportData()" class="btn btn-export">
+                                <span style="margin-right: 5px;">⬇️</span>导出数据
+                            </button>
+                            <button onclick="downloadTemplate('full')" class="btn btn-template">
+                                📋 下载完整模板
+                            </button>
+                            <button onclick="downloadTemplate('simple')" class="btn btn-template">
+                                📄 下载简化模板
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数据导入功能 -->
+                <div class="export-import-section">
+                    <h3 class="export-import-title">
+                        <span>📥</span>
+                        数据导入
+                    </h3>
+                    
+                    <p style="color: #2c3e50; font-size: 14px; margin-bottom: 15px;">
+                        支持导入CSV格式的客户数据，可批量添加或更新客户信息
+                    </p>
+                    
+                    <!-- 导入选项 -->
+                    <div class="import-options" id="importOptions">
+                        <div class="import-option active" onclick="selectImportOption('simple')">
+                            <div class="import-option-icon">📄</div>
+                            <div class="import-option-title">简化模板导入</div>
+                            <div class="import-option-desc">
+                                适合批量添加新客户<br>
+                                (6个必需字段)
+                            </div>
+                        </div>
+                        <div class="import-option" onclick="selectImportOption('full')">
+                            <div class="import-option-icon">📊</div>
+                            <div class="import-option-title">完整格式导入</div>
+                            <div class="import-option-desc">
+                                兼容导出的CSV文件<br>
+                                (10个字段，适合备份恢复)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 文件选择 -->
+                    <div class="form-group">
+                        <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: 500;">
+                            选择CSV文件 <span style="font-weight: normal; color: #7f8c8d;" id="formatInfo">(支持简单格式)</span>
+                        </label>
+                        <div class="file-input-container">
+                            <label class="file-input-label">
+                                📁 选择文件
+                                <input type="file" id="csvFile" class="file-input" accept=".csv" onchange="handleFileSelect()">
+                            </label>
+                            <span id="fileName" style="color: #7f8c8d; font-size: 14px;">未选择文件</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 导入模式 -->
+                    <div class="import-mode">
+                        <label style="display: block; margin-bottom: 10px; color: #2c3e50; font-weight: 500;">导入模式</label>
+                        <div class="mode-options">
+                            <label class="mode-option">
+                                <input type="radio" name="importMode" value="add" checked>
+                                <span>仅添加新记录（跳过已存在的账号）</span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="importMode" value="update">
+                                <span>更新模式（更新已存在的记录）</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 预览区域 -->
+                    <div class="preview-container" id="previewContainer">
+                        <div class="preview-stats">
+                            <span>数据预览 (最多显示10行)</span>
+                            <span id="previewStats">共0条记录</span>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="preview-table" id="previewTable">
+                                <thead id="previewHeader">
+                                    <!-- 表头动态生成 -->
+                                </thead>
+                                <tbody id="previewBody">
+                                    <!-- 数据动态生成 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- 操作按钮 -->
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button onclick="previewImport()" class="btn" id="previewBtn" disabled>
+                            🔍 预览数据
+                        </button>
+                        <button onclick="executeImport()" class="btn btn-import" id="importBtn" disabled>
+                            📥 开始导入
+                        </button>
+                        <button onclick="resetImport()" class="btn btn-clear">
+                            🔄 重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 测试验证 -->
+            <div class="section test-section">
+                <h2 class="section-title">🧪 测试验证接口</h2>
+                <div id="testAlert" class="alert"></div>
+                
+                <div class="form-row">
+                    <input type="text" id="testAccountId" class="form-control" placeholder="输入账号ID进行测试" value="1000132128">
+                    <input type="text" id="testServer" class="form-control" placeholder="输入服务器" value="FortunePrimeGlobal-Demo">
+                </div>
+                
+                <button onclick="testVerify()" class="btn btn-test">测试验证</button>
+                
+                <div id="testResult" class="test-result"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 编辑模态框 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">编辑客户信息</div>
+            <div id="editAlert" class="alert"></div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">账号ID:</label>
+                <input type="text" id="editAccountId" class="form-control" readonly style="background: #f5f5f5;">
+            </div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">服务器:</label>
+                <input type="text" id="editServer" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">识别码:</label>
+                                <input type="text" id="editIdentificationCode" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">到期时间:</label>
+                <input type="date" id="editExpireDate" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">状态:</label>
+                <select id="editIsActive" class="form-control">
+                    <option value="true">激活</option>
+                    <option value="false">禁用</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">备注:</label>
+                <textarea id="editNotes" class="form-control" rows="3" style="resize: vertical;"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button onclick="saveEdit()" class="btn">保存修改</button>
+                <button onclick="closeEditModal()" class="btn" style="background: #95a5a6;">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 删除确认模态框 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">⚠️ 确认删除</div>
+            
+            <div class="delete-confirm">
+                <p style="color: #e74c3c; font-weight: 600; margin-bottom: 10px;">您确定要删除这个客户吗？</p>
+                <p style="color: #7f8c8d; font-size: 14px;">账号ID: <span id="deleteAccountId" style="font-weight: 600;"></span></p>
+                <p style="color: #7f8c8d; font-size: 14px;">服务器: <span id="deleteServer" style="font-weight: 600;"></span></p>
+                <p style="color: #7f8c8d; font-size: 14px;">识别码: <span id="deleteIdentificationCode" style="font-weight: 600;"></span></p>
+                <p style="color: #e74c3c; font-size: 13px; margin-top: 15px; border-top: 1px dashed #f8c471; padding-top: 10px;">
+                    ⚠️ 注意：此操作不可撤销，删除后将无法恢复！
+                </p>
+            </div>
+            
+            <div id="deleteAlert" class="alert"></div>
+            
+            <div class="delete-actions">
+                <button onclick="confirmDelete()" class="btn btn-delete">确认删除</button>
+                <button onclick="closeDeleteModal()" class="btn" style="background: #95a5a6;">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 导入进度模态框 -->
+    <div id="importProgressModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-title">📥 数据导入中...</div>
+            
+            <div id="importProgressAlert" class="alert"></div>
+            
+            <div id="importProgress" style="margin: 20px 0;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span id="importProgressText">正在处理...</span>
+                    <span id="importProgressPercent">0%</span>
+                </div>
+                <div style="width: 100%; height: 20px; background: #f0f0f0; border-radius: 10px; overflow: hidden;">
+                    <div id="importProgressBar" style="width: 0%; height: 100%; background: #3498db; transition: width 0.3s;"></div>
+                </div>
+            </div>
+            
+            <div id="importResult" style="display: none;">
+                <div style="background: #f8f9fa; border-radius: 6px; padding: 15px; margin: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #2ecc71; font-weight: bold;">✅ 成功导入: <span id="importSuccessCount">0</span></span>
+                        <span style="color: #f39c12;">🔄 跳过: <span id="importSkipCount">0</span></span>
+                        <span style="color: #e74c3c;">❌ 失败: <span id="importFailCount">0</span></span>
+                    </div>
+                    <div id="importDetails" style="font-size: 13px; color: #7f8c8d; max-height: 200px; overflow-y: auto; padding: 10px; background: white; border-radius: 4px; border: 1px solid #dee2e6;">
+                        <!-- 导入详情会动态生成 -->
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button onclick="closeImportProgressModal()" class="btn" id="importCloseBtn" style="display: none;">
+                    完成
+                </button>
+                <button onclick="cancelImport()" class="btn btn-clear" id="importCancelBtn">
+                    取消
                 </button>
             </div>
         </div>
-        
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <!-- 侧边栏 -->
-            <div class="sidebar">
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active" onclick="showSection('clients')">
-                            <i class="fas fa-users nav-icon"></i>
-                            <span>客户管理</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="showSection('import')">
-                            <i class="fas fa-file-import nav-icon"></i>
-                            <span>数据导入</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="showSection('export')">
-                            <i class="fas fa-file-export nav-icon"></i>
-                            <span>数据导出</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- 内容区域 -->
-            <div class="content-area">
-                <!-- 客户管理部分 -->
-                <div id="clients-section" class="content-section">
-                    <div class="content-header">
-                        <h2 class="content-title">
-                            <i class="fas fa-users content-title-icon"></i>
-                            客户列表
-                        </h2>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="openAddModal()">
-                                <i class="fas fa-plus"></i> 添加客户
-                            </button>
-                            <button class="btn btn-info" onclick="showSection('import')">
-                                <i class="fas fa-file-import"></i> 导入数据
-                            </button>
-                            <button class="btn btn-success" onclick="showSection('export')">
-                                <i class="fas fa-file-export"></i> 导出数据
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="search-box">
-                        <input type="text" class="search-input" id="search-input" 
-                               placeholder="搜索账号ID、服务器、识别码或备注..." 
-                               onkeyup="if(event.keyCode===13) searchClients()">
-                        <button class="search-btn" onclick="searchClients()">
-                            <i class="fas fa-search"></i> 搜索
-                        </button>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table class="data-table" id="clients-table">
-                            <thead>
-                                <tr>
-                                    <th>序号</th>
-                                    <th>账号ID</th>
-                                    <th>服务器</th>
-                                    <th>识别码</th>
-                                    <th>到期时间</th>
-                                    <th>状态</th>
-                                    <th>会话数</th>
-                                    <th>备注</th>
-                                    <th>创建时间</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="clients-tbody">
-                                <!-- 数据会动态加载 -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="empty-state" id="empty-state" style="display: none;">
-                        <div class="empty-state-icon">
-                            <i class="fas fa-users-slash"></i>
-                        </div>
-                        <div class="empty-state-text">暂无客户数据</div>
-                        <p>点击"添加客户"按钮创建第一个客户</p>
-                    </div>
-                    
-                    <div class="pagination" id="pagination">
-                        <!-- 分页会动态生成 -->
-                    </div>
-                </div>
-                
-                <!-- 数据导入部分 -->
-                <div id="import-section" class="content-section" style="display: none;">
-                    <div class="content-header">
-                        <h2 class="content-title">
-                            <i class="fas fa-file-import content-title-icon"></i>
-                            数据导入
-                        </h2>
-                        <div class="action-buttons">
-                            <button class="btn btn-warning" onclick="showSection('clients')">
-                                <i class="fas fa-arrow-left"></i> 返回列表
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="import-section">
-                        <h3 style="margin-bottom: 15px; color: #333;">选择导入方式</h3>
-                        <div class="import-options">
-                            <div class="import-option active" onclick="selectImportOption('simple')">
-                                <div class="import-option-icon">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                                <div class="import-option-title">简单模板导入</div>
-                                <div class="import-option-desc">
-                                    使用简化模板（6个字段）<br>
-                                    适合批量添加新客户
-                                </div>
-                            </div>
-                            <div class="import-option" onclick="selectImportOption('full')">
-                                <div class="import-option-icon">
-                                    <i class="fas fa-file-excel"></i>
-                                </div>
-                                <div class="import-option-title">完整模板导入</div>
-                                <div class="import-option-desc">
-                                    使用完整模板（10个字段）<br>
-                                    兼容导出的CSV文件格式
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="import-form">
-                            <div class="form-group">
-                                <label class="form-label">选择导入模板</label>
-                                <select class="form-input" id="template-select" onchange="updateImportTemplate()">
-                                    <option value="simple">简单模板（6字段）</option>
-                                    <option value="full">完整模板（10字段）</option>
-                                </select>
-                                <button class="btn btn-info" onclick="downloadTemplate()" style="margin-top: 10px;">
-                                    <i class="fas fa-download"></i> 下载模板
-                                </button>
-                            </div>
-                            
-                            <div class="form-group file-input-container">
-                                <label class="form-label" id="file-label">选择CSV文件（支持简单格式）</label>
-                                <input type="file" class="form-input file-input" id="csv-file" accept=".csv">
-                                <button class="btn btn-warning" onclick="previewImport()" style="margin-top: 10px;">
-                                    <i class="fas fa-eye"></i> 预览数据
-                                </button>
-                            </div>
-                            
-                            <div class="form-group import-mode">
-                                <label class="form-label">导入模式</label>
-                                <div class="mode-options">
-                                    <label class="mode-option">
-                                        <input type="radio" name="import-mode" value="add" checked>
-                                        <span>仅添加新记录（跳过已存在的账号）</span>
-                                    </label>
-                                    <label class="mode-option">
-                                        <input type="radio" name="import-mode" value="update">
-                                        <span>更新模式（更新已存在的记录）</span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div id="preview-section" style="display: none;">
-                                <h4 style="margin-bottom: 15px; color: #333;">数据预览</h4>
-                                <div class="table-container">
-                                    <table class="preview-table" id="preview-table">
-                                        <thead>
-                                            <tr id="preview-header">
-                                                <!-- 表头会动态生成 -->
-                                            </tr>
-                                        </thead>
-                                        <tbody id="preview-body">
-                                            <!-- 预览数据会动态生成 -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
-                                    <p><i class="fas fa-info-circle"></i> 预览仅显示前10行数据，验证通过的数据将显示绿色标记。</p>
-                                </div>
-                            </div>
-                            
-                            <div class="modal-footer" style="margin-top: 30px; padding: 0; border: none;">
-                                <button class="btn btn-primary" onclick="executeImport()" id="import-btn" disabled>
-                                    <i class="fas fa-upload"></i> 开始导入
-                                </button>
-                                <button class="btn btn-warning" onclick="resetImportForm()">
-                                    <i class="fas fa-redo"></i> 重置
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 数据导出部分 -->
-                <div id="export-section" class="content-section" style="display: none;">
-                    <div class="content-header">
-                        <h2 class="content-title">
-                            <i class="fas fa-file-export content-title-icon"></i>
-                            数据导出
-                        </h2>
-                        <div class="action-buttons">
-                            <button class="btn btn-warning" onclick="showSection('clients')">
-                                <i class="fas fa-arrow-left"></i> 返回列表
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="import-section">
-                        <h3 style="margin-bottom: 15px; color: #333;">导出选项</h3>
-                        
-                        <div class="form-group">
-                            <label class="form-label">搜索筛选（可选）</label>
-                            <input type="text" class="form-input" id="export-search" 
-                                   placeholder="输入关键词筛选要导出的数据...">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">导出格式</label>
-                            <div class="mode-options">
-                                <label class="mode-option">
-                                    <input type="radio" name="export-format" value="full" checked>
-                                    <span>完整格式（包含所有字段，适合数据备份）</span>
-                                </label>
-                                <label class="mode-option">
-                                    <input type="radio" name="export-format" value="simple">
-                                    <span>简化格式（仅业务字段，适合分享）</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="modal-footer" style="margin-top: 30px; padding: 0; border: none;">
-                            <button class="btn btn-success" onclick="exportData()">
-                                <i class="fas fa-download"></i> 导出数据
-                            </button>
-                            <button class="btn btn-info" onclick="downloadTemplate('export')">
-                                <i class="fas fa-file-download"></i> 下载模板
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 添加/编辑客户模态框 -->
-    <div id="client-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">
-                    <i class="fas fa-user-plus"></i>
-                    <span id="modal-title">添加新客户</span>
-                </h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="client-form">
-                    <div class="form-group">
-                        <label class="form-label">账号ID *</label>
-                        <input type="text" class="form-input" id="account-id" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">服务器 *</label>
-                        <input type="text" class="form-input" id="license-key" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">识别码 *</label>
-                        <input type="text" class="form-input" id="identification-code" required>
-                        <small style="color: #666;">多个识别码用逗号分隔，例如: 123456,654321</small>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">到期时间 *</label>
-                        <input type="date" class="form-input" id="expire-date" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">最大会话数</label>
-                        <input type="number" class="form-input" id="max-sessions" value="999" min="1">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <input type="checkbox" class="form-checkbox" id="is-active" checked>
-                            启用账号
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">备注</label>
-                        <textarea class="form-textarea" id="notes" rows="3"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-warning" onclick="closeModal()">取消</button>
-                <button class="btn btn-success" onclick="saveClient()">保存</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 通知提示 -->
-    <div id="notification" class="notification"></div>
-    
-    <!-- 加载中 -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text" id="loading-text">处理中...</div>
     </div>
     
     <script>
-        // 全局变量
+        // ========== 配置 ==========
+        const API_BASE = 'https://islandshen.pythonanywhere.com/api';
+        let currentEditClient = null;
+        let clientToDelete = null;
+        let currentSearchQuery = '';
         let currentPage = 1;
-        let totalPages = 1;
-        let perPage = 20;
-        let searchQuery = '';
-        let currentClientId = null;
+        const perPage = 20;
+        
+        // ========== 导入相关变量 ==========
+        let selectedFile = null;
+        let importFormat = 'simple'; // 'simple' 或 'full'
         let importPreviewData = [];
-        let importFormat = 'simple';
-        let apiBaseUrl = window.location.origin;
+        let isImporting = false;
+        let importCanceled = false;
         
-        // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('页面加载完成');
-            checkLogin();
-            loadClients();
-        });
-        
-        // 检查登录状态
-        function checkLogin() {
-            const token = localStorage.getItem('admin_token');
-            const username = localStorage.getItem('admin_username');
+        // ========== 登录功能 ==========
+        async function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
             
-            if (!token || !username) {
-                // 如果未登录，跳转到登录页
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('username').textContent = username;
-            }
-        }
-        
-        // 退出登录
-        function logout() {
-            localStorage.removeItem('admin_token');
-            localStorage.removeItem('admin_username');
-            window.location.href = 'login.html';
-        }
-        
-        // 切换内容区域
-        function showSection(sectionId) {
-            // 隐藏所有内容区域
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            // 显示选中的内容区域
-            document.getElementById(`${sectionId}-section`).style.display = 'block';
-            
-            // 更新导航菜单
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            if (sectionId === 'clients') {
-                document.querySelector('.nav-link[onclick*="clients"]').classList.add('active');
-                loadClients();
-            } else if (sectionId === 'import') {
-                document.querySelector('.nav-link[onclick*="import"]').classList.add('active');
-            } else if (sectionId === 'export') {
-                document.querySelector('.nav-link[onclick*="export"]').classList.add('active');
-            }
-        }
-        
-        // 加载客户列表
-        function loadClients() {
-            showLoading('加载客户数据...');
-            
-            const token = localStorage.getItem('admin_token');
-            let url = `${apiBaseUrl}/api/clients?page=${currentPage}&per_page=${perPage}`;
-            
-            if (searchQuery) {
-                url += `&search=${encodeURIComponent(searchQuery)}`;
+            if (!username || !password) {
+                showLoginAlert('请输入用户名和密码');
+                return;
             }
             
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        logout();
-                    }
-                    throw new Error('网络响应不正常');
-                }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                if (data.success) {
-                    renderClientsTable(data.clients);
-                    renderPagination(data.pagination);
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('mainContainer').style.display = 'block';
+                    
+                    // 设置默认到期时间（30天后）
+                    const defaultDate = new Date();
+                    defaultDate.setDate(defaultDate.getDate() + 30);
+                    document.getElementById('addExpireDate').valueAsDate = defaultDate;
+                    
+                    loadClients();
                 } else {
-                    showNotification('加载客户列表失败: ' + data.error, 'error');
-                }
-            })
-            .catch(error => {
-                hideLoading();
-                console.error('加载客户列表错误:', error);
-                showNotification('加载客户列表失败', 'error');
-            });
-        }
-        
-        // 渲染客户表格
-        function renderClientsTable(clients) {
-            const tbody = document.getElementById('clients-tbody');
-            const emptyState = document.getElementById('empty-state');
-            
-            if (!clients || clients.length === 0) {
-                tbody.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            emptyState.style.display = 'none';
-            
-            let html = '';
-            clients.forEach(client => {
-                const statusClass = client.is_active ? 'status-active' : 'status-inactive';
-                const statusText = client.is_active ? '正常' : '禁用';
-                const sessionText = `${client.current_sessions}/${client.max_sessions}`;
-                const createdDate = client.created_at ? client.created_at.split(' ')[0] : '未知';
-                
-                // 处理识别码显示（如果太长则截断）
-                let identificationDisplay = client.identification_code;
-                if (identificationDisplay.length > 20) {
-                    identificationDisplay = identificationDisplay.substring(0, 20) + '...';
+                    showLoginAlert('用户名或密码错误');
                 }
                 
-                html += `
-                    <tr>
-                        <td>${client.id}</td>
-                        <td>${client.account_id}</td>
-                        <td>${client.license_key}</td>
-                        <td title="${client.identification_code}">${identificationDisplay}</td>
-                        <td>${client.expire_date}</td>
-                        <td><span class="${statusClass}">${statusText}</span></td>
-                        <td>${sessionText}</td>
-                        <td title="${client.notes || ''}">${(client.notes || '').substring(0, 20)}${(client.notes || '').length > 20 ? '...' : ''}</td>
-                        <td>${createdDate}</td>
-                        <td>
-                            <div class="action-icons">
-                                <i class="fas fa-edit edit-icon action-icon" onclick="editClient('${client.account_id}')" title="编辑"></i>
-                                <i class="fas fa-trash delete-icon action-icon" onclick="deleteClient('${client.account_id}')" title="删除"></i>
-                                <i class="fas fa-redo reset-icon action-icon" onclick="resetSessions('${client.account_id}')" title="重置会话数"></i>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tbody.innerHTML = html;
-        }
-        
-        // 渲染分页
-        function renderPagination(pagination) {
-            const paginationDiv = document.getElementById('pagination');
-            
-            if (pagination.pages <= 1) {
-                paginationDiv.innerHTML = '';
-                return;
-            }
-            
-            currentPage = pagination.page;
-            totalPages = pagination.pages;
-            
-            let html = '';
-            
-            // 上一页按钮
-            html += `<button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-                        <i class="fas fa-chevron-left"></i>
-                     </button>`;
-            
-            // 页码
-            for (let i = 1; i <= totalPages; i++) {
-                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-                    html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-                } else if (i === currentPage - 3 || i === currentPage + 3) {
-                    html += `<span class="pagination-btn" style="border: none; background: none;">...</span>`;
-                }
-            }
-            
-            // 下一页按钮
-            html += `<button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-                        <i class="fas fa-chevron-right"></i>
-                     </button>`;
-            
-            // 页面信息
-            html += `<span class="page-info">第 ${currentPage} 页，共 ${totalPages} 页，${pagination.total} 条记录</span>`;
-            
-            paginationDiv.innerHTML = html;
-        }
-        
-        // 跳转到指定页面
-        function goToPage(page) {
-            if (page >= 1 && page <= totalPages && page !== currentPage) {
-                currentPage = page;
-                loadClients();
+            } catch (error) {
+                console.error('登录错误:', error);
+                showLoginAlert('登录失败，请检查网络连接');
             }
         }
         
-        // 搜索客户
+        function showLoginAlert(message) {
+            const alertDiv = document.getElementById('loginAlert');
+            alertDiv.textContent = message;
+            alertDiv.className = 'login-alert alert-error';
+            alertDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('username').value = 'islandshen@163.com';
+                document.getElementById('password').value = 'Auo_0523';
+            }
+        }
+        
+        // ========== 显示提示信息 ==========
+        function showAlert(elementId, message, type = 'error') {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        function showMainAlert(message, type = 'error') {
+            showAlert('exportImportAlert', message, type);
+        }
+        
+        // ========== 搜索功能 ==========
         function searchClients() {
-            const searchInput = document.getElementById('search-input');
-            searchQuery = searchInput.value.trim();
+            const searchInput = document.getElementById('searchInput');
+            currentSearchQuery = searchInput.value.trim();
             currentPage = 1;
             loadClients();
         }
         
-        // 打开添加客户模态框
-        function openAddModal() {
-            currentClientId = null;
-            document.getElementById('modal-title').textContent = '添加新客户';
-            document.getElementById('client-form').reset();
-            document.getElementById('account-id').disabled = false;
-            
-            // 设置默认到期时间为30天后
-            const today = new Date();
-            const futureDate = new Date(today);
-            futureDate.setDate(today.getDate() + 30);
-            document.getElementById('expire-date').value = futureDate.toISOString().split('T')[0];
-            
-            document.getElementById('client-modal').style.display = 'flex';
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            currentSearchQuery = '';
+            currentPage = 1;
+            loadClients();
         }
         
-        // 编辑客户
-        function editClient(accountId) {
-            showLoading('加载客户信息...');
+        // ========== 分页功能 ==========
+        function goToPage(page) {
+            currentPage = page;
+            loadClients();
+        }
+        
+        function createPagination(pagination) {
+            const container = document.getElementById('paginationContainer');
+            const infoDiv = document.getElementById('paginationInfo');
+            const controlsDiv = document.getElementById('paginationControls');
             
-            const token = localStorage.getItem('admin_token');
-            fetch(`${apiBaseUrl}/api/client/${accountId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+            if (pagination.pages <= 1) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'flex';
+            
+            // 更新分页信息
+            const start = (pagination.page - 1) * pagination.per_page + 1;
+            const end = Math.min(pagination.page * pagination.per_page, pagination.total);
+            infoDiv.textContent = `显示第 ${start} 到 ${end} 条，共 ${pagination.total} 条记录`;
+            
+            // 创建分页按钮
+            controlsDiv.innerHTML = '';
+            
+            // 上一页按钮
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.textContent = '‹';
+            prevBtn.disabled = !pagination.has_prev;
+            prevBtn.onclick = () => goToPage(pagination.page - 1);
+            controlsDiv.appendChild(prevBtn);
+            
+            // 页码按钮
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, pagination.page - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(pagination.pages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // 第一页
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.className = 'page-btn';
+                firstBtn.textContent = '1';
+                firstBtn.onclick = () => goToPage(1);
+                controlsDiv.appendChild(firstBtn);
+                
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.textContent = '...';
+                    controlsDiv.appendChild(ellipsis);
                 }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        logout();
-                    }
-                    throw new Error('网络响应不正常');
+            }
+            
+            // 中间页码
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = 'page-btn';
+                pageBtn.textContent = i;
+                if (i === pagination.page) {
+                    pageBtn.classList.add('active');
                 }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                if (data.success) {
-                    currentClientId = accountId;
-                    document.getElementById('modal-title').textContent = '编辑客户信息';
+                pageBtn.onclick = () => goToPage(i);
+                controlsDiv.appendChild(pageBtn);
+            }
+            
+            // 最后一页
+            if (endPage < pagination.pages) {
+                if (endPage < pagination.pages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.textContent = '...';
+                    controlsDiv.appendChild(ellipsis);
+                }
+                
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'page-btn';
+                lastBtn.textContent = pagination.pages;
+                lastBtn.onclick = () => goToPage(pagination.pages);
+                controlsDiv.appendChild(lastBtn);
+            }
+            
+            // 下一页按钮
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.textContent = '›';
+            nextBtn.disabled = !pagination.has_next;
+            nextBtn.onclick = () => goToPage(pagination.page + 1);
+            controlsDiv.appendChild(nextBtn);
+        }
+        
+        // ========== 加载客户列表 ==========
+        async function loadClients() {
+            const loadingDiv = document.getElementById('loading');
+            const tbody = document.getElementById('clientsBody');
+            
+            loadingDiv.style.display = 'block';
+            tbody.innerHTML = '';
+            
+            try {
+                let url = `${API_BASE}/clients?page=${currentPage}&per_page=${perPage}`;
+                if (currentSearchQuery) {
+                    url += `&search=${encodeURIComponent(currentSearchQuery)}`;
+                }
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                const clients = data.clients || [];
+                const pagination = data.pagination || { page: 1, per_page: perPage, total: 0, pages: 1 };
+                
+                if (clients.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 40px; color: #95a5a6;">
+                                📭 ${currentSearchQuery ? '没有找到匹配的客户' : '暂无客户数据，请先添加客户'}
+                            </td>
+                        </tr>
+                    `;
+                    document.getElementById('paginationContainer').style.display = 'none';
+                } else {
+                    clients.forEach((client, index) => {
+                        const row = createClientRow(client, (pagination.page - 1) * pagination.per_page + index + 1);
+                        tbody.appendChild(row);
+                    });
                     
-                    const client = data.client;
-                    document.getElementById('account-id').value = client.account_id;
-                    document.getElementById('account-id').disabled = true; // 编辑时不能修改账号ID
-                    document.getElementById('license-key').value = client.license_key;
-                    document.getElementById('identification-code').value = client.identification_code;
-                    document.getElementById('expire-date').value = client.expire_date;
-                    document.getElementById('max-sessions').value = client.max_sessions;
-                    document.getElementById('is-active').checked = client.is_active;
-                    document.getElementById('notes').value = client.notes || '';
+                    createPagination(pagination);
+                }
+                
+                const searchInfo = currentSearchQuery ? `（搜索: "${currentSearchQuery}"）` : '';
+                showAlert('listAlert', `已加载 ${clients.length} 个客户${searchInfo}`, 'success');
+                
+            } catch (error) {
+                console.error('加载客户失败:', error);
+                showAlert('listAlert', `加载失败: ${error.message}`, 'error');
+                
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 40px; color: #e74c3c;">
+                            ❌ 数据加载失败，请检查网络连接
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('paginationContainer').style.display = 'none';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+        
+        // ========== 创建客户行 ==========
+        function createClientRow(client, serialNumber) {
+            const tr = document.createElement('tr');
+            
+            const expireDate = new Date(client.expire_date);
+            const now = new Date();
+            const isExpired = expireDate < now;
+            const isActive = client.is_active;
+            
+            let statusText, statusClass;
+            if (!isActive) {
+                statusText = '已禁用';
+                statusClass = 'status-inactive';
+            } else if (isExpired) {
+                statusText = '已过期';
+                statusClass = 'status-expired';
+            } else {
+                statusText = '正常';
+                statusClass = 'status-active';
+            }
+            
+            let createdTime = '未知';
+            if (client.created_at) {
+                try {
+                    const createdDate = new Date(client.created_at);
+                    createdTime = createdDate.toLocaleDateString('zh-CN');
+                } catch (e) {
+                    createdTime = client.created_at;
+                }
+            }
+            
+            const identificationCode = client.identification_code || '-';
+            const notes = client.notes || '-';
+            
+            tr.innerHTML = `
+                <td class="serial-number">${serialNumber}</td>
+                <td><strong>${client.account_id}</strong></td>
+                <td>${client.license_key || client.server || '未设置'}</td>
+                <td>${identificationCode}</td>
+                <td>${client.expire_date}</td>
+                <td><span class="${statusClass}">${statusText}</span></td>
+                <td>${createdTime}</td>
+                <td class="notes-cell" title="${notes}">${notes}</td>
+                <td>
+                    <div class="actions">
+                        <button onclick="openEditModal('${client.account_id}')" class="action-btn btn-edit">编辑</button>
+                        <button onclick="toggleClientStatus('${client.account_id}', ${!client.is_active})" class="action-btn ${client.is_active ? 'btn-disable' : 'btn-enable'}">
+                            ${client.is_active ? '禁用' : '启用'}
+                        </button>
+                        <button onclick="openDeleteModal('${client.account_id}', '${client.license_key || client.server}', '${identificationCode}')" class="action-btn btn-delete">删除</button>
+                    </div>
+                </td>
+            `;
+            
+            if (!isActive || isExpired) {
+                tr.style.opacity = '0.7';
+            }
+            
+            return tr;
+        }
+        
+        // ========== 添加新客户 ==========
+        async function addNewClient() {
+            const accountId = document.getElementById('addAccountId').value.trim();
+            const server = document.getElementById('addServer').value.trim();
+            const identificationCode = document.getElementById('addIdentificationCode').value.trim();
+            const expireDate = document.getElementById('addExpireDate').value;
+            const isActive = document.getElementById('addIsActive').value === 'true';
+            const notes = document.getElementById('addNotes').value.trim();
+            
+            if (!accountId || !server || !expireDate || !identificationCode) {
+                showAlert('addAlert', '请填写所有必填项（账号ID、服务器、识别码、到期时间）', 'error');
+                return;
+            }
+            
+            if (!/^\d+$/.test(accountId)) {
+                showAlert('addAlert', '账号ID必须是数字', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: accountId,
+                        license_key: server,
+                        identification_code: identificationCode,
+                        expire_date: expireDate,
+                        max_sessions: 999,
+                        is_active: isActive,
+                        notes: notes
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('addAlert', '✅ 客户添加成功！', 'success');
                     
-                    document.getElementById('client-modal').style.display = 'flex';
+                    document.getElementById('addAccountId').value = '';
+                    document.getElementById('addServer').value = '';
+                    document.getElementById('addIdentificationCode').value = '';
+                    document.getElementById('addNotes').value = '';
+                    
+                    loadClients();
                 } else {
-                    showNotification('加载客户信息失败: ' + data.message, 'error');
+                    showAlert('addAlert', `添加失败: ${result.message}`, 'error');
                 }
-            })
-            .catch(error => {
-                hideLoading();
-                console.error('编辑客户错误:', error);
-                showNotification('加载客户信息失败', 'error');
-            });
+                
+            } catch (error) {
+                showAlert('addAlert', `网络错误: ${error.message}`, 'error');
+            }
         }
         
-        // 保存客户
-        function saveClient() {
-            const accountId = document.getElementById('account-id').value.trim();
-            const licenseKey = document.getElementById('license-key').value.trim();
-            const identificationCode = document.getElementById('identification-code').value.trim();
-            const expireDate = document.getElementById('expire-date').value;
-            const maxSessions = document.getElementById('max-sessions').value;
-            const isActive = document.getElementById('is-active').checked;
-            const notes = document.getElementById('notes').value.trim();
+        // ========== 打开编辑模态框 ==========
+        async function openEditModal(accountId) {
+            try {
+                const response = await fetch(`${API_BASE}/client/${accountId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const client = result.client;
+                    currentEditClient = client;
+                    
+                    document.getElementById('editAccountId').value = client.account_id;
+                    document.getElementById('editServer').value = client.license_key;
+                    document.getElementById('editIdentificationCode').value = client.identification_code || '';
+                    document.getElementById('editExpireDate').value = client.expire_date;
+                    document.getElementById('editIsActive').value = client.is_active.toString();
+                    document.getElementById('editNotes').value = client.notes || '';
+                    
+                    document.getElementById('editModal').style.display = 'flex';
+                    
+                } else {
+                    showAlert('editAlert', '客户不存在', 'error');
+                }
+                
+            } catch (error) {
+                showAlert('editAlert', `加载失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 关闭编辑模态框 ==========
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditClient = null;
+        }
+        
+        // ========== 保存编辑 ==========
+        async function saveEdit() {
+            if (!currentEditClient) return;
             
-            if (!accountId || !licenseKey || !identificationCode || !expireDate) {
-                showNotification('请填写所有必填字段', 'warning');
+            const server = document.getElementById('editServer').value.trim();
+            const identificationCode = document.getElementById('editIdentificationCode').value.trim();
+            const expireDate = document.getElementById('editExpireDate').value;
+            const isActive = document.getElementById('editIsActive').value === 'true';
+            const notes = document.getElementById('editNotes').value.trim();
+            
+            if (!server || !identificationCode || !expireDate) {
+                showAlert('editAlert', '服务器、识别码和到期时间都是必填项', 'error');
                 return;
             }
             
-            const clientData = {
-                account_id: accountId,
-                license_key: licenseKey,
-                identification_code: identificationCode,
-                expire_date: expireDate,
-                max_sessions: maxSessions,
-                is_active: isActive,
-                notes: notes
-            };
-            
-            showLoading(currentClientId ? '更新客户信息...' : '添加客户...');
-            
-            const token = localStorage.getItem('admin_token');
-            const url = currentClientId ? 
-                `${apiBaseUrl}/api/update/${accountId}` : 
-                `${apiBaseUrl}/api/add`;
-            const method = currentClientId ? 'POST' : 'POST';
-            
-            fetch(url, {
-                method: method,
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(clientData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        logout();
-                    }
-                    throw new Error('网络响应不正常');
-                }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                if (data.success) {
-                    showNotification(data.message, 'success');
-                    closeModal();
-                    loadClients();
+            try {
+                const response = await fetch(`${API_BASE}/update/${currentEditClient.account_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        license_key: server,
+                        identification_code: identificationCode,
+                        expire_date: expireDate,
+                        is_active: isActive,
+                        notes: notes,
+                        max_sessions: 999
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('editAlert', '✅ 修改保存成功！', 'success');
+                    setTimeout(() => {
+                        closeEditModal();
+                        loadClients();
+                    }, 1000);
                 } else {
-                    showNotification(data.message, 'error');
+                    showAlert('editAlert', `保存失败: ${result.message}`, 'error');
                 }
-            })
-            .catch(error => {
-                hideLoading();
-                console.error('保存客户错误:', error);
-                showNotification('保存客户失败', 'error');
-            });
+                
+            } catch (error) {
+                showAlert('editAlert', `网络错误: ${error.message}`, 'error');
+            }
         }
         
-        // 删除客户
-        function deleteClient(accountId) {
-            if (!confirm(`确定要删除账号 ${accountId} 吗？此操作不可恢复！`)) {
+        // ========== 切换客户状态 ==========
+        async function toggleClientStatus(accountId, newStatus) {
+            if (!confirm(`确定要${newStatus ? '启用' : '禁用'}这个账号吗？`)) {
                 return;
             }
             
-            showLoading('删除客户...');
-            
-            const token = localStorage.getItem('admin_token');
-            fetch(`${apiBaseUrl}/api/delete/${accountId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        logout();
-                    }
-                    throw new Error('网络响应不正常');
-                }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                if (data.success) {
-                    showNotification(data.message, 'success');
+            try {
+                const response = await fetch(`${API_BASE}/update/${accountId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        is_active: newStatus
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('listAlert', `账号已${newStatus ? '启用' : '禁用'}`, 'success');
                     loadClients();
                 } else {
-                    showNotification(data.message, 'error');
+                    showAlert('listAlert', `操作失败: ${result.message}`, 'error');
                 }
-            })
-            .catch(error => {
-                hideLoading();
-                console.error('删除客户错误:', error);
-                showNotification('删除客户失败', 'error');
-            });
+                
+            } catch (error) {
+                showAlert('listAlert', `网络错误: ${error.message}`, 'error');
+            }
         }
         
-        // 重置会话数
-        function resetSessions(accountId) {
-            if (!confirm(`确定要重置账号 ${accountId} 的会话数吗？`)) {
+        // ========== 打开删除确认模态框 ==========
+        function openDeleteModal(accountId, server, identificationCode) {
+            clientToDelete = accountId;
+            document.getElementById('deleteAccountId').textContent = accountId;
+            document.getElementById('deleteServer').textContent = server;
+            document.getElementById('deleteIdentificationCode').textContent = identificationCode;
+            document.getElementById('deleteModal').style.display = 'flex';
+            document.getElementById('deleteAlert').style.display = 'none';
+        }
+        
+        // ========== 关闭删除确认模态框 ==========
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            clientToDelete = null;
+        }
+        
+        // ========== 确认删除客户 ==========
+        async function confirmDelete() {
+            if (!clientToDelete) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/delete/${clientToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('deleteAlert', '✅ 客户删除成功！', 'success');
+                    setTimeout(() => {
+                        closeDeleteModal();
+                        loadClients();
+                    }, 1000);
+                } else {
+                    showAlert('deleteAlert', `删除失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showAlert('deleteAlert', `网络错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 测试验证接口 ==========
+        async function testVerify() {
+            const accountId = document.getElementById('testAccountId').value.trim();
+            const server = document.getElementById('testServer').value.trim();
+            const testResultDiv = document.getElementById('testResult');
+            
+            if (!accountId || !server) {
+                showAlert('testAlert', '请输入账号和服务器', 'error');
                 return;
             }
             
-            showLoading('重置会话数...');
-            
-            const token = localStorage.getItem('admin_token');
-            fetch(`${apiBaseUrl}/api/reset_sessions/${accountId}`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        logout();
-                    }
-                    throw new Error('网络响应不正常');
-                }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                if (data.success) {
-                    showNotification(data.message, 'success');
-                    loadClients();
+            try {
+                const response = await fetch(`${API_BASE}/verify`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        account_id: accountId,
+                        license_key: server
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.valid) {
+                    testResultDiv.innerHTML = `
+                        <div style="background: #d5f4e6; color: #27ae60; padding: 15px; border-radius: 6px; border: 1px solid #a3e4c1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">✅ 验证成功！</div>
+                            <div style="font-size: 14px;">
+                                <div>账号ID: <strong>${result.account_id}</strong></div>
+                                <div>到期时间: <strong>${result.expire_date}</strong></div>
+                                <div>状态: <span style="color: #27ae60; font-weight: 600;">正常</span></div>
+                            </div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
                 } else {
-                    showNotification(data.message, 'error');
+                    testResultDiv.innerHTML = `
+                        <div style="background: #fadbd8; color: #e74c3c; padding: 15px; border-radius: 6px; border: 1px solid #f5b7b1;">
+                            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">❌ 验证失败</div>
+                            <div style="font-size: 14px;">错误信息: ${result.message}</div>
+                        </div>
+                    `;
+                    testResultDiv.style.display = 'block';
                 }
-            })
-            .catch(error => {
-                hideLoading();
-                console.error('重置会话数错误:', error);
-                showNotification('重置会话数失败', 'error');
-            });
+                
+            } catch (error) {
+                testResultDiv.innerHTML = `
+                    <div style="background: #fef5e7; color: #f39c12; padding: 15px; border-radius: 6px; border: 1px solid #f8c471;">
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">⚠️ 网络错误</div>
+                        <div style="font-size: 14px;">${error.message}</div>
+                    </div>
+                `;
+                testResultDiv.style.display = 'block';
+            }
         }
         
-        // 关闭模态框
-        function closeModal() {
-            document.getElementById('client-modal').style.display = 'none';
-            currentClientId = null;
+        // ========== 数据导出功能 ==========
+        async function exportData() {
+            const searchQuery = currentSearchQuery || '';
+            
+            try {
+                const url = `${API_BASE}/export/csv?search=${encodeURIComponent(searchQuery)}`;
+                
+                // 创建临时链接触发下载
+                const a = document.createElement('a');
+                a.href = url;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                showMainAlert('导出任务已开始，文件将自动下载', 'success');
+                
+            } catch (error) {
+                console.error('导出错误:', error);
+                showMainAlert(`导出失败: ${error.message}`, 'error');
+            }
         }
+        
+        async function downloadTemplate(format = 'full') {
+            try {
+                let url;
+                if (format === 'simple') {
+                    url = `${API_BASE}/export/template`;
+                } else {
+                    url = `${API_BASE}/export/template/full`;
+                }
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                showMainAlert(`模板下载已开始 (${format === 'simple' ? '简化' : '完整'}格式)`, 'success');
+                
+            } catch (error) {
+                console.error('下载模板错误:', error);
+                showMainAlert(`下载失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // ========== 数据导入功能 ==========
         
         // 选择导入选项
-        function selectImportOption(option) {
-            importFormat = option;
+        function selectImportOption(format) {
+            importFormat = format;
             
             // 更新选项UI
-            document.querySelectorAll('.import-option').forEach(el => {
-                el.classList.remove('active');
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('active');
             });
             event.target.closest('.import-option').classList.add('active');
             
-            // 更新下拉选择
-            document.getElementById('template-select').value = option;
-            updateImportTemplate();
-        }
-        
-        // 更新导入模板显示
-        function updateImportTemplate() {
-            const templateType = document.getElementById('template-select').value;
-            importFormat = templateType;
-            
-            // 更新文件标签
-            const fileLabel = document.getElementById('file-label');
-            if (templateType === 'simple') {
-                fileLabel.textContent = '选择CSV文件（支持简单格式，6个字段）';
+            // 更新格式信息
+            const formatInfo = document.getElementById('formatInfo');
+            if (format === 'simple') {
+                formatInfo.textContent = '(支持简单格式，6个字段)';
             } else {
-                fileLabel.textContent = '选择CSV文件（支持完整格式，10个字段）';
+                formatInfo.textContent = '(支持完整格式，10个字段)';
             }
             
             // 重置预览
-            document.getElementById('preview-section').style.display = 'none';
-            document.getElementById('import-btn').disabled = true;
+            resetPreview();
         }
         
-        // 下载模板
-        function downloadTemplate(type = 'import') {
-            if (type === 'import') {
-                const templateType = document.getElementById('template-select').value;
-                const templateUrl = templateType === 'simple' ? 
-                    `${apiBaseUrl}/api/export/template` : 
-                    `${apiBaseUrl}/api/export/template/full`;
+        // 处理文件选择
+        function handleFileSelect() {
+            const fileInput = document.getElementById('csvFile');
+            const fileNameSpan = document.getElementById('fileName');
+            
+            if (fileInput.files && fileInput.files.length > 0) {
+                selectedFile = fileInput.files[0];
+                fileNameSpan.textContent = selectedFile.name;
+                fileNameSpan.style.color = '#2c3e50';
                 
-                window.open(templateUrl, '_blank');
+                // 启用预览按钮
+                document.getElementById('previewBtn').disabled = false;
             } else {
-                // 导出页面下载模板
-                const format = document.querySelector('input[name="export-format"]:checked').value;
-                const templateUrl = format === 'simple' ? 
-                    `${apiBaseUrl}/api/export/template` : 
-                    `${apiBaseUrl}/api/export/template/full`;
-                
-                window.open(templateUrl, '_blank');
+                selectedFile = null;
+                fileNameSpan.textContent = '未选择文件';
+                fileNameSpan.style.color = '#7f8c8d';
+                document.getElementById('previewBtn').disabled = true;
             }
+            
+            // 禁用导入按钮，直到预览完成
+            document.getElementById('importBtn').disabled = true;
         }
         
         // 预览导入数据
-        function previewImport() {
-            const fileInput = document.getElementById('csv-file');
-            if (!fileInput.files || fileInput.files.length === 0) {
-                showNotification('请先选择CSV文件', 'warning');
+        async function previewImport() {
+            if (!selectedFile) {
+                showMainAlert('请先选择CSV文件', 'warning');
                 return;
             }
             
-            showLoading('预览数据中...');
-            
-            const file = fileInput.files[0];
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', selectedFile);
             
-            fetch(`${apiBaseUrl}/api/import/preview`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('网络响应不正常');
-                }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                if (data.success) {
-                    importPreviewData = data.preview_data;
-                    renderImportPreview(data);
-                    document.getElementById('preview-section').style.display = 'block';
-                    document.getElementById('import-btn').disabled = false;
+            try {
+                showMainAlert('正在预览数据...', 'info');
+                
+                const response = await fetch(`${API_BASE}/import/preview`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    importPreviewData = result.preview_data || [];
+                    renderPreview(importPreviewData, result.format, result.fields);
+                    showMainAlert(`预览成功，共${result.total_rows}行数据，已读取${importPreviewData.length}行`, 'success');
                     
-                    showNotification(`预览成功，共${data.total_rows}行数据，已读取${data.preview_data.length}行`, 'success');
+                    // 启用导入按钮
+                    document.getElementById('importBtn').disabled = false;
                 } else {
-                    showNotification('预览失败: ' + data.message, 'error');
+                    showMainAlert(`预览失败: ${result.message}`, 'error');
+                    resetPreview();
                 }
-            })
-            .catch(error => {
-                hideLoading();
-                console.error('预览导入错误:', error);
-                showNotification('预览导入失败', 'error');
-            });
+                
+            } catch (error) {
+                console.error('预览错误:', error);
+                showMainAlert(`预览失败: ${error.message}`, 'error');
+                resetPreview();
+            }
         }
         
-        // 渲染导入预览
-        function renderImportPreview(data) {
-            const previewHeader = document.getElementById('preview-header');
-            const previewBody = document.getElementById('preview-body');
+        // 渲染预览数据
+        function renderPreview(data, format, fields) {
+            const previewContainer = document.getElementById('previewContainer');
+            const previewHeader = document.getElementById('previewHeader');
+            const previewBody = document.getElementById('previewBody');
+            const previewStats = document.getElementById('previewStats');
             
-            // 清空现有内容
-            previewHeader.innerHTML = '';
-            previewBody.innerHTML = '';
+            // 显示预览容器
+            previewContainer.style.display = 'block';
             
-            // 根据格式确定显示的列
-            const columns = data.format === 'full' ? 
-                ['行号', '账号ID', '服务器', '识别码', '到期时间', '状态', '最大会话数', '当前会话数', '备注', '验证状态'] :
-                ['行号', '账号ID', '服务器', '识别码', '到期时间', '状态', '备注', '验证状态'];
+            // 更新统计数据
+            const totalRows = data.length;
+            const validRows = data.filter(row => row.is_valid).length;
+            const invalidRows = totalRows - validRows;
+            previewStats.textContent = `共${totalRows}条，有效:${validRows}，无效:${invalidRows}`;
             
             // 渲染表头
             let headerHtml = '';
-            columns.forEach(col => {
-                headerHtml += `<th>${col}</th>`;
-            });
+            if (format === 'full') {
+                headerHtml = `
+                    <tr>
+                        <th>行号</th>
+                        <th>账号ID</th>
+                        <th>服务器</th>
+                        <th>识别码</th>
+                        <th>到期时间</th>
+                        <th>状态</th>
+                        <th>最大会话数</th>
+                        <th>当前会话数</th>
+                        <th>备注</th>
+                        <th>验证状态</th>
+                    </tr>
+                `;
+            } else {
+                headerHtml = `
+                    <tr>
+                        <th>行号</th>
+                        <th>账号ID</th>
+                        <th>服务器</th>
+                        <th>识别码</th>
+                        <th>到期时间</th>
+                        <th>状态</th>
+                        <th>备注</th>
+                        <th>验证状态</th>
+                    </tr>
+                `;
+            }
             previewHeader.innerHTML = headerHtml;
             
             // 渲染数据行
             let bodyHtml = '';
-            data.preview_data.forEach(item => {
+            data.forEach(item => {
                 let rowHtml = `<tr>`;
                 
                 // 行号
                 rowHtml += `<td>${item.row}</td>`;
                 
                 // 账号ID
-                rowHtml += `<td>${item.account_id}</td>`;
+                rowHtml += `<td>${item.account_id || ''}</td>`;
                 
                 // 服务器
                 rowHtml += `<td>${item.license_key || ''}</td>`;
@@ -1637,7 +2186,7 @@
                 rowHtml += `<td>${statusText}</td>`;
                 
                 // 如果是完整格式，添加额外字段
-                if (data.format === 'full') {
+                if (format === 'full') {
                     rowHtml += `<td>${item.max_sessions || 999}</td>`;
                     rowHtml += `<td>${item.current_sessions || 0}</td>`;
                 }
@@ -1652,12 +2201,12 @@
                 // 验证状态
                 let statusHtml = '';
                 if (item.is_valid) {
-                    statusHtml = `<span class="preview-valid"><i class="fas fa-check-circle"></i> 有效</span>`;
+                    statusHtml = `<span class="preview-valid">✅ 有效</span>`;
                     if (item.exists_in_db) {
-                        statusHtml += `<br><span class="preview-exists"><i class="fas fa-exclamation-triangle"></i> 已存在</span>`;
+                        statusHtml += `<br><span class="preview-exists">⚠️ 已存在</span>`;
                     }
                 } else {
-                    statusHtml = `<span class="preview-invalid"><i class="fas fa-times-circle"></i> 无效</span>`;
+                    statusHtml = `<span class="preview-invalid">❌ 无效</span>`;
                     if (item.validation_errors && item.validation_errors.length > 0) {
                         statusHtml += `<br><small>${item.validation_errors.join(', ')}</small>`;
                     }
@@ -1671,11 +2220,42 @@
             previewBody.innerHTML = bodyHtml;
         }
         
+        // 重置预览
+        function resetPreview() {
+            const previewContainer = document.getElementById('previewContainer');
+            const previewBody = document.getElementById('previewBody');
+            const fileNameSpan = document.getElementById('fileName');
+            
+            previewContainer.style.display = 'none';
+            previewBody.innerHTML = '';
+            importPreviewData = [];
+            
+            // 重置文件输入
+            document.getElementById('csvFile').value = '';
+            selectedFile = null;
+            fileNameSpan.textContent = '未选择文件';
+            fileNameSpan.style.color = '#7f8c8d';
+            
+            // 禁用按钮
+            document.getElementById('previewBtn').disabled = true;
+            document.getElementById('importBtn').disabled = true;
+        }
+        
+        // 重置导入
+        function resetImport() {
+            resetPreview();
+            showMainAlert('导入表单已重置', 'info');
+        }
+        
         // 执行导入
-        function executeImport() {
-            const fileInput = document.getElementById('csv-file');
-            if (!fileInput.files || fileInput.files.length === 0) {
-                showNotification('请先选择CSV文件', 'warning');
+        async function executeImport() {
+            if (!selectedFile) {
+                showMainAlert('请先选择CSV文件', 'warning');
+                return;
+            }
+            
+            if (importPreviewData.length === 0) {
+                showMainAlert('请先预览数据', 'warning');
                 return;
             }
             
@@ -1687,117 +2267,195 @@
                 }
             }
             
-            showLoading('正在导入数据...');
+            // 打开导入进度模态框
+            openImportProgressModal();
+            isImporting = true;
+            importCanceled = false;
             
-            const file = fileInput.files[0];
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', selectedFile);
             
             // 添加导入模式
-            const importMode = document.querySelector('input[name="import-mode"]:checked').value;
+            const importMode = document.querySelector('input[name="importMode"]:checked').value;
             formData.append('update_mode', importMode === 'update' ? 'true' : 'false');
             
-            fetch(`${apiBaseUrl}/api/import/csv`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
+            try {
+                // 更新进度
+                updateImportProgress(10, '正在上传文件...');
+                
+                const response = await fetch(`${API_BASE}/import/csv`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
                 if (!response.ok) {
-                    throw new Error('网络响应不正常');
+                    throw new Error(`HTTP错误: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(data => {
-                hideLoading();
-                if (data.success) {
-                    showNotification(`导入完成！成功导入: ${data.imported}, 跳过: ${data.skipped}, 失败: ${data.failed}`, 'success');
+                
+                const result = await response.json();
+                
+                if (importCanceled) {
+                    showMainAlert('导入已取消', 'warning');
+                    return;
+                }
+                
+                if (result.success) {
+                    updateImportProgress(100, '导入完成！');
                     
-                    // 显示详细结果
-                    if (data.results && data.results.length > 0) {
-                        let resultMessage = '导入详情:\n';
-                        data.results.forEach(result => {
-                            resultMessage += `行${result.row}: 账号${result.account_id} - ${result.status} - ${result.message}\n`;
-                        });
-                        alert(resultMessage);
-                    }
+                    // 显示导入结果
+                    showImportResult(result);
+                    showMainAlert(`导入完成！成功:${result.imported}，跳过:${result.skipped}，失败:${result.failed}`, 'success');
                     
-                    // 重置表单并刷新客户列表
-                    resetImportForm();
-                    showSection('clients');
+                    // 刷新客户列表
                     loadClients();
                 } else {
-                    showNotification('导入失败: ' + data.message, 'error');
+                    updateImportProgress(0, `导入失败: ${result.message}`);
+                    showMainAlert(`导入失败: ${result.message}`, 'error');
                 }
-            })
-            .catch(error => {
-                hideLoading();
+                
+            } catch (error) {
                 console.error('导入错误:', error);
-                showNotification('导入失败', 'error');
-            });
+                updateImportProgress(0, `导入失败: ${error.message}`);
+                showMainAlert(`导入失败: ${error.message}`, 'error');
+            } finally {
+                isImporting = false;
+            }
         }
         
-        // 重置导入表单
-        function resetImportForm() {
-            document.getElementById('csv-file').value = '';
-            document.getElementById('preview-section').style.display = 'none';
-            document.getElementById('import-btn').disabled = true;
-            importPreviewData = [];
-        }
-        
-        // 导出数据
-        function exportData() {
-            const searchQuery = document.getElementById('export-search').value.trim();
-            const format = document.querySelector('input[name="export-format"]:checked').value;
+        // 打开导入进度模态框
+        function openImportProgressModal() {
+            const modal = document.getElementById('importProgressModal');
+            const progressBar = document.getElementById('importProgressBar');
+            const progressPercent = document.getElementById('importProgressPercent');
+            const progressText = document.getElementById('importProgressText');
+            const resultDiv = document.getElementById('importResult');
+            const closeBtn = document.getElementById('importCloseBtn');
+            const cancelBtn = document.getElementById('importCancelBtn');
             
-            let url = `${apiBaseUrl}/api/export/csv`;
-            if (searchQuery) {
-                url += `?search=${encodeURIComponent(searchQuery)}`;
-                if (format === 'simple') {
-                    url += `&format=simple`;
-                }
-            } else if (format === 'simple') {
-                url += `?format=simple`;
+            // 重置显示
+            progressBar.style.width = '0%';
+            progressPercent.textContent = '0%';
+            progressText.textContent = '正在处理...';
+            resultDiv.style.display = 'none';
+            closeBtn.style.display = 'none';
+            cancelBtn.style.display = 'block';
+            
+            modal.style.display = 'flex';
+        }
+        
+        // 关闭导入进度模态框
+        function closeImportProgressModal() {
+            document.getElementById('importProgressModal').style.display = 'none';
+        }
+        
+        // 取消导入
+        function cancelImport() {
+            if (isImporting) {
+                importCanceled = true;
+                showMainAlert('正在取消导入...', 'warning');
+            }
+            closeImportProgressModal();
+        }
+        
+        // 更新导入进度
+        function updateImportProgress(percent, text) {
+            const progressBar = document.getElementById('importProgressBar');
+            const progressPercent = document.getElementById('importProgressPercent');
+            const progressText = document.getElementById('importProgressText');
+            const closeBtn = document.getElementById('importCloseBtn');
+            const cancelBtn = document.getElementById('importCancelBtn');
+            
+            progressBar.style.width = `${percent}%`;
+            progressPercent.textContent = `${percent}%`;
+            progressText.textContent = text;
+            
+            if (percent >= 100) {
+                cancelBtn.style.display = 'none';
+                closeBtn.style.display = 'block';
+            }
+        }
+        
+        // 显示导入结果
+        function showImportResult(result) {
+            const resultDiv = document.getElementById('importResult');
+            const successCount = document.getElementById('importSuccessCount');
+            const skipCount = document.getElementById('importSkipCount');
+            const failCount = document.getElementById('importFailCount');
+            const importDetails = document.getElementById('importDetails');
+            
+            successCount.textContent = result.imported || 0;
+            skipCount.textContent = result.skipped || 0;
+            failCount.textContent = result.failed || 0;
+            
+            // 显示导入详情
+            let detailsHtml = '';
+            if (result.results && result.results.length > 0) {
+                result.results.forEach(item => {
+                    let statusIcon = '';
+                    let statusColor = '';
+                    
+                    if (item.status === '导入' || item.status === '更新') {
+                        statusIcon = '✅';
+                        statusColor = '#27ae60';
+                    } else if (item.status === '跳过') {
+                        statusIcon = '🔄';
+                        statusColor = '#f39c12';
+                    } else {
+                        statusIcon = '❌';
+                        statusColor = '#e74c3c';
+                    }
+                    
+                    detailsHtml += `<div style="margin-bottom: 5px;">
+                        <span style="color: ${statusColor}; font-weight: bold;">${statusIcon} 行${item.row}:</span>
+                        <span>账号 ${item.account_id || '未知'} - ${item.status} - ${item.message}</span>
+                    </div>`;
+                });
+            } else {
+                detailsHtml = '<div style="color: #7f8c8d; text-align: center;">暂无详细结果</div>';
             }
             
-            window.open(url, '_blank');
-            showNotification('导出任务已开始，文件将自动下载', 'info');
+            importDetails.innerHTML = detailsHtml;
+            resultDiv.style.display = 'block';
         }
         
-        // 显示通知
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // 显示加载中
-        function showLoading(text = '处理中...') {
-            document.getElementById('loading-text').textContent = text;
-            document.getElementById('loading-overlay').style.display = 'flex';
-        }
-        
-        // 隐藏加载中
-        function hideLoading() {
-            document.getElementById('loading-overlay').style.display = 'none';
-        }
-        
-        // 监听键盘事件
+        // ========== 键盘快捷键 ==========
         document.addEventListener('keydown', function(event) {
-            // ESC键关闭模态框
             if (event.key === 'Escape') {
-                closeModal();
+                closeEditModal();
+                closeDeleteModal();
+                closeImportProgressModal();
             }
             
-            // Ctrl+F搜索
-            if (event.ctrlKey && event.key === 'f') {
-                event.preventDefault();
-                document.getElementById('search-input').focus();
+            if (event.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
+                login();
             }
+            
+            if (event.key === 'Enter' && event.target.id === 'searchInput') {
+                searchClients();
+            }
+        });
+        
+        // 搜索框输入监听
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (this.value.trim().length >= 2 || this.value.trim().length === 0) {
+                    searchClients();
+                }
+            }, 500);
+        });
+        
+        // 页面加载时自动登录（测试用）
+        window.addEventListener('DOMContentLoaded', function() {
+            // 为了方便测试，自动填充登录信息
+            document.getElementById('username').value = 'islandshen@163.com';
+            document.getElementById('password').value = 'Auo_0523';
+            
+            // 设置默认日期
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 30);
+            document.getElementById('addExpireDate').valueAsDate = defaultDate;
         });
     </script>
 </body>
