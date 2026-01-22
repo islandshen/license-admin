@@ -393,6 +393,30 @@
             background: #8e44ad;
         }
         
+        .btn-import-preview {
+            background: #f39c12;
+        }
+        
+        .btn-import-preview:hover {
+            background: #d68910;
+        }
+        
+        .btn-import-execute {
+            background: #2ecc71;
+        }
+        
+        .btn-import-execute:hover {
+            background: #27ae60;
+        }
+        
+        .btn-import-cancel {
+            background: #95a5a6;
+        }
+        
+        .btn-import-cancel:hover {
+            background: #7f8c8d;
+        }
+        
         /* 分页样式 */
         .pagination-container {
             display: flex;
@@ -616,6 +640,12 @@
             border: 1px solid #aed6f1;
         }
         
+        .alert-warning {
+            background: #fef5e7;
+            color: #f39c12;
+            border: 1px solid #f8c471;
+        }
+        
         .loading {
             text-align: center;
             padding: 30px;
@@ -758,20 +788,23 @@
             cursor: pointer;
         }
         
+        /* 预览容器样式 */
         .preview-container {
             background: white;
             border: 1px solid #dee2e6;
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 15px;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
             display: none;
         }
         
         .preview-stats {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
         }
         
         .preview-table {
@@ -784,11 +817,100 @@
             background: #e9ecef;
             padding: 8px;
             border: 1px solid #dee2e6;
+            font-weight: 600;
         }
         
         .preview-table td {
             padding: 8px;
             border: 1px solid #dee2e6;
+        }
+        
+        .preview-table tr.error-row {
+            background: #fef5e7;
+        }
+        
+        .error-container {
+            background: #fef5e7;
+            border: 1px solid #f8c471;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .error-list {
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+        
+        .error-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #f8c471;
+        }
+        
+        .error-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* 导入结果模态框样式 */
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-card.success {
+            background: #2ecc71;
+        }
+        
+        .stat-card.failed {
+            background: #e74c3c;
+        }
+        
+        .stat-card.skipped {
+            background: #95a5a6;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .result-section {
+            margin-bottom: 20px;
+        }
+        
+        .result-list {
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 13px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        
+        .result-item {
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
         }
         
         @media (max-width: 1200px) {
@@ -874,6 +996,10 @@
             
             .pagination-controls {
                 justify-content: center;
+            }
+            
+            .result-stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1017,16 +1143,22 @@
                 <div class="form-row" style="align-items: center;">
                     <div style="flex: 1;">
                         <p style="color: #2c3e50; font-size: 14px; margin-bottom: 10px;">
-                            导出当前搜索结果到CSV文件
+                            导出当前搜索结果到文件
                         </p>
                     </div>
                     
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="exportData()" class="btn btn-export">
-                            <span style="margin-right: 5px;">⬇️</span>导出数据
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="exportData('csv')" class="btn btn-export">
+                            <span style="margin-right: 5px;">📄</span>导出CSV
                         </button>
-                        <button onclick="downloadTemplate()" class="btn btn-template">
-                            📋 下载模板
+                        <button onclick="exportData('excel')" class="btn btn-export" style="background: #9b59b6;">
+                            <span style="margin-right: 5px;">📊</span>导出Excel
+                        </button>
+                        <button onclick="downloadTemplate('csv')" class="btn btn-template">
+                            📋 CSV模板
+                        </button>
+                        <button onclick="downloadTemplate('excel')" class="btn btn-template">
+                            📋 Excel模板
                         </button>
                     </div>
                 </div>
@@ -1040,6 +1172,117 @@
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span style="color: #3498db;">✓</span>
                             <span>文件名自动包含时间戳，方便管理</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 批量导入功能 -->
+            <div class="section">
+                <h2 class="section-title">📥 批量导入</h2>
+                <div id="importAlert" class="alert"></div>
+                
+                <div class="form-row" style="align-items: flex-start;">
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">
+                            选择文件 (支持CSV/Excel)
+                        </label>
+                        <input type="file" id="importFile" accept=".csv,.xlsx,.xls" class="form-control" 
+                               style="padding: 8px 15px; cursor: pointer;">
+                        
+                        <div style="margin-top: 8px; font-size: 13px; color: #7f8c8d;">
+                            支持格式: CSV (.csv), Excel (.xlsx, .xls)
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                        <button onclick="previewImport()" class="btn btn-import-preview">
+                            👁️ 预览数据
+                        </button>
+                        <button onclick="clearImport()" class="btn btn-import-cancel">
+                            清除
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 导入预览区域 -->
+                <div id="importPreview" class="preview-container">
+                    <div class="preview-stats">
+                        <h3 style="font-size: 16px; color: #2c3e50; margin: 0;">📋 导入预览</h3>
+                        <div id="importStats" style="font-size: 14px; color: #7f8c8d;"></div>
+                    </div>
+                    
+                    <div style="overflow-x: auto; max-height: 300px; overflow-y: auto;">
+                        <table class="preview-table">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 8px; text-align: center;">行号</th>
+                                    <th style="padding: 8px; text-align: left;">账号ID</th>
+                                    <th style="padding: 8px; text-align: left;">服务器</th>
+                                    <th style="padding: 8px; text-align: left;">识别码</th>
+                                    <th style="padding: 8px; text-align: left;">到期时间</th>
+                                    <th style="padding: 8px; text-align: left;">状态</th>
+                                    <th style="padding: 8px; text-align: left;">验证状态</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewBody">
+                                <!-- 预览数据将通过JavaScript动态填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 错误信息区域 -->
+                    <div id="importErrors" class="error-container">
+                        <h4 style="margin: 0 0 10px 0; color: #f39c12;">⚠️ 发现错误</h4>
+                        <div id="errorList" class="error-list"></div>
+                    </div>
+                    
+                    <!-- 导入按钮 -->
+                    <div id="importActions" style="display: none; margin-top: 20px; text-align: right;">
+                        <button onclick="executeImport()" class="btn btn-import-execute">
+                            ✅ 确认导入
+                        </button>
+                        <button onclick="cancelImport()" class="btn btn-import-cancel">
+                            取消
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 导入结果模态框 -->
+                <div id="importResultModal" class="modal">
+                    <div class="modal-content" style="max-width: 600px;">
+                        <div class="modal-title">
+                            <span style="margin-right: 10px;">📊</span>导入结果
+                        </div>
+                        
+                        <div id="importResultContent" style="max-height: 400px; overflow-y: auto;">
+                            <!-- 导入结果将通过JavaScript动态填充 -->
+                        </div>
+                        
+                        <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                            <button onclick="closeImportResult()" class="btn btn-import-cancel">
+                                关闭
+                            </button>
+                            <button onclick="closeImportResultAndRefresh()" class="btn btn-import-execute" style="margin-left: 10px;">
+                                关闭并刷新列表
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 15px; padding: 12px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ddd;">
+                    <div style="font-size: 13px; color: #7f8c8d;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                            <span style="color: #2ecc71;">✓</span>
+                            <span><strong>CSV模板</strong>: 下载模板文件，按照格式准备数据</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                            <span style="color: #3498db;">✓</span>
+                            <span><strong>预览功能</strong>: 先预览验证数据，确认无误后再导入</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #9b59b6;">✓</span>
+                            <span><strong>错误定位</strong>: 自动检测格式错误和重复账号</span>
                         </div>
                     </div>
                 </div>
@@ -1140,6 +1383,7 @@
         let currentSearchQuery = '';
         let currentPage = 1;
         const perPage = 20;
+        let importPreviewData = null;
         
         // ========== 登录功能 ==========
         async function login() {
@@ -1719,13 +1963,17 @@
         }
         
         // ========== 数据导出功能 ==========
-        async function exportData() {
+        async function exportData(format = 'csv') {
             const searchQuery = currentSearchQuery || '';
             
             try {
-                const url = `${API_BASE}/export/csv?search=${encodeURIComponent(searchQuery)}`;
+                let url;
+                if (format === 'csv') {
+                    url = `${API_BASE}/export/csv?search=${encodeURIComponent(searchQuery)}`;
+                } else {
+                    url = `${API_BASE}/export/excel?search=${encodeURIComponent(searchQuery)}`;
+                }
                 
-                // 创建临时链接触发下载
                 const a = document.createElement('a');
                 a.href = url;
                 a.style.display = 'none';
@@ -1733,7 +1981,8 @@
                 a.click();
                 document.body.removeChild(a);
                 
-                showAlert('exportAlert', '导出任务已开始，请稍候...', 'success');
+                const formatName = format === 'csv' ? 'CSV' : 'Excel';
+                showAlert('exportAlert', `${formatName}导出任务已开始，请稍候...`, 'success');
                 
             } catch (error) {
                 console.error('导出错误:', error);
@@ -1741,9 +1990,9 @@
             }
         }
         
-        async function downloadTemplate() {
+        async function downloadTemplate(format = 'csv') {
             try {
-                const url = `${API_BASE}/export/template`;
+                const url = `${API_BASE}/export/template?type=${format}`;
                 
                 const a = document.createElement('a');
                 a.href = url;
@@ -1752,12 +2001,333 @@
                 a.click();
                 document.body.removeChild(a);
                 
-                showAlert('exportAlert', '模板下载已开始', 'success');
+                const formatName = format === 'csv' ? 'CSV' : 'Excel';
+                showAlert('importAlert', `${formatName}模板下载已开始`, 'success');
                 
             } catch (error) {
                 console.error('下载模板错误:', error);
-                showAlert('exportAlert', `下载失败: ${error.message}`, 'error');
+                showAlert('importAlert', `下载失败: ${error.message}`, 'error');
             }
+        }
+        
+        // ========== 批量导入功能 ==========
+        function previewImport() {
+            const fileInput = document.getElementById('importFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showAlert('importAlert', '请先选择文件', 'error');
+                return;
+            }
+            
+            // 验证文件类型
+            const filename = file.name.toLowerCase();
+            if (!filename.endsWith('.csv') && !filename.endsWith('.xlsx') && !filename.endsWith('.xls')) {
+                showAlert('importAlert', '只支持CSV和Excel文件', 'error');
+                fileInput.value = '';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            // 显示加载状态
+            const previewSection = document.getElementById('importPreview');
+            previewSection.style.display = 'block';
+            document.getElementById('previewBody').innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 20px; color: #7f8c8d;">
+                        <div class="loading">正在解析文件...</div>
+                    </td>
+                </tr>
+            `;
+            document.getElementById('importErrors').style.display = 'none';
+            document.getElementById('importActions').style.display = 'none';
+            
+            // 发送预览请求
+            fetch(`${API_BASE}/import/preview`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    importPreviewData = result.preview;
+                    displayImportPreview(result);
+                } else {
+                    showAlert('importAlert', `预览失败: ${result.message}`, 'error');
+                    previewSection.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('预览导入错误:', error);
+                showAlert('importAlert', `网络错误: ${error.message}`, 'error');
+                previewSection.style.display = 'none';
+            });
+        }
+        
+        function displayImportPreview(data) {
+            const previewBody = document.getElementById('previewBody');
+            const importStats = document.getElementById('importStats');
+            const importErrors = document.getElementById('importErrors');
+            const errorList = document.getElementById('errorList');
+            const importActions = document.getElementById('importActions');
+            
+            const stats = data.statistics;
+            
+            // 更新统计信息
+            importStats.innerHTML = `
+                <span style="color: #2ecc71; font-weight: 600;">有效: ${stats.valid_rows}</span> | 
+                <span style="color: #e74c3c; font-weight: 600;">错误: ${stats.error_rows}</span> | 
+                <span style="color: #7f8c8d;">总计: ${stats.total_rows}</span>
+            `;
+            
+            // 显示预览表格
+            previewBody.innerHTML = '';
+            data.preview.forEach(row => {
+                const isValid = row.valid;
+                const rowClass = isValid ? '' : 'error-row';
+                
+                const tr = document.createElement('tr');
+                if (!isValid) {
+                    tr.classList.add('error-row');
+                }
+                
+                tr.innerHTML = `
+                    <td style="padding: 8px; text-align: center; ${!isValid ? 'color: #e74c3c;' : ''}">
+                        ${row.row_number}
+                        ${!isValid ? '<br><small style="font-size: 11px; color: #e74c3c;">✗</small>' : ''}
+                    </td>
+                    <td style="padding: 8px; ${!isValid ? 'color: #e74c3c;' : ''}">
+                        ${row.account_id || ''}
+                    </td>
+                    <td style="padding: 8px;">
+                        ${row.license_key || ''}
+                    </td>
+                    <td style="padding: 8px;">
+                        ${row.identification_code || ''}
+                    </td>
+                    <td style="padding: 8px;">
+                        ${row.expire_date || ''}
+                    </td>
+                    <td style="padding: 8px;">
+                        ${row.status || '正常'}
+                    </td>
+                    <td style="padding: 8px;">
+                        ${isValid ? 
+                            '<span style="color: #2ecc71; font-weight: 600;">✓ 有效</span>' : 
+                            '<span style="color: #e74c3c; font-weight: 600;">✗ 无效</span>'}
+                    </td>
+                `;
+                
+                previewBody.appendChild(tr);
+            });
+            
+            // 显示错误信息
+            if (stats.total_errors > 0) {
+                errorList.innerHTML = '';
+                
+                // 收集所有错误
+                let allErrors = [];
+                data.preview.forEach(row => {
+                    if (row.errors && row.errors.length > 0) {
+                        allErrors = allErrors.concat(row.errors);
+                    }
+                });
+                
+                // 显示最多10个错误
+                const displayErrors = allErrors.slice(0, 10);
+                displayErrors.forEach(error => {
+                    const errorItem = document.createElement('div');
+                    errorItem.className = 'error-item';
+                    errorItem.textContent = error;
+                    errorList.appendChild(errorItem);
+                });
+                
+                // 如果错误超过10个，显示提示
+                if (allErrors.length > 10) {
+                    const errorItem = document.createElement('div');
+                    errorItem.className = 'error-item';
+                    errorItem.style.color = '#7f8c8d';
+                    errorItem.textContent = `... 还有 ${allErrors.length - 10} 个错误未显示`;
+                    errorList.appendChild(errorItem);
+                }
+                
+                importErrors.style.display = 'block';
+            } else {
+                importErrors.style.display = 'none';
+            }
+            
+            // 显示导入按钮（如果有有效数据）
+            if (stats.valid_rows > 0) {
+                importActions.style.display = 'block';
+            } else {
+                importActions.style.display = 'none';
+            }
+            
+            // 显示重复账号警告
+            if (stats.existing_accounts && stats.existing_accounts.length > 0) {
+                showAlert('importAlert', 
+                    `发现 ${stats.existing_accounts.length} 个已存在的账号，导入时将自动跳过`,
+                    'warning');
+            }
+        }
+        
+        async function executeImport() {
+            if (!importPreviewData || importPreviewData.length === 0) {
+                showAlert('importAlert', '没有可导入的数据', 'error');
+                return;
+            }
+            
+            // 只导入有效的数据
+            const validData = importPreviewData.filter(row => row.valid);
+            
+            if (validData.length === 0) {
+                showAlert('importAlert', '没有有效的可导入数据', 'error');
+                return;
+            }
+            
+            if (!confirm(`确定要导入 ${validData.length} 条客户数据吗？`)) {
+                return;
+            }
+            
+            try {
+                // 显示加载状态
+                const importResultContent = document.getElementById('importResultContent');
+                importResultContent.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div class="loading">正在导入数据...</div>
+                    </div>
+                `;
+                document.getElementById('importResultModal').style.display = 'flex';
+                
+                const response = await fetch(`${API_BASE}/import/execute`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        data: validData
+                    })
+                });
+                
+                const result = await response.json();
+                displayImportResult(result);
+                
+            } catch (error) {
+                console.error('执行导入错误:', error);
+                const importResultContent = document.getElementById('importResultContent');
+                importResultContent.innerHTML = `
+                    <div style="padding: 20px; background: #fadbd8; color: #e74c3c; border-radius: 6px;">
+                        <h4 style="margin: 0 0 10px 0;">❌ 导入失败</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayImportResult(result) {
+            const importResultContent = document.getElementById('importResultContent');
+            const summary = result.summary;
+            
+            let resultHtml = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="margin: 0 0 15px 0; color: #2c3e50;">📊 导入结果统计</h3>
+                    <div class="result-stats">
+                        <div class="stat-card success">
+                            <div class="stat-number">${summary.success}</div>
+                            <div class="stat-label">成功导入</div>
+                        </div>
+                        <div class="stat-card failed">
+                            <div class="stat-number">${summary.failed}</div>
+                            <div class="stat-label">导入失败</div>
+                        </div>
+                        <div class="stat-card skipped">
+                            <div class="stat-number">${summary.skipped}</div>
+                            <div class="stat-label">跳过</div>
+                        </div>
+                    </div>
+            `;
+            
+            // 显示成功数据
+            if (result.results.success.length > 0) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4 style="margin: 0 0 10px 0; color: #27ae60;">✅ 成功导入的数据 (${result.results.success.length}条)</h4>
+                        <div class="result-list">
+                `;
+                
+                result.results.success.forEach((item, index) => {
+                    resultHtml += `
+                        <div class="result-item">
+                            ${index + 1}. 账号: <strong>${item.account_id}</strong>, 服务器: ${item.license_key}
+                        </div>
+                    `;
+                });
+                
+                resultHtml += `</div></div>`;
+            }
+            
+            // 显示失败数据
+            if (result.results.failed.length > 0) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4 style="margin: 0 0 10px 0; color: #e74c3c;">❌ 导入失败的数据 (${result.results.failed.length}条)</h4>
+                        <div class="result-list">
+                `;
+                
+                result.results.failed.forEach((item, index) => {
+                    resultHtml += `
+                        <div class="result-item" style="background: #fef5e7;">
+                            ${index + 1}. 账号: <strong>${item.account_id || '未知'}</strong>, 原因: ${item.reason}
+                        </div>
+                    `;
+                });
+                
+                resultHtml += `</div></div>`;
+            }
+            
+            // 显示跳过的数据
+            if (result.results.skipped.length > 0) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4 style="margin: 0 0 10px 0; color: #7f8c8d;">⚠️ 跳过的数据 (${result.results.skipped.length}条)</h4>
+                        <div class="result-list">
+                `;
+                
+                result.results.skipped.forEach((item, index) => {
+                    resultHtml += `
+                        <div class="result-item">
+                            ${index + 1}. 账号: <strong>${item.account_id}</strong>, 原因: ${item.reason}
+                        </div>
+                    `;
+                });
+                
+                resultHtml += `</div></div>`;
+            }
+            
+            resultHtml += `</div>`;
+            importResultContent.innerHTML = resultHtml;
+        }
+        
+        function clearImport() {
+            document.getElementById('importFile').value = '';
+            document.getElementById('importPreview').style.display = 'none';
+            document.getElementById('importAlert').style.display = 'none';
+            importPreviewData = null;
+        }
+        
+        function cancelImport() {
+            clearImport();
+        }
+        
+        function closeImportResult() {
+            document.getElementById('importResultModal').style.display = 'none';
+        }
+        
+        function closeImportResultAndRefresh() {
+            document.getElementById('importResultModal').style.display = 'none';
+            loadClients();
         }
         
         // ========== 键盘快捷键 ==========
@@ -1765,6 +2335,7 @@
             if (event.key === 'Escape') {
                 closeEditModal();
                 closeDeleteModal();
+                closeImportResult();
             }
             
             if (event.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
@@ -1787,7 +2358,20 @@
             }, 500);
         });
         
-        // 页面加载时自动登录（测试用）
+        // 文件输入变化监听
+        document.getElementById('importFile').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                const filename = file.name.toLowerCase();
+                
+                if (!filename.endsWith('.csv') && !filename.endsWith('.xlsx') && !filename.endsWith('.xls')) {
+                    showAlert('importAlert', '只支持CSV和Excel文件', 'error');
+                    this.value = '';
+                }
+            }
+        });
+        
+        // 页面加载时自动设置默认值
         window.addEventListener('DOMContentLoaded', function() {
             // 为了方便测试，自动填充登录信息
             document.getElementById('username').value = 'islandshen@163.com';
@@ -1797,6 +2381,10 @@
             const defaultDate = new Date();
             defaultDate.setDate(defaultDate.getDate() + 30);
             document.getElementById('addExpireDate').valueAsDate = defaultDate;
+            
+            // 设置测试账号
+            document.getElementById('testAccountId').value = '1000132128';
+            document.getElementById('testServer').value = 'FortunePrimeGlobal-Demo';
         });
     </script>
 </body>
