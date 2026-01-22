@@ -5,7 +5,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA客户管理系统</title>
     <style>
-        /* ... 所有原有样式保持不变 ... */
+        /* 原有样式保持不变，只添加导入相关样式 */
+        
+        /* 新增：导入相关样式 */
+        .import-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .import-title {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .import-title span {
+            font-size: 18px;
+        }
+        
+        .file-input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+        
+        .file-input-label:hover {
+            background: #2980b9;
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-name {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .import-options {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-item label {
+            font-size: 14px;
+            color: #2c3e50;
+            cursor: pointer;
+        }
+        
+        .option-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .preview-container {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .preview-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        .preview-table th {
+            background: #e9ecef;
+            padding: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .preview-table td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .preview-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-new {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .status-update {
+            background: #d6eaf8;
+            color: #2980b9;
+        }
+        
+        .status-skip {
+            background: #fef5e7;
+            color: #f39c12;
+        }
+        
+        .status-invalid {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+        
+        .import-progress {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            border-radius: 10px;
+            transition: width 0.3s;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            line-height: 20px;
+        }
+        
+        .import-results {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .results-summary {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .result-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 6px;
+            min-width: 100px;
+        }
+        
+        .result-success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #a3e4c1;
+        }
+        
+        .result-updated {
+            background: #d6eaf8;
+            color: #2980b9;
+            border: 1px solid #aed6f1;
+        }
+        
+        .result-skipped {
+            background: #fef5e7;
+            color: #f39c12;
+            border: 1px solid #f8c471;
+        }
+        
+        .result-failed {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        .result-count {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .result-label {
+            font-size: 13px;
+        }
+        
+        .results-details {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        
+        .result-row-success {
+            color: #27ae60;
+        }
+        
+        .result-row-update {
+            color: #2980b9;
+        }
+        
+        .result-row-skip {
+            color: #f39c12;
+        }
+        
+        .result-row-error {
+            color: #e74c3c;
+        }
+        
+        .format-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px dashed #ddd;
+        }
+        
+        .format-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .format-info li {
+            margin: 4px 0;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        
+        .format-info strong {
+            color: #2c3e50;
+        }
+        
+        /* 其他原有样式保持不变 */
         * {
             margin: 0;
             padding: 0;
@@ -22,104 +312,8 @@
             padding: 20px;
         }
         
-        /* ... 所有其他样式保持不变 ... */
+        /* ... 其他原有样式 ... */
         
-        /* 导入导出区域样式简化 */
-        .import-export-section {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-        
-        .import-export-title {
-            font-size: 18px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #3498db;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .import-export-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .import-export-card {
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            flex: 1;
-            min-width: 250px;
-        }
-        
-        .card-title {
-            font-size: 16px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .card-description {
-            font-size: 14px;
-            color: #6c757d;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        
-        .card-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-        
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        
-        .import-notice {
-            background: #e8f4fd;
-            border: 1px solid #b6d4fe;
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #2c3e50;
-        }
-        
-        .notice-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        
-        .notice-item:last-child {
-            margin-bottom: 0;
-        }
-        
-        /* ... 所有其他样式保持不变 ... */
     </style>
 </head>
 <body>
@@ -182,6 +376,80 @@
                 </div>
                 
                 <button onclick="addNewClient()" class="btn">添加客户</button>
+            </div>
+            
+            <!-- 数据导入功能 -->
+            <div class="section">
+                <h2 class="section-title">📥 数据导入</h2>
+                <div id="importAlert" class="alert"></div>
+                
+                <div class="import-section">
+                    <div class="import-title">
+                        <span>📄</span>
+                        <span>导入CSV文件</span>
+                    </div>
+                    
+                    <div class="file-input-container">
+                        <label class="file-input-label">
+                            📁 选择CSV文件
+                            <input type="file" id="csvFile" class="file-input" accept=".csv" onchange="handleFileSelect()">
+                        </label>
+                        <span class="file-name" id="fileName">未选择文件</span>
+                    </div>
+                    
+                    <div class="import-options">
+                        <div class="option-item">
+                            <input type="checkbox" id="updateExisting" checked>
+                            <label for="updateExisting">更新已存在的记录</label>
+                        </div>
+                    </div>
+                    
+                    <div class="format-info">
+                        <p style="color: #2c3e50; font-size: 13px; margin-bottom: 5px;">
+                            <strong>支持格式：</strong>
+                        </p>
+                        <ul>
+                            <li><strong>简化格式：</strong> 账号ID, 服务器, 识别码, 到期时间, 状态, 备注</li>
+                            <li><strong>完整格式：</strong> 序号, 账号ID, 服务器, 识别码, 到期时间, 状态, 最大会话数, 当前会话数, 备注, 创建时间</li>
+                        </ul>
+                        <p style="color: #7f8c8d; font-size: 12px; margin-top: 8px;">
+                            💡 提示：可以使用系统导出的CSV文件直接导入
+                        </p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button onclick="previewImport()" class="btn" id="previewBtn">预览文件</button>
+                        <button onclick="confirmImport()" class="btn btn-export" id="importBtn" disabled>开始导入</button>
+                        <button onclick="clearImport()" class="btn btn-clear">清空</button>
+                    </div>
+                </div>
+                
+                <div class="preview-container" id="previewContainer">
+                    <div class="preview-stats">
+                        <span id="previewStats"></span>
+                        <span id="previewFormat"></span>
+                    </div>
+                    <table class="preview-table" id="previewTable">
+                        <!-- 预览表格内容将通过JS动态生成 -->
+                    </table>
+                </div>
+                
+                <div class="import-progress" id="importProgress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
+                    </div>
+                    <div style="text-align: center; font-size: 13px; color: #7f8c8d;" id="progressText">准备导入...</div>
+                </div>
+                
+                <div class="import-results" id="importResults">
+                    <div class="results-summary" id="resultsSummary">
+                        <!-- 结果摘要将通过JS动态生成 -->
+                    </div>
+                    <div style="font-size: 14px; color: #2c3e50; margin-bottom: 10px;">导入详情：</div>
+                    <div class="results-details" id="resultsDetails">
+                        <!-- 结果详情将通过JS动态生成 -->
+                    </div>
+                </div>
             </div>
             
             <!-- 客户列表 -->
@@ -253,70 +521,38 @@
                 </div>
             </div>
             
-            <!-- 简化的导入导出功能 -->
-            <div class="import-export-section">
-                <div class="import-export-title">
-                    <span>📊</span>
-                    <span>数据导入导出</span>
-                </div>
+            <!-- 数据导出功能 -->
+            <div class="section">
+                <h2 class="section-title">📤 数据导出</h2>
+                <div id="exportAlert" class="alert"></div>
                 
-                <div id="importExportAlert" class="alert"></div>
-                
-                <div class="import-export-actions">
-                    <!-- 数据导出 -->
-                    <div class="import-export-card">
-                        <div class="card-title">
-                            <span>📤</span>
-                            <span>数据导出</span>
-                        </div>
-                        <div class="card-description">
-                            导出当前搜索结果到CSV文件，包含所有客户字段
-                        </div>
-                        <div class="card-actions">
-                            <button onclick="exportData()" class="btn btn-export">
-                                <span style="margin-right: 5px;">⬇️</span>导出数据
-                            </button>
-                        </div>
+                <div class="form-row" style="align-items: center;">
+                    <div style="flex: 1;">
+                        <p style="color: #2c3e50; font-size: 14px; margin-bottom: 10px;">
+                            导出当前搜索结果到CSV文件
+                        </p>
                     </div>
                     
-                    <!-- 数据导入 -->
-                    <div class="import-export-card">
-                        <div class="card-title">
-                            <span>📥</span>
-                            <span>数据导入</span>
-                        </div>
-                        <div class="card-description">
-                            支持导入CSV格式的客户数据，可批量添加或更新客户信息
-                        </div>
-                        <div class="card-actions">
-                            <div class="file-input-wrapper">
-                                <label class="btn btn-template" style="margin-right: 0;">
-                                    📋 下载导入模板
-                                </label>
-                                <input type="file" id="csvTemplateDownload" accept=".csv" style="display: none;" onclick="downloadTemplate()">
-                            </div>
-                            <div class="file-input-wrapper">
-                                <label class="btn" style="background: #2ecc71;">
-                                    📄 选择CSV文件并导入
-                                </label>
-                                <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleFileImport(this)">
-                            </div>
-                        </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="exportData()" class="btn btn-export">
+                            <span style="margin-right: 5px;">⬇️</span>导出数据
+                        </button>
+                        <button onclick="downloadTemplate()" class="btn btn-template">
+                            📋 下载模板
+                        </button>
                     </div>
                 </div>
                 
-                <div class="import-notice">
-                    <div class="notice-item">
-                        <span style="color: #2ecc71;">✓</span>
-                        <span>导入模板包含所有必要字段，只需填写相应数据</span>
-                    </div>
-                    <div class="notice-item">
-                        <span style="color: #3498db;">✓</span>
-                        <span>支持批量导入，一次最多可导入1000条记录</span>
-                    </div>
-                    <div class="notice-item">
-                        <span style="color: #f39c12;">✓</span>
-                        <span>导入前系统会自动验证数据格式</span>
+                <div style="margin-top: 15px; padding: 12px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ddd;">
+                    <div style="font-size: 13px; color: #7f8c8d;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                            <span style="color: #2ecc71;">✓</span>
+                            <span>导出的CSV文件包含所有客户字段</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #3498db;">✓</span>
+                            <span>文件名自动包含时间戳，方便管理</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -416,6 +652,335 @@
         let currentSearchQuery = '';
         let currentPage = 1;
         const perPage = 20;
+        
+        // ========== 导入相关变量 ==========
+        let selectedFile = null;
+        let previewData = null;
+        
+        // ========== 导入功能 ==========
+        
+        // 处理文件选择
+        function handleFileSelect() {
+            const fileInput = document.getElementById('csvFile');
+            const fileNameSpan = document.getElementById('fileName');
+            
+            if (fileInput.files.length > 0) {
+                selectedFile = fileInput.files[0];
+                fileNameSpan.textContent = selectedFile.name;
+                fileNameSpan.style.color = '#3498db';
+                
+                // 启用导入按钮
+                document.getElementById('importBtn').disabled = false;
+                
+                // 隐藏之前的预览和结果
+                document.getElementById('previewContainer').style.display = 'none';
+                document.getElementById('importResults').style.display = 'none';
+            } else {
+                selectedFile = null;
+                fileNameSpan.textContent = '未选择文件';
+                fileNameSpan.style.color = '#7f8c8d';
+                document.getElementById('importBtn').disabled = true;
+            }
+        }
+        
+        // 预览导入文件
+        async function previewImport() {
+            if (!selectedFile) {
+                showAlert('importAlert', '请先选择CSV文件', 'error');
+                return;
+            }
+            
+            const previewContainer = document.getElementById('previewContainer');
+            const previewStats = document.getElementById('previewStats');
+            const previewFormat = document.getElementById('previewFormat');
+            const previewTable = document.getElementById('previewTable');
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                
+                const response = await fetch(`${API_BASE}/import/preview`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    previewData = result.preview_data;
+                    
+                    // 显示预览信息
+                    previewStats.textContent = `共 ${result.total_rows} 行数据`;
+                    previewFormat.textContent = `格式: ${result.format === 'full' ? '完整格式' : '简化格式'}`;
+                    
+                    // 清空并填充预览表格
+                    previewTable.innerHTML = '';
+                    
+                    if (previewData.length > 0) {
+                        // 创建表头
+                        const thead = document.createElement('thead');
+                        const headerRow = document.createElement('tr');
+                        const headers = ['行号', '账号ID', '服务器', '识别码', '到期时间', '状态', '备注', '验证状态'];
+                        
+                        headers.forEach(header => {
+                            const th = document.createElement('th');
+                            th.textContent = header;
+                            headerRow.appendChild(th);
+                        });
+                        
+                        thead.appendChild(headerRow);
+                        previewTable.appendChild(thead);
+                        
+                        // 创建表格内容
+                        const tbody = document.createElement('tbody');
+                        
+                        previewData.forEach(item => {
+                            const row = document.createElement('tr');
+                            
+                            // 行号
+                            const cellRow = document.createElement('td');
+                            cellRow.textContent = item.row;
+                            row.appendChild(cellRow);
+                            
+                            // 账号ID
+                            const cellAccountId = document.createElement('td');
+                            cellAccountId.textContent = item.account_id;
+                            if (item.exists_in_db) {
+                                cellAccountId.style.color = '#2980b9';
+                                cellAccountId.style.fontWeight = '600';
+                            }
+                            row.appendChild(cellAccountId);
+                            
+                            // 服务器
+                            const cellServer = document.createElement('td');
+                            cellServer.textContent = item.license_key;
+                            row.appendChild(cellServer);
+                            
+                            // 识别码
+                            const cellCode = document.createElement('td');
+                            cellCode.textContent = item.identification_code;
+                            row.appendChild(cellCode);
+                            
+                            // 到期时间
+                            const cellDate = document.createElement('td');
+                            cellDate.textContent = item.expire_date;
+                            row.appendChild(cellDate);
+                            
+                            // 状态
+                            const cellStatus = document.createElement('td');
+                            cellStatus.textContent = item.status;
+                            cellStatus.style.color = item.is_active ? '#27ae60' : '#e74c3c';
+                            row.appendChild(cellStatus);
+                            
+                            // 备注
+                            const cellNotes = document.createElement('td');
+                            cellNotes.textContent = item.notes || '-';
+                            row.appendChild(cellNotes);
+                            
+                            // 验证状态
+                            const cellValid = document.createElement('td');
+                            if (item.is_valid) {
+                                const statusSpan = document.createElement('span');
+                                statusSpan.className = 'preview-status status-new';
+                                statusSpan.textContent = item.exists_in_db ? '更新' : '新增';
+                                cellValid.appendChild(statusSpan);
+                            } else {
+                                const statusSpan = document.createElement('span');
+                                statusSpan.className = 'preview-status status-invalid';
+                                statusSpan.textContent = '无效';
+                                cellValid.appendChild(statusSpan);
+                                
+                                if (item.validation_errors && item.validation_errors.length > 0) {
+                                    statusSpan.title = item.validation_errors.join(', ');
+                                }
+                            }
+                            row.appendChild(cellValid);
+                            
+                            tbody.appendChild(row);
+                        });
+                        
+                        previewTable.appendChild(tbody);
+                    }
+                    
+                    previewContainer.style.display = 'block';
+                    showAlert('importAlert', `文件预览成功，共 ${result.total_rows} 行数据`, 'success');
+                    
+                } else {
+                    showAlert('importAlert', `预览失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                console.error('预览错误:', error);
+                showAlert('importAlert', `预览失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // 确认导入
+        async function confirmImport() {
+            if (!selectedFile) {
+                showAlert('importAlert', '请先选择CSV文件', 'error');
+                return;
+            }
+            
+            if (!confirm('确定要导入选中的CSV文件吗？')) {
+                return;
+            }
+            
+            const updateExisting = document.getElementById('updateExisting').checked;
+            const progressDiv = document.getElementById('importProgress');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const importBtn = document.getElementById('importBtn');
+            const previewBtn = document.getElementById('previewBtn');
+            
+            // 显示进度条
+            progressDiv.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressFill.textContent = '0%';
+            progressText.textContent = '开始导入...';
+            
+            // 禁用按钮
+            importBtn.disabled = true;
+            previewBtn.disabled = true;
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('update_mode', updateExisting.toString());
+                
+                const response = await fetch(`${API_BASE}/import/csv`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                // 更新进度
+                progressFill.style.width = '50%';
+                progressFill.textContent = '50%';
+                progressText.textContent = '正在处理数据...';
+                
+                const result = await response.json();
+                
+                // 更新进度
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100%';
+                progressText.textContent = '导入完成！';
+                
+                if (result.success) {
+                    // 显示导入结果
+                    showImportResults(result);
+                    
+                    // 刷新客户列表
+                    setTimeout(() => {
+                        loadClients();
+                    }, 1000);
+                    
+                    showAlert('importAlert', `导入完成！成功: ${result.imported}, 更新: ${result.updated || 0}, 跳过: ${result.skipped}, 失败: ${result.failed}`, 'success');
+                    
+                } else {
+                    showAlert('importAlert', `导入失败: ${result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                console.error('导入错误:', error);
+                showAlert('importAlert', `导入失败: ${error.message}`, 'error');
+                progressText.textContent = '导入失败！';
+                progressFill.style.background = '#e74c3c';
+            } finally {
+                // 恢复按钮
+                setTimeout(() => {
+                    importBtn.disabled = false;
+                    previewBtn.disabled = false;
+                    progressDiv.style.display = 'none';
+                    progressFill.style.background = '#3498db';
+                }, 2000);
+            }
+        }
+        
+        // 显示导入结果
+        function showImportResults(result) {
+            const resultsDiv = document.getElementById('importResults');
+            const resultsSummary = document.getElementById('resultsSummary');
+            const resultsDetails = document.getElementById('resultsDetails');
+            
+            // 清空之前的显示
+            resultsSummary.innerHTML = '';
+            resultsDetails.innerHTML = '';
+            
+            // 创建结果摘要
+            const summaryItems = [
+                { label: '成功', count: result.imported || 0, class: 'result-success' },
+                { label: '更新', count: result.updated || 0, class: 'result-updated' },
+                { label: '跳过', count: result.skipped || 0, class: 'result-skipped' },
+                { label: '失败', count: result.failed || 0, class: 'result-failed' }
+            ];
+            
+            summaryItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `result-item ${item.class}`;
+                
+                const countSpan = document.createElement('div');
+                countSpan.className = 'result-count';
+                countSpan.textContent = item.count;
+                
+                const labelSpan = document.createElement('div');
+                labelSpan.className = 'result-label';
+                labelSpan.textContent = item.label;
+                
+                div.appendChild(countSpan);
+                div.appendChild(labelSpan);
+                resultsSummary.appendChild(div);
+            });
+            
+            // 创建结果详情
+            if (result.results && result.results.length > 0) {
+                result.results.forEach(item => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'result-row';
+                    
+                    const accountInfo = document.createElement('span');
+                    accountInfo.textContent = `第${item.row}行 - 账号ID: ${item.account_id}`;
+                    
+                    const statusInfo = document.createElement('span');
+                    statusInfo.textContent = item.message || item.status;
+                    
+                    // 根据状态设置样式
+                    if (item.status === '导入' || item.status === '新增') {
+                        rowDiv.className += ' result-row-success';
+                        statusInfo.textContent = '✓ ' + statusInfo.textContent;
+                    } else if (item.status === '更新') {
+                        rowDiv.className += ' result-row-update';
+                        statusInfo.textContent = '🔄 ' + statusInfo.textContent;
+                    } else if (item.status === '跳过') {
+                        rowDiv.className += ' result-row-skip';
+                        statusInfo.textContent = '⏭️ ' + statusInfo.textContent;
+                    } else if (item.status === '失败') {
+                        rowDiv.className += ' result-row-error';
+                        statusInfo.textContent = '❌ ' + statusInfo.textContent;
+                    }
+                    
+                    rowDiv.appendChild(accountInfo);
+                    rowDiv.appendChild(statusInfo);
+                    resultsDetails.appendChild(rowDiv);
+                });
+            }
+            
+            // 显示结果
+            resultsDiv.style.display = 'block';
+        }
+        
+        // 清空导入
+        function clearImport() {
+            document.getElementById('csvFile').value = '';
+            document.getElementById('fileName').textContent = '未选择文件';
+            document.getElementById('fileName').style.color = '#7f8c8d';
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('importResults').style.display = 'none';
+            document.getElementById('importProgress').style.display = 'none';
+            document.getElementById('importBtn').disabled = true;
+            
+            selectedFile = null;
+            previewData = null;
+        }
         
         // ========== 登录功能 ==========
         async function login() {
@@ -994,7 +1559,7 @@
             }
         }
         
-        // ========== 简化的导入导出功能 ==========
+        // ========== 数据导出功能 ==========
         async function exportData() {
             const searchQuery = currentSearchQuery || '';
             
@@ -1004,80 +1569,35 @@
                 // 创建临时链接触发下载
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `客户数据_${new Date().toISOString().split('T')[0]}.csv`;
                 a.style.display = 'none';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 
-                showAlert('importExportAlert', '✅ 导出已开始，请稍候...', 'success');
+                showAlert('exportAlert', '导出任务已开始，请稍候...', 'success');
                 
             } catch (error) {
                 console.error('导出错误:', error);
-                showAlert('importExportAlert', `❌ 导出失败: ${error.message}`, 'error');
+                showAlert('exportAlert', `导出失败: ${error.message}`, 'error');
             }
         }
         
-        function downloadTemplate() {
+        async function downloadTemplate() {
             try {
                 const url = `${API_BASE}/export/template`;
                 
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = '客户数据导入模板.csv';
                 a.style.display = 'none';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 
-                showAlert('importExportAlert', '✅ 模板下载已开始', 'success');
+                showAlert('exportAlert', '模板下载已开始', 'success');
                 
             } catch (error) {
                 console.error('下载模板错误:', error);
-                showAlert('importExportAlert', `❌ 下载失败: ${error.message}`, 'error');
-            }
-        }
-        
-        async function handleFileImport(fileInput) {
-            const file = fileInput.files[0];
-            if (!file) return;
-            
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                showAlert('importExportAlert', '❌ 请选择CSV格式的文件', 'error');
-                fileInput.value = '';
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            showAlert('importExportAlert', '⏳ 正在导入数据，请稍候...', 'info');
-            
-            try {
-                const response = await fetch(`${API_BASE}/import/csv`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showAlert('importExportAlert', `✅ 导入成功！共导入 ${result.count || 0} 条记录`, 'success');
-                    
-                    // 清空文件选择
-                    fileInput.value = '';
-                    
-                    // 刷新列表
-                    setTimeout(() => {
-                        loadClients();
-                    }, 1000);
-                } else {
-                    showAlert('importExportAlert', `❌ 导入失败: ${result.message || '未知错误'}`, 'error');
-                }
-                
-            } catch (error) {
-                console.error('导入错误:', error);
-                showAlert('importExportAlert', `❌ 网络错误: ${error.message}`, 'error');
+                showAlert('exportAlert', `下载失败: ${error.message}`, 'error');
             }
         }
         
